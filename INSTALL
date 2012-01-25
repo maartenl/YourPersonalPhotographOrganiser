@@ -1,0 +1,34 @@
+INSTALL
+=======
+
+Installing this package requires the following components:
+- Netbeans
+- Glassfish (comes with Netbeans)
+- JDK 7
+- MySQL
+- MySQL JConnect jdbc driver in glassfish
+- JQuery (automatically connects to a CDN, so no worries there)
+- Fancybox (Lightbox replacement for jquery)
+
+Steps
+-----
+
+1. create a database
+2. run the database script
+3. load up the project in netbeans
+4. deploy it to glassfish
+5. deploy the fancybox stuff to
+~GlassFish_Server/glassfish/domains/domain1/docroot (assuming defaults here)
+5. profit
+
+Addendum
+--------
+
+Don't for get to properly specify the data source in glassfish.
+
+References
+----------
+http://fancybox.net/support
+http://docs.jquery.com/Downloading_jQuery
+http://www.cssbuttongenerator.com/
+http://code.google.com/p/metadata-extractor/ (http://www.drewnoakes.com/code/exif/)

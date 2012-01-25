@@ -1,0 +1,88 @@
+YourPersonalPhotographOrganiser
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+An attempt from me at creating a Photo gallery.
+
+Given the fact that there are numerous other photo galleries, why should
+you use this one?
+
+1. it's very easy to comprehend and very simple
+2. it uses the JDK 7 and Glassfish, if you wish to learn these two, here's
+your chance
+3. it has almost everything you need for home use, I do not recommend it for
+website use.
+
+Requirements
+
+1. simple database, easy to make changes directly, if so required
+2. used for home use
+3. no authentication or authorization required
+4. helps me to understand the jdk 7, glassfish and jee, by using
+all the new stuff in there.
+5. absolutely NO changing of the photographs, all changes are done
+in java, in memory, in glassfish.
+6. flexible in where these photographs are located
+
+Use
+
+Go to url http://micemouse:8080/YourPersonalPhotographOrganiser-war/ to get started
+Parameters:
+id=id/number of gallery, 0 being the default if nothing is provided.
+
+Go to url
+http://micemouse:8080/YourPersonalPhotographOrganiser-war/photo.jsp to get started
+Parameters:
+id=id/number of Photograph
+
+BigImageServlet:
+http://micemouse:8080/YourPersonalPhotographOrganiser-war/BigImageServlet
+Parameters:
+id=id/number of Photograph
+size=thumb/medium/default
+
+TestServlet
+http://micemouse:8080/YourPersonalPhotographOrganiser-war/TestServlet
+
+HTTP operations:
+GET - read
+POST - create
+PUT - edit
+DELETE - delete
+
+The rest services 
+=================
+
+Gallery
+-------
+http://micemouse:8080/YourPersonalPhotographOrganiser-war/resources/gallery.database.entities.gallery
+http://micemouse:8080/YourPersonalPhotographOrganiser-war/resources/gallery.database.entities.gallery/{id}
+http://micemouse:8080/YourPersonalPhotographOrganiser-war/resources/gallery.database.entities.gallery/{id}/photographs
+
+
+http://micemouse:8080/YourPersonalPhotographOrganiser-war/resources/gallery.database.entities.galleryphotograph
+http://micemouse:8080/YourPersonalPhotographOrganiser-war/resources/gallery.database.entities.photograph
+http://micemouse:8080/YourPersonalPhotographOrganiser-war/resources/gallery.database.entities.location
+http://micemouse:8080/YourPersonalPhotographOrganiser-war/resources/gallery.database.entities.comment
+
+Epected result would look a little like so:
+Status Code: 200 OK
+X-Powered-By: Servlet/3.0 JSP/2.2 (GlassFish Server Open Source Edition
+3.1.1 Java/Oracle Corporation/1.7)
+Server: GlassFish Serve rOepn Source Edition 34.1.1.
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: Sat, 24 Dec 2011 17:19:55 GMT
+
+Directory Contents
+
+build - the build products (class files, for instance)
+DATABASE - description of the database, with sql scripts
+nbproject - net beans settings.
+src	 - java source files, empty as java source files are present in the war and ejb instead.
+YourPersonalPhotographOrganiser-war - the web war
+YourPersonalPhotographOrganiser-ejb - the enterprise java beans
+build.xml - make file
+dist - contains files for deploying to the glassfish server
+README - this file
+rest - files used by the REST Client Firefox addon (for testing)
+

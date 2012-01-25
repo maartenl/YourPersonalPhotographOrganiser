@@ -1,0 +1,146 @@
+Database YourPersonalPhotographOrganiser
+========================================
+
+Tables
+------
+
+Gallery
+GalleryPhotograph
+Photograph
+Comment
+Location
+Tag
+
+Fields
+------
+
+Gallery
+id
+name
+description
+creation_date
+parent_id
+highlight
+sortorder
+
+GalleryPhotograph
+id
+gallery_id
+photograph_id
+name
+description
+angle
+sortorder
+
+
+Photograph
+id
+location_id
+filename
+relativepath
+taken
+
+
+Comment
+id
+galleryphotograph_id
+author
+submitted
+comment
+
+
+Location
+id
+path
+
+Tag
+tagname
+photograph_id
+
+Relations
+---------
+
+Gallery.id -> Gallery.parent_id
+
+Gallery.highlight -> GalleryPhotograph.id
+
+GalleryPhotograph.gallery_id -> Gallery.id
+
+GalleryPhotograph.photograph_id -> Photograph.id
+
+Comment.galleryphotograph_id -> GalleryPhotograph.id
+
+Photograph.location_id -> Location.id
+
+Tag.photograph_id -> Photograph.id
+
+SQL
+---
+
+drop table if exists Tag;
+drop table if exists Comment;
+drop table if exists GalleryPhotograph;
+drop table if exists Gallery;
+drop table if exists Photograph;
+drop table if exists Location;
+
+create table Location (
+ id bigint not null auto_increment primary key,
+ filepath varchar(512)
+);
+
+create table Photograph (
+ id bigint not null auto_increment primary key,
+ location_id bigint not null,
+ filename varchar(255),
+ relativepath varchar(1024),
+ taken timestamp,
+ foreign key (location_id) references Location (id)
+);
+
+create table Gallery (
+ id bigint not null auto_increment primary key,
+ name varchar(80),
+ description text,
+ creation_date timestamp not null default current_timestamp,
+ parent_id bigint,
+ highlight bigint,
+ sortorder int not null,
+ foreign key (parent_id) references Gallery (id),
+ foreign key (highlight) references Photograph (id)
+);
+
+create table GalleryPhotograph (
+ id bigint not null auto_increment primary key,
+ gallery_id bigint not null,
+ photograph_id bigint not null,
+ name varchar(255),
+ description text,
+ angle int,
+ sortorder bigint,
+ foreign key (gallery_id) references Gallery (id),
+ foreign key (photograph_id) references Photograph (id)
+);
+
+create table Comment (
+ id bigint not null auto_increment primary key,
+ galleryphotograph_id bigint not null,
+ author varchar(255),
+ submitted timestamp,
+ comment text,
+ foreign key (galleryphotograph_id) references GalleryPhotograph (id)
+);
+
+create table Tag (
+ tagname varchar(80) not null,
+ photograph_id bigint not null,
+ primary key (tagname, photograph_id),
+ foreign key (photograph_id) references Photograph (id)
+);
+
+Authentication/Authorisation
+----------------------------
+
+CREATE USER 'gallery'@'micemouse' IDENTIFIED BY 'gallery';
+GRANT ALL PRIVILEGES ON YourPersonalPhotographOrganiser.* TO
+'gallery'@'micemouse' WITH GRANT OPTION;
