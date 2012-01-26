@@ -57,6 +57,7 @@ import javax.xml.bind.annotation.XmlTransient;
 })
 public class Gallery implements Serializable
 {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -228,5 +229,4 @@ public class Gallery implements Serializable
     {
         return "gallery.database.entities.Gallery[ id=" + id + " ]";
     }
-
 }

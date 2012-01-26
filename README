@@ -25,23 +25,23 @@ in java, in memory, in glassfish.
 
 Use
 
-Go to url http://micemouse:8080/YourPersonalPhotographOrganiser-war/ to get started
+Go to url http://micemouse:8080/YourPersonalPhotographOrganiser/ to get started
 Parameters:
 id=id/number of gallery, 0 being the default if nothing is provided.
 
 Go to url
-http://micemouse:8080/YourPersonalPhotographOrganiser-war/photo.jsp to get started
+http://micemouse:8080/YourPersonalPhotographOrganiser/photo.jsp to get started
 Parameters:
 id=id/number of Photograph
 
 BigImageServlet:
-http://micemouse:8080/YourPersonalPhotographOrganiser-war/BigImageServlet
+http://micemouse:8080/YourPersonalPhotographOrganiser/BigImageServlet
 Parameters:
 id=id/number of Photograph
 size=thumb/medium/default
 
 TestServlet
-http://micemouse:8080/YourPersonalPhotographOrganiser-war/TestServlet
+http://micemouse:8080/YourPersonalPhotographOrganiser/TestServlet
 
 HTTP operations:
 GET - read
@@ -54,15 +54,15 @@ The rest services
 
 Gallery
 -------
-http://micemouse:8080/YourPersonalPhotographOrganiser-war/resources/gallery.database.entities.gallery
-http://micemouse:8080/YourPersonalPhotographOrganiser-war/resources/gallery.database.entities.gallery/{id}
-http://micemouse:8080/YourPersonalPhotographOrganiser-war/resources/gallery.database.entities.gallery/{id}/photographs
+http://micemouse:8080/YourPersonalPhotographOrganiser/resources/galleries
+http://micemouse:8080/YourPersonalPhotographOrganiser/resources/galleries/{id}
+http://micemouse:8080/YourPersonalPhotographOrganiser/resources/galleries/{id}/photographs
 
 
-http://micemouse:8080/YourPersonalPhotographOrganiser-war/resources/gallery.database.entities.galleryphotograph
-http://micemouse:8080/YourPersonalPhotographOrganiser-war/resources/gallery.database.entities.photograph
-http://micemouse:8080/YourPersonalPhotographOrganiser-war/resources/gallery.database.entities.location
-http://micemouse:8080/YourPersonalPhotographOrganiser-war/resources/gallery.database.entities.comment
+http://micemouse:8080/YourPersonalPhotographOrganiser/resources/galleryphotographs
+http://micemouse:8080/YourPersonalPhotographOrganiser/resources/photographs
+http://micemouse:8080/YourPersonalPhotographOrganiser/resources/locations
+http://micemouse:8080/YourPersonalPhotographOrganiser/resources/comments
 
 Epected result would look a little like so:
 Status Code: 200 OK
@@ -79,8 +79,7 @@ build - the build products (class files, for instance)
 DATABASE - description of the database, with sql scripts
 nbproject - net beans settings.
 src	 - java source files, empty as java source files are present in the war and ejb instead.
-YourPersonalPhotographOrganiser-war - the web war
-YourPersonalPhotographOrganiser-ejb - the enterprise java beans
+YourPersonalPhotographOrganiser - the web war
 build.xml - make file
 dist - contains files for deploying to the glassfish server
 README - this file
