@@ -35,10 +35,10 @@ Parameters:
 id=id/number of Photograph
 
 BigImageServlet:
-http://micemouse:8080/YourPersonalPhotographOrganiser/BigImageServlet
+http://micemouse:8080/YourPersonalPhotographOrganiser/ImageServlet
 Parameters:
 id=id/number of Photograph
-size=thumb/medium/default
+size=thumb/medium/large/default
 
 TestServlet
 http://micemouse:8080/YourPersonalPhotographOrganiser/TestServlet
@@ -49,7 +49,7 @@ POST - create
 PUT - edit
 DELETE - delete
 
-The rest services 
+The rest services
 =================
 
 Gallery

@@ -17,6 +17,8 @@
 package gallery.beans;
 
 import gallery.database.entities.Photograph;
+import java.io.File;
+import java.nio.file.FileSystems;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -38,6 +40,7 @@ import javax.ws.rs.Produces;
 @Path("/photographs")
 public class PhotographBean extends AbstractBean<Photograph>
 {
+
     @PersistenceContext(unitName = "YourPersonalPhotographOrganiserPU")
     private EntityManager em;
 
@@ -50,6 +53,7 @@ public class PhotographBean extends AbstractBean<Photograph>
     {
         super(Photograph.class);
     }
+
     @POST
     @Override
     @Consumes(
@@ -121,5 +125,18 @@ public class PhotographBean extends AbstractBean<Photograph>
     public String countREST()
     {
         return String.valueOf(super.count());
+    }
+
+    public File getFile(Long id)
+    {
+        Photograph photo = find(id);
+        if (photo == null)
+        {
+            return null;
+        }
+
+        java.nio.file.Path newPath = FileSystems.getDefault().getPath(photo.getLocationId().getFilepath(), photo.getRelativepath(), photo.getFilename());
+        File file = newPath.toFile();
+        return file;
     }
 }
