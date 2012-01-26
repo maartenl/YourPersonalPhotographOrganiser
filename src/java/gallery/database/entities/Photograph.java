@@ -79,10 +79,6 @@ public class Photograph implements Serializable
     private Location locationId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "photograph")
     private Collection<Tag> tagCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "photographId")
-    private Collection<GalleryPhotograph> galleryPhotographCollection;
-    @OneToMany(mappedBy = "highlight")
-    private Collection<Gallery> galleryCollection;
 
     public Photograph()
     {
@@ -158,28 +154,6 @@ public class Photograph implements Serializable
     public void setTagCollection(Collection<Tag> tagCollection)
     {
         this.tagCollection = tagCollection;
-    }
-
-    @XmlTransient
-    public Collection<GalleryPhotograph> getGalleryPhotographCollection()
-    {
-        return galleryPhotographCollection;
-    }
-
-    public void setGalleryPhotographCollection(Collection<GalleryPhotograph> galleryPhotographCollection)
-    {
-        this.galleryPhotographCollection = galleryPhotographCollection;
-    }
-
-    @XmlTransient
-    public Collection<Gallery> getGalleryCollection()
-    {
-        return galleryCollection;
-    }
-
-    public void setGalleryCollection(Collection<Gallery> galleryCollection)
-    {
-        this.galleryCollection = galleryCollection;
     }
 
     @Override

@@ -1,0 +1,1 @@
+{"requestUrl":"http://micemouse:8080/YourPersonalPhotographOrganiser/resources/photographs/1","requestMethod":"GET","requestBody":"","headers":["Content-Type","application/json","Accept","application/json"]}
