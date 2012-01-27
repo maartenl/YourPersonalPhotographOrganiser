@@ -98,10 +98,6 @@ public class ImageServlet extends HttpServlet
         {
             contentType = "image/jpeg";
         }
-        if (filename.toLowerCase().endsWith(".avi"))
-        {
-            contentType = "video/avi";
-        }
         if (filename.toLowerCase().endsWith(".jpeg"))
         {
             contentType = "image/jpeg";
@@ -116,7 +112,6 @@ public class ImageServlet extends HttpServlet
         }
         response.setContentType(contentType);
         FileOperations.outputImage(file, response.getOutputStream(), request.getParameter("size"));
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

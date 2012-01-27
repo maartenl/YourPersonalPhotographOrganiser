@@ -50,111 +50,134 @@
                 });
             }
 
-        function pageUp()
-        {
-            YourPersonalPhotographOrganiserBag.index -= (YourPersonalPhotographOrganiserBag.view == "multiple" ? 9 : 1);
-            if (YourPersonalPhotographOrganiserBag.index<0) {YourPersonalPhotographOrganiserBag.index =0;}
-            displayPhotos();
-        }
-
-        function pageDown()
-        {
-            YourPersonalPhotographOrganiserBag.index += (YourPersonalPhotographOrganiserBag.view == "multiple" ? 9 : 1);
-            displayPhotos();
-        }
-
-        function changeView()
-        {
-            YourPersonalPhotographOrganiserBag.view = (YourPersonalPhotographOrganiserBag.view == "multiple" ? "single" : "multiple");
-            displayPhotos();
-        }
-
-        function go()
-        {
-            var i = parseInt($("#go_number_foto").val()) - 1;
-            if (window.console && YourPersonalPhotographOrganiserBag.debug) {console.debug(i);}
-            if (i < 0 || i > YourPersonalPhotographOrganiserBag.photos.length - 1){return;}
-            YourPersonalPhotographOrganiserBag.index = i;
-            displayPhotos();
-        }
-
-        function displayPhotos()
-        {
-            var buffer = "";
-            var photos = YourPersonalPhotographOrganiserBag.photos;
-
-            if (YourPersonalPhotographOrganiserBag.view != "multiple")
+            function pageUp()
             {
-                var i=YourPersonalPhotographOrganiserBag.index;
-                buffer +='<div class=\"photograph\"><a href=\"photo.jsp?id=' + photos[i].id + '\">' +
-                    '<img src=\"/YourPersonalPhotographOrganiser/ImageServlet?id=' + photos[i].photographId.id + '&size=large\" alt=\"\"/></a>' +
-                    '<br/><div class=\"name\">' + (i+1) + '. ' +
-                    photos[i].name
-                    + '</div><div class=\"description\">' + description + '</div></div>';
-                $('#pictureDiv').html(buffer);
-                return;
-            }
-
-            var i = 0;
-            var j = 0;
-            for (i=YourPersonalPhotographOrganiserBag.index;i<=YourPersonalPhotographOrganiserBag.index+8;i++)
-            {
-                var description = photos[i].description;
-                if (description == null) {description = '';}
-
-                buffer +='<div class="photograph ' + (j % 3 == 0 ? 'photographBegin ':' ') + (j % 3 == 2 ? 'photographEnd':'') +'"><a class=\"group\" rel=\"group1\" href=\"/YourPersonalPhotographOrganiser/ImageServlet?id=' + photos[i].photographId.id + '\">' +
-                    '<img src=\"/YourPersonalPhotographOrganiser/ImageServlet?id=' + photos[i].photographId.id + '&size=medium\" alt=\"\"/>' +
-                    '</a><br/><div class=\"name\"><a href=\"photo.jsp?id=' + photos[i].id + '\">' + (i+1) + '. ' +
-                    photos[i].name
-                    + '</a></div><div class=\"description\">' + description + '</div></div>';
-                j++;
-            }
-            $('#pictureDiv').html(buffer);
-            doThisThing();
-        }
-
-        function refreshPage(id)
-        {
-            $.get('/YourPersonalPhotographOrganiser/resources/galleries/' + id,
-            function(data){
-                if (window.console && YourPersonalPhotographOrganiserBag.debug) {console.debug(data);}
-                if (data == null)
-                {
-                    alert("No photographs found.");return;
-                }
-                $("#galleryname").html(data.name);
-                $("#gallerydescription").html(data.description);
-                if (data.parentId != null)
-                {
-                    $("#gallery_up").html("Up");
-                    $("#gallery_up").onclick(function() {
-                        // similar behavior as an HTTP redirect
-                        window.location.replace('/YourPersonalPhotographOrganiser/resources/galleries/' + data.parentId.id);
-                    });// end function onclick
-                } // end if parentId
-            }, // end function(data)
-            "json"); // endget
-            // url [, data] [, success(data, textStatus, jqXHR)] [, dataType] )
-
-            $.get('/YourPersonalPhotographOrganiser/resources/galleries/' + id + '/photographs',
-            function(data){
-                if (window.console && YourPersonalPhotographOrganiserBag.debug) {console.debug(data);}
-                YourPersonalPhotographOrganiserBag.photos = data;
-                YourPersonalPhotographOrganiserBag.index = 0;
+                YourPersonalPhotographOrganiserBag.index -= (YourPersonalPhotographOrganiserBag.view == "multiple" ? 9 : 1);
+                if (YourPersonalPhotographOrganiserBag.index<0) {YourPersonalPhotographOrganiserBag.index =0;}
                 displayPhotos();
-            }, // end function(data)
-            "json"); // endget
-            // url [, data] [, success(data, textStatus, jqXHR)] [, dataType] )
-        }
+            }
+
+            function pageDown()
+            {
+                YourPersonalPhotographOrganiserBag.index += (YourPersonalPhotographOrganiserBag.view == "multiple" ? 9 : 1);
+                displayPhotos();
+            }
+
+            function changeView()
+            {
+                YourPersonalPhotographOrganiserBag.view = (YourPersonalPhotographOrganiserBag.view == "multiple" ? "single" : "multiple");
+                displayPhotos();
+            }
+
+            function go()
+            {
+                var i = parseInt($("#go_number_foto").val()) - 1;
+                if (window.console && YourPersonalPhotographOrganiserBag.debug) {console.debug(i);}
+                if (i < 0 || i > YourPersonalPhotographOrganiserBag.photos.length - 1){return;}
+                YourPersonalPhotographOrganiserBag.index = i;
+                displayPhotos();
+            }
+
+            function displayPhotos()
+            {
+                var buffer = "";
+                var photos = YourPersonalPhotographOrganiserBag.photos;
+
+                if (YourPersonalPhotographOrganiserBag.view != "multiple")
+                {
+                    var i=YourPersonalPhotographOrganiserBag.index;
+                    var description = photos[i].description;
+                    if (description == null) {description = '';}
+                    if (photos[i].photographId.filename.toLowerCase().search('[.]avi$') == -1)
+                    {
+                        buffer +='<div class=\"photograph\"><a href=\"photo.jsp?id=' + photos[i].id + '\">' +
+                            '<img src=\"/YourPersonalPhotographOrganiser/ImageServlet?id=' + photos[i].photographId.id + '&size=large\" alt=\"\"/></a>' +
+                            '<br/><div class=\"name\">' + (i+1) + '. ' +
+                            photos[i].name
+                            + '</div><div class=\"description\">' + description + '</div></div>';
+                    }
+                    else
+                    {
+                        buffer +='<div class=\"photograph\">' +
+                            '<a><img src=\"/YourPersonalPhotographOrganiser/images/movie.png\" alt=\"\"/></a>' +
+                            '<br/><div class=\"name\">' + (i+1) + '. ' +
+                            photos[i].name
+                            + '</div><div class=\"description\">' + description + '</div></div>';
+                    }
+                    $('#pictureDiv').html(buffer);
+                    return;
+                }
+
+                var i = 0;
+                var j = 0;
+                for (i=YourPersonalPhotographOrganiserBag.index;i<=YourPersonalPhotographOrganiserBag.index+8;i++)
+                {
+                    var description = photos[i].description;
+                    if (description == null) {description = '';}
+                    if (photos[i].photographId.filename.toLowerCase().search('[.]avi$') == -1)
+                    {
+
+                        buffer +='<div class="photograph ' + (j % 3 == 0 ? 'photographBegin ':' ') + (j % 3 == 2 ? 'photographEnd':'') +'"><a class=\"group\" rel=\"group1\" href=\"/YourPersonalPhotographOrganiser/ImageServlet?id=' + photos[i].photographId.id + '\">' +
+                            '<img src=\"/YourPersonalPhotographOrganiser/ImageServlet?id=' + photos[i].photographId.id + '&size=medium\" alt=\"\"/>' +
+                            '</a><br/><div class=\"name\"><a href=\"photo.jsp?id=' + photos[i].id + '\">' + (i+1) + '. ' +
+                            photos[i].name
+                            + '</a></div><div class=\"description\">' + description + '</div></div>';}
+                    else
+                    {
+                        buffer +='<div class=\"photograph ' + (j % 3 == 0 ? 'photographBegin ':' ') + (j % 3 == 2 ? 'photographEnd':'') +'">' +
+                            '<a><img src=\"/YourPersonalPhotographOrganiser/images/movie.png\" alt=\"\"/></a>' +
+                            '<br/><div class=\"name\">' + (i+1) + '. ' +
+                            photos[i].name
+                            + '</div><div class=\"description\">' + description + '</div></div>';
+                    }
+                    j++;
+                }
+                $('#pictureDiv').html(buffer);
+                doThisThing();
+            }
+
+            function refreshPage(id)
+            {
+                $.get('/YourPersonalPhotographOrganiser/resources/galleries/' + id,
+                function(data){
+                    if (window.console && YourPersonalPhotographOrganiserBag.debug) {console.debug(data);}
+                    if (data == null)
+                    {
+                        alert("No photographs found.");return;
+                    }
+                    $("#galleryname").html(data.name);
+                    $("#gallerydescription").html(data.description);
+                    if (data.parentId != null)
+                    {
+                        $("#gallery_up").html("Up");
+                        $("#gallery_up").onclick(function() {
+                            // similar behavior as an HTTP redirect
+                            window.location.replace('/YourPersonalPhotographOrganiser/resources/galleries/' + data.parentId.id);
+                        });// end function onclick
+                    } // end if parentId
+                }, // end function(data)
+                "json"); // endget
+                // url [, data] [, success(data, textStatus, jqXHR)] [, dataType] )
+
+                $.get('/YourPersonalPhotographOrganiser/resources/galleries/' + id + '/photographs',
+                function(data){
+                    if (window.console && YourPersonalPhotographOrganiserBag.debug) {console.debug(data);}
+                    YourPersonalPhotographOrganiserBag.photos = data;
+                    YourPersonalPhotographOrganiserBag.index = 0;
+                    displayPhotos();
+                }, // end function(data)
+                "json"); // endget
+                // url [, data] [, success(data, textStatus, jqXHR)] [, dataType] )
+            }
 
 
-        $(document).ready(function() {
-            refreshPage(<%= id%>);
-            $('.page_up').click(function(){pageUp();});
-            $('.page_down').click(function(){pageDown();});
-            $('.changeview').click(function(){changeView();});
-            $('.goButton').click(function(){go();});
-        }); // end document ready
+            $(document).ready(function() {
+                refreshPage(<%= id%>);
+                $('.page_up').click(function(){pageUp();});
+                $('.page_down').click(function(){pageDown();});
+                $('.changeview').click(function(){changeView();});
+                $('.goButton').click(function(){go();});
+            }); // end document ready
         </script>
         <link rel="stylesheet" href="/fancybox/jquery.fancybox-1.3.4.css" type="text/css" media="screen" />
         <link rel="stylesheet" href="css/yppo.css" type="text/css" media="screen" />
@@ -167,7 +190,7 @@
         <div class="page_down myButton">Page down</div>
         <div class="changeview myButton">Change view</div>
         <input id="go_number_foto" type="text"></input>
-        <div class="goButton myButton">Go</div><hr/>
+        <div class="goButton myButton">Go</div>
         <hr/>
         <div id="pictureDiv"></div><hr>
         <div class="gallery_up myButton">No up</div>

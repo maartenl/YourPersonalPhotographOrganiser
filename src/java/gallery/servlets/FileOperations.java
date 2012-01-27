@@ -40,6 +40,10 @@ public class FileOperations
     public static void outputImage(File file, ServletOutputStream outputStream, String size) throws IOException
     {
         BufferedImage image = ImageIO.read(file);
+        if (image == null)
+        {
+            throw new IOException("Image is empty");
+        }
         if (size == null)
         {
             ImageIO.write(image, "jpg", outputStream);
