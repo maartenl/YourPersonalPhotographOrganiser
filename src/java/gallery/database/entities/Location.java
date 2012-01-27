@@ -59,8 +59,6 @@ public class Location implements Serializable
     @Size(max = 512)
     @Column(name = "filepath")
     private String filepath;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "locationId")
-    private Collection<Photograph> photographCollection;
 
     public Location()
     {
@@ -89,17 +87,6 @@ public class Location implements Serializable
     public void setFilepath(String filepath)
     {
         this.filepath = filepath;
-    }
-
-    @XmlTransient
-    public Collection<Photograph> getPhotographCollection()
-    {
-        return photographCollection;
-    }
-
-    public void setPhotographCollection(Collection<Photograph> photographCollection)
-    {
-        this.photographCollection = photographCollection;
     }
 
     @Override

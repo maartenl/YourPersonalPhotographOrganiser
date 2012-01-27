@@ -1,0 +1,90 @@
+/*
+    Document   : yppo
+    Created on : Jan 22, 2012, 7:37:43 PM
+    Author     : maartenl
+    Description:
+        Stylesheet of the YourPersonalPhotographOrganiser webapplication.
+*/
+
+root {
+    display: block;
+}
+
+hr {
+    clear:both;
+}
+
+.gallery_up {
+    float:left;
+}
+
+.page_up {
+    float:left;
+}
+
+.page_down {
+    float:left;
+    clear:right;}
+
+.photograph {
+    float:left;
+    margin:10px;
+    width:28%;
+}
+
+.photograph .name {
+    text-align: center;
+}
+
+.photograph .description {
+    text-align: center;
+}
+
+.photograph a img
+{
+    border-style:solid;
+    border-width:thin;
+    border-color: black;
+    padding:10px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.photographBegin {
+    clear:left;
+}
+
+.photographEnd {
+    clear:right;
+}
+
+.myButton {
+	-moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
+	-webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
+	box-shadow:inset 0px 1px 0px 0px #ffffff;
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #dfdfdf) );
+	background:-moz-linear-gradient( center top, #ededed 5%, #dfdfdf 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#dfdfdf');
+	background-color:#ededed;
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+	border-radius:6px;
+	border:1px solid #dcdcdc;
+	display:inline-block;
+	color:#777777;
+	font-family:arial;
+	font-size:15px;
+	font-weight:bold;
+	padding:6px 24px;
+	text-decoration:none;
+	text-shadow:1px 1px 0px #ffffff;
+}.myButton:hover {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #dfdfdf), color-stop(1, #ededed) );
+	background:-moz-linear-gradient( center top, #dfdfdf 5%, #ededed 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#dfdfdf', endColorstr='#ededed');
+	background-color:#dfdfdf;
+}.myButton:active {
+	position:relative;
+	top:1px;
+}

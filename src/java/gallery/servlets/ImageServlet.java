@@ -75,7 +75,16 @@ public class ImageServlet extends HttpServlet
             writeError("Photograph id not found.", response);
             return;
         }
-        Long id = new Long(idString);
+        Long id = null;
+
+        try
+        {
+            id = new Long(idString);
+        } catch (NumberFormatException e)
+        {
+            writeError("Photograph id not a number.", response);
+            return;
+        }
         if (id == null || id <= 0l)
         {
             writeError("Photograph id invalid.", response);

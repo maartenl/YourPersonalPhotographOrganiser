@@ -17,6 +17,8 @@
 package gallery.beans;
 
 import gallery.database.entities.Gallery;
+import gallery.database.entities.GalleryPhotograph;
+import java.util.Collection;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -29,6 +31,8 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response.Status;
 
 /**
  *
@@ -91,6 +95,22 @@ public class GalleryBean extends AbstractBean<Gallery>
     public Gallery find(@PathParam("id") Long id)
     {
         return super.find(id);
+    }
+
+    @GET
+    @Path("{id}/photographs")
+    @Produces(
+    {
+        "application/xml", "application/json"
+    })
+    public Collection<GalleryPhotograph> getPhotographs(@PathParam("id") Long id)
+    {
+        Gallery gallery = find(id);
+        if (gallery == null)
+        {
+            throw new WebApplicationException(Status.NOT_FOUND);
+        }
+        return gallery.getGalleryPhotographCollection();
     }
 
     @GET

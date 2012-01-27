@@ -169,6 +169,7 @@ public class GalleryPhotograph implements Serializable
         return galleryId;
     }
 
+    @XmlTransient
     public void setGalleryId(Gallery galleryId)
     {
         this.galleryId = galleryId;
