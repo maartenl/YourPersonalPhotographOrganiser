@@ -17,6 +17,7 @@
 package gallery.beans;
 
 import gallery.database.entities.GalleryPhotograph;
+import java.math.BigInteger;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -69,7 +70,12 @@ public class GalleryPhotographBean extends AbstractBean<GalleryPhotograph>
     })
     public void edit(GalleryPhotograph entity)
     {
-        super.edit(entity);
+        GalleryPhotograph photo = find(entity.getId());
+        photo.setAngle(entity.getAngle());
+        photo.setDescription(entity.getDescription());
+        photo.setName(entity.getName());
+        photo.setSortorder(entity.getSortorder());
+        // super.edit(entity);
     }
 
     @DELETE
