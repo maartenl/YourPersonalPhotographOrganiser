@@ -17,10 +17,15 @@
 package gallery.beans;
 
 import gallery.database.entities.Comment;
+import gallery.database.entities.GalleryPhotograph;
+import java.util.Date;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -41,6 +46,9 @@ public class CommentBean extends AbstractBean<Comment>
     @PersistenceContext(unitName = "YourPersonalPhotographOrganiserPU")
     private EntityManager em;
 
+    @EJB
+    GalleryPhotographBean galleryphotographBean;
+
     protected EntityManager getEntityManager()
     {
         return em;
@@ -50,6 +58,7 @@ public class CommentBean extends AbstractBean<Comment>
     {
         super(Comment.class);
     }
+
     @POST
     @Override
     @Consumes(
@@ -58,7 +67,28 @@ public class CommentBean extends AbstractBean<Comment>
     })
     public void create(Comment entity)
     {
-        super.create(entity);
+        GalleryPhotograph photo = galleryphotographBean.find(entity.getGalleryphotographId().getId());
+        entity.setGalleryphotographId(photo);
+        Comment newComment = new Comment();
+        newComment.setAuthor(entity.getAuthor());
+        newComment.setComment(entity.getComment());
+        newComment.setSubmitted(new Date());
+        newComment.setGalleryphotographId(photo);
+        photo.getCommentCollection().add(newComment);
+        System.out.println(newComment);
+        try
+        {
+        super.create(newComment);
+        }
+        catch (ConstraintViolationException e)
+        {
+            for (ConstraintViolation<?> violation : e.getConstraintViolations())
+            {
+                System.out.println(violation);
+            }
+
+        }
+        // super.create(entity);
     }
 
     @PUT

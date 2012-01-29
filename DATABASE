@@ -96,6 +96,8 @@ create table Photograph (
  relativepath varchar(1024),
  taken timestamp,
  foreign key (location_id) references Location (id)
+# hash : stuff
+# size : stuff
 );
 
 create table Gallery (

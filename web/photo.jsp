@@ -56,6 +56,7 @@ Author : maartenl
                 debug : true, // debugging=false is debugging off
                 view : "multiple" // indicates that 9 pictures should be shown at once, single being only one picture.
             };
+
             function createPhotograph()
             {
                 alert("createPhotograph");
@@ -72,6 +73,7 @@ Author : maartenl
                 photo.angle = $("#angle").val();
                 photo.name = $("#name").val();
                 photo.sortorder = $("#sortorder").val();
+                photo.photographId.id = $("#photo_photographId_id").val();
                 $.ajax({
                     type: "PUT",
                     url: "/YourPersonalPhotographOrganiser/resources/galleryphotographs",
@@ -97,6 +99,29 @@ Author : maartenl
                 $.ajax({
                     type: "DELETE",
                     url: "/YourPersonalPhotographOrganiser/resources/galleryphotographs/" + photo.id,
+                    success: function()
+                    {
+                        alert("Success!");
+                    },
+                    contentType: "application/json"
+                }).done(function( msg ) {
+                    alert( "Data Saved: " + msg );
+                });
+            }
+
+
+            function createComment()
+            {
+                alert("createComment");
+                var comment = {
+                    author:$("#author").val(),
+                    comment:$("#comment").val(),
+                    galleryphotographId: YourPersonalPhotographOrganiserBag.photograph
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "/YourPersonalPhotographOrganiser/resources/comments",
+                    data: JSON.stringify(comment),
                     success: function()
                     {
                         alert("Success!");
@@ -134,7 +159,7 @@ Author : maartenl
 
                     $("#photo_photographId_id").val(data.photographId.id);
                     $("#photo_photographId_relativepath").html(data.photographId.relativepath);
-                    $("#photo_photographId_taken").html(data.photographId.taken);
+                    $("#photo_photographId_taken").html(new Date(data.photographId.taken) + "");
                     $("#photo_photographId_filename").html(data.photographId.filename);
 
                     $("#photo_photographId_locationId_id").html(data.photographId.locationId.id);
@@ -149,9 +174,12 @@ Author : maartenl
             {
                 refreshPage(<%= id%>);
 
+                $('.refreshPhotograph').click(function(){refreshPage(<%= id%>);});
                 $('.createPhotograph').click(function(){createPhotograph();});
                 $('.updatePhotograph').click(function(){updatePhotograph();});
                 $('.deletePhotograph').click(function(){deletePhotograph();});
+
+                $('.createComment').click(function(){createComment();});
             }); // end document ready
         </script>
         <link rel="stylesheet" href="/fancybox/jquery.fancybox-1.3.4.css" type="text/css" media="screen" />
@@ -195,7 +223,21 @@ Author : maartenl
         <p>
             File path:<span id="photo_photographId_locationId_filepath"></span>
         </p>
+        <h3>Comment</h3>
+        <label for="id">Id</label>
+        <input type="text" name="id" id="id"/>
+        <br/>
+        <label for="author">Author</label>
+        <input type="text" name="author" id="author"/>
+        <br/>
+        <label for="comment">Comment</label>
+        <textarea name="comment" id="comment" ></textarea>
+        <br/>
+        <p>Submitted:</p>
+
+        <div class="createComment myButton">Create</div>
         <hr/>
+        <div class="refreshPhotograph myButton">Refresh</div>
         <div class="createPhotograph myButton">Create</div>
         <div class="updatePhotograph myButton">Update</div>
         <div class="deletePhotograph myButton">Delete</div>

@@ -56,7 +56,7 @@ public class Comment implements Serializable
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
+    // @NotNull
     @Column(name = "id")
     private Long id;
     @Size(max = 255)
@@ -167,7 +167,7 @@ public class Comment implements Serializable
     @Override
     public String toString()
     {
-        return "gallery.database.entities.Comment[ id=" + id + " ]";
+        return "gallery.database.entities.Comment[ id=" + id + " author=" + author + " comment=" + comment + "]";
     }
 
 }

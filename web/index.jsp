@@ -88,23 +88,38 @@
                     var i=YourPersonalPhotographOrganiserBag.index;
                     var description = photos[i].description;
                     if (description == null) {description = '';}
+                    buffer += "<div class=\"photographCenter\">";
                     if (photos[i].photographId.filename.toLowerCase().search('[.]avi$') == -1)
                     {
-                        buffer +='<div class=\"photograph\"><a href=\"photo.jsp?id=' + photos[i].id + '\">' +
-                            '<img src=\"/YourPersonalPhotographOrganiser/ImageServlet?id=' + photos[i].photographId.id + '&size=large\" alt=\"\"/></a>' +
-                            '<br/><div class=\"name\">' + (i+1) + '. ' +
-                            photos[i].name
-                            + '</div><div class=\"description\">' + description + '</div></div>';
+                        buffer += "<a href=\"photo.jsp?id=" + photos[i].id + "\">" +
+                            "<img src=\"/YourPersonalPhotographOrganiser/ImageServlet?id=" + photos[i].photographId.id + "&size=large\" alt=\"\"/>";
                     }
                     else
                     {
-                        buffer +='<div class=\"photograph\">' +
-                            '<a><img src=\"/YourPersonalPhotographOrganiser/images/movie.png\" alt=\"\"/></a>' +
+                        buffer += "<a><img src=\"/YourPersonalPhotographOrganiser/images/movie.png\" alt=\"\"/>";
+                    }
+                    buffer += '</a>' +
                             '<br/><div class=\"name\">' + (i+1) + '. ' +
                             photos[i].name
-                            + '</div><div class=\"description\">' + description + '</div></div>';
-                    }
+                            + '</div><div class=\"description\">' + description + '</div><div class=\"comments\"></div></div>';
                     $('#pictureDiv').html(buffer);
+
+                    $.get('/YourPersonalPhotographOrganiser/resources/galleryphotographs/' + photos[i].id + '/comments',
+                    function(data){
+                        if (window.console && YourPersonalPhotographOrganiserBag.debug) {console.debug(data);}
+                        if (data == null)
+                        {
+                            alert("No comments found.");return;
+                        }
+                        var buffer = "";
+                        for (i in data)
+                        {
+                            buffer += "<p>" + data[i].comment + "<p/><p>" + data[i].author + ", " + (new Date(data[i].submitted)) + "</p>";
+                        }
+                        $(".comments").html(buffer);
+                    }, // end function(data)
+                    "json"); // endget
+                    // url [, data] [, success(data, textStatus, jqXHR)] [, dataType] )
                     return;
                 }
 

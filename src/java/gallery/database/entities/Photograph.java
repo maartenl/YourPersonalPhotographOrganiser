@@ -40,7 +40,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- *
+ * TODO add hash and size
  * @author maartenl
  */
 @Entity

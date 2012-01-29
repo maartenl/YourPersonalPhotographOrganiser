@@ -60,6 +60,7 @@ http://micemouse:8080/YourPersonalPhotographOrganiser/resources/galleries/{id}/p
 
 
 http://micemouse:8080/YourPersonalPhotographOrganiser/resources/galleryphotographs
+http://micemouse:8080/YourPersonalPhotographOrganiser/resources/galleryphotographs/{id}/comments
 http://micemouse:8080/YourPersonalPhotographOrganiser/resources/photographs
 http://micemouse:8080/YourPersonalPhotographOrganiser/resources/locations
 http://micemouse:8080/YourPersonalPhotographOrganiser/resources/comments

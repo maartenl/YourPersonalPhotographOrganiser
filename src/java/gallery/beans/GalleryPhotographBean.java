@@ -16,9 +16,11 @@
  */
 package gallery.beans;
 
+import gallery.database.entities.Comment;
 import gallery.database.entities.GalleryPhotograph;
-import java.math.BigInteger;
+import java.util.Collection;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -30,6 +32,8 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response.Status;
 
 /**
  *
@@ -39,8 +43,11 @@ import javax.ws.rs.Produces;
 @Path("/galleryphotographs")
 public class GalleryPhotographBean extends AbstractBean<GalleryPhotograph>
 {
+
     @PersistenceContext(unitName = "YourPersonalPhotographOrganiserPU")
     private EntityManager em;
+    @EJB
+    PhotographBean photographBean;
 
     protected EntityManager getEntityManager()
     {
@@ -51,6 +58,7 @@ public class GalleryPhotographBean extends AbstractBean<GalleryPhotograph>
     {
         super(GalleryPhotograph.class);
     }
+
     @POST
     @Override
     @Consumes(
@@ -75,6 +83,7 @@ public class GalleryPhotographBean extends AbstractBean<GalleryPhotograph>
         photo.setDescription(entity.getDescription());
         photo.setName(entity.getName());
         photo.setSortorder(entity.getSortorder());
+        photo.setPhotographId(photographBean.find(entity.getPhotographId().getId()));
         // super.edit(entity);
     }
 
@@ -83,6 +92,22 @@ public class GalleryPhotographBean extends AbstractBean<GalleryPhotograph>
     public void remove(@PathParam("id") Long id)
     {
         super.remove(super.find(id));
+    }
+
+    @GET
+    @Path("{id}/comments")
+    @Produces(
+    {
+        "application/xml", "application/json"
+    })
+    public Collection<Comment> getComments(@PathParam("id") Long id)
+    {
+        GalleryPhotograph photo = find(id);
+        if (photo == null)
+        {
+            throw new WebApplicationException(Status.NOT_FOUND);
+        }
+        return photo.getCommentCollection();
     }
 
     @GET
