@@ -132,6 +132,41 @@ Author : maartenl
                 });
             }
 
+            function refreshMetadata()
+            {
+                $.get(
+                '/YourPersonalPhotographOrganiser/resources/photographs/' + YourPersonalPhotographOrganiserBag.photograph.photographId.id + '/metadata'
+                ,
+                function(data)
+                {
+                    if (window.console && YourPersonalPhotographOrganiserBag.debug)
+                    {
+                        console.debug(data);
+                    }
+                    if (data == null)
+                    {
+                        alert("No photograph metadata found.");
+                        return;
+                    }
+                    var buffer = "";
+                    for (i in data)
+                    {
+                        var tags = data[i].tags;
+                        buffer+="<p><strong>Name:</strong>" + data[i].name + (data[i].taken != null ? "</p><p><strong>Taken:</strong> " + (new Date(data[i].taken)) : "") + "</p>";
+                        buffer+="<table><tr><th>tag</th><th>value</th></tr>";
+                        for (j in tags)
+                        {
+                            buffer+="<tr><td>" + tags[j].name + "</td><td>"+ tags[j].value + "</td></tr>";
+                        }
+                        buffer+="</table>";
+                    }
+                    $("#metadata").html(buffer);
+
+                } // end function data
+                , "json"); // endget metadata
+                // url [, data] [, success(data, textStatus, jqXHR)] [, dataType] )
+            }
+
             function refreshPage(id)
             {
                 $.get(
@@ -164,10 +199,12 @@ Author : maartenl
 
                     $("#photo_photographId_locationId_id").html(data.photographId.locationId.id);
                     $("#photo_photographId_locationId_filepath").html(data.photographId.locationId.filepath);
+                    refreshMetadata();
 
                 } // end function data
-                , "json"); // endget
+                , "json"); // endget galleryphotograph
                 // url [, data] [, success(data, textStatus, jqXHR)] [, dataType] )
+
             }
 
             $(document).ready(function()
@@ -223,6 +260,7 @@ Author : maartenl
         <p>
             File path:<span id="photo_photographId_locationId_filepath"></span>
         </p>
+        <h3>Metadata</h3><div id="metadata"></div>
         <h3>Comment</h3>
         <label for="id">Id</label>
         <input type="text" name="id" id="id"/>

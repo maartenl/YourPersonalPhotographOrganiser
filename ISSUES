@@ -357,3 +357,17 @@ new entity, as the id gets determined by the database.
 
 Jk7 doesn't work with jsp pages yet
 http://java.net/jira/browse/GLASSFISH-17429
+
+4. WARNING: A HTTP GET method, public gallery.database.entities.Photograph
+gallery.beans.PhotographBean.getMetadata(java.lang.Long), should not consume
+any entity.
+SEVERE: The exception contained within MappableContainerException could not
+be mapped to a response, re-throwing to the HTTP container
+java.io.EOFException: No content to map to Object due to end of input
+
+Caused by a wrong method:
+    public List<List<String>> getMetadata(Long id)
+
+should be:
+    public List<List<String>> getMetadata(@PathParam("id") Long id)
+

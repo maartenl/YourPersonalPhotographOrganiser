@@ -3,6 +3,9 @@ YourPersonalPhotographOrganiser
 
 An attempt from me at creating a Photo gallery.
 
+WHY
+---
+
 Given the fact that there are numerous other photo galleries, why should
 you use this one?
 
@@ -20,10 +23,24 @@ Requirements
 4. helps me to understand the jdk 7, glassfish and jee, by using
 all the new stuff in there.
 5. absolutely NO changing of the photographs, all changes are done
-in java, in memory, in glassfish.
-6. flexible in where these photographs are located
+in java, in memory, in glassfish. *)
+6. flexible in where these photographs are located (no need to keep them in
+the webdir, for example)
 
-Use
+
+*) I've had too many instances where:
+1. changing files from webinterface is a security risk, and requires proper
+access rights.
+2. changing files causes the extra data present in the jpegs put there by
+photocameras to be discarded
+3. changing files potentially causes deterioration of the quality of the
+jpegs
+4. changing files has sometimes caused the file to be damaged in some way
+5. changing files makes it impossible to determine if the photo is already 
+present in your collection
+
+USE
+---
 
 Go to url http://micemouse:8080/YourPersonalPhotographOrganiser/ to get started
 Parameters:
@@ -49,11 +66,10 @@ POST - create
 PUT - edit
 DELETE - delete
 
-The rest services
-=================
+REST SERVICES
+-------------
 
 Gallery
--------
 http://micemouse:8080/YourPersonalPhotographOrganiser/resources/galleries
 http://micemouse:8080/YourPersonalPhotographOrganiser/resources/galleries/{id}
 http://micemouse:8080/YourPersonalPhotographOrganiser/resources/galleries/{id}/photographs
@@ -74,7 +90,8 @@ Content-Type: application/json
 Transfer-Encoding: chunked
 Date: Sat, 24 Dec 2011 17:19:55 GMT
 
-Directory Contents
+CONTENTS
+--------
 
 build - the build products (class files, for instance)
 DATABASE - description of the database, with sql scripts

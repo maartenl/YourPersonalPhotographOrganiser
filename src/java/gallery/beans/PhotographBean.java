@@ -16,9 +16,19 @@
  */
 package gallery.beans;
 
+import com.drew.imaging.ImageMetadataReader;
+import com.drew.imaging.ImageProcessingException;
+import com.drew.metadata.Directory;
+import com.drew.metadata.Metadata;
+import com.drew.metadata.Tag;
+import com.drew.metadata.exif.ExifSubIFDDirectory;
 import gallery.database.entities.Photograph;
+import gallery.images.PhotoMetadata;
+import gallery.images.PhotoTag;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.FileSystems;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -31,6 +41,8 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response.Status;
 
 /**
  *
@@ -138,5 +150,42 @@ public class PhotographBean extends AbstractBean<Photograph>
         java.nio.file.Path newPath = FileSystems.getDefault().getPath(photo.getLocationId().getFilepath(), photo.getRelativepath(), photo.getFilename());
         File file = newPath.toFile();
         return file;
+    }
+
+    @GET
+    @Path("{id}/metadata")
+    @Produces(
+    {
+        "application/xml", "application/json"
+    })
+    public List<PhotoMetadata> getMetadata(@PathParam("id") Long id)
+    {
+        File jpegFile = getFile(id);
+        Metadata metadata;
+        try
+        {
+            // JDK7 : empty diamond
+            List<PhotoMetadata> metadatas = new ArrayList<>();
+            metadata = ImageMetadataReader.readMetadata(jpegFile);
+            for (Directory directory : metadata.getDirectories())
+            {
+                PhotoMetadata mymetadata = new PhotoMetadata();
+                mymetadata.name = directory.getName();
+
+                mymetadata.taken = directory.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL);
+                for (Tag tag : directory.getTags())
+                {
+                    mymetadata.tags.add(new PhotoTag(tag.getTagName(),
+                            tag.getDescription()));
+                }
+                metadatas.add(mymetadata);
+            }
+            return metadatas;
+            // JDK 7 - Multicatch , woohoo!
+        } catch (ImageProcessingException | IOException ex)
+        {
+            throw new WebApplicationException(Status.INTERNAL_SERVER_ERROR);
+        }
+
     }
 }
