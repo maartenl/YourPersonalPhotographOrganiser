@@ -371,3 +371,14 @@ Caused by a wrong method:
 should be:
     public List<List<String>> getMetadata(@PathParam("id") Long id)
 
+5. WARNING:
+StandardWrapperValve[org.netbeans.rest.application.config.ApplicationConfig]:
+PWC1406: Servlet.service() for servlet
+org.netbeans.rest.application.config.ApplicationConfig threw exception
+org.codehaus.jackson.map.JsonMappingException: Infinite recursion
+(StackOverflowError) (through reference chain:
+gallery.database.entities.Gallery
+
+https://www.netbeans.org/bugzilla/show_bug.cgi?id=205394
+
+I've choosen for now to add JsonIgnore and change it at a later date.

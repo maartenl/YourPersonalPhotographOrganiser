@@ -10,7 +10,7 @@ Given the fact that there are numerous other photo galleries, why should
 you use this one?
 
 1. it's very easy to comprehend and very simple
-2. it uses the JDK 7 and Glassfish, if you wish to learn these two, here's
+2. it uses the JDK 7 and JEE 3.1 (under Glassfish), if you wish to learn these two, here's
 your chance
 3. it has almost everything you need for home use, I do not recommend it for
 website use.
@@ -20,7 +20,7 @@ Requirements
 1. simple database, easy to make changes directly, if so required
 2. used for home use
 3. no authentication or authorization required
-4. helps me to understand the jdk 7, glassfish and jee, by using
+4. helps me to understand the jdk 7, glassfish and jee 3.1, by using
 all the new stuff in there.
 5. absolutely NO changing of the photographs, all changes are done
 in java, in memory, in glassfish. *)
@@ -38,6 +38,18 @@ jpegs
 4. changing files has sometimes caused the file to be damaged in some way
 5. changing files makes it impossible to determine if the photo is already 
 present in your collection
+
+Some of the new stuff that is being used here:
+JDK7 (Look for "JDK7" in the sourcecode)
+1. multiple catch
+2. try-with-resources
+3. diamond-notation
+4. filevisitor interface
+5. Path class usage
+JEE 3.1
+1. no local interfaces on beans
+2. EJBs inside the WAR, no longer is an EAR required
+
 
 USE
 ---

@@ -38,6 +38,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  * TODO add hash and size
@@ -74,6 +75,14 @@ public class Photograph implements Serializable
     @Column(name = "taken")
     @Temporal(TemporalType.TIMESTAMP)
     private Date taken;
+    @Basic(optional = false)
+    @Size(max = 1024)
+    @Column(name = "hashstring")
+    private String hashstring;
+    @Basic(optional = false)
+    @Column(name = "filesize")
+    private Long filesize;
+
     @JoinColumn(name = "location_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Location locationId;
@@ -146,6 +155,7 @@ public class Photograph implements Serializable
     }
 
     @XmlTransient
+    @JsonIgnore
     public Collection<Tag> getTagCollection()
     {
         return tagCollection;
@@ -154,6 +164,26 @@ public class Photograph implements Serializable
     public void setTagCollection(Collection<Tag> tagCollection)
     {
         this.tagCollection = tagCollection;
+    }
+
+    public Long getFilesize()
+    {
+        return filesize;
+    }
+
+    public void setFilesize(Long filesize)
+    {
+        this.filesize = filesize;
+    }
+
+    public String getHashstring()
+    {
+        return hashstring;
+    }
+
+    public void setHashstring(String hashstring)
+    {
+        this.hashstring = hashstring;
     }
 
     @Override

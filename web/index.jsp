@@ -60,6 +60,7 @@
             function pageDown()
             {
                 YourPersonalPhotographOrganiserBag.index += (YourPersonalPhotographOrganiserBag.view == "multiple" ? 9 : 1);
+                if (YourPersonalPhotographOrganiserBag.index>=YourPersonalPhotographOrganiserBag.photos.length) {YourPersonalPhotographOrganiserBag.index =YourPersonalPhotographOrganiserBag.photos.length - 1;}
                 displayPhotos();
             }
 
@@ -99,9 +100,9 @@
                         buffer += "<a><img src=\"/YourPersonalPhotographOrganiser/images/movie.png\" alt=\"\"/>";
                     }
                     buffer += '</a>' +
-                            '<br/><div class=\"name\">' + (i+1) + '. ' +
-                            photos[i].name
-                            + '</div><div class=\"description\">' + description + '</div><div class=\"comments\"></div></div>';
+                        '<br/><div class=\"name\">' + (i+1) + '. ' +
+                        photos[i].name
+                        + '</div><div class=\"description\">' + description + '</div><div class=\"comments\"></div></div>';
                     $('#pictureDiv').html(buffer);
 
                     $.get('/YourPersonalPhotographOrganiser/resources/galleryphotographs/' + photos[i].id + '/comments',
@@ -178,6 +179,8 @@
                 function(data){
                     if (window.console && YourPersonalPhotographOrganiserBag.debug) {console.debug(data);}
                     YourPersonalPhotographOrganiserBag.photos = data;
+                    $("#gallerystats").html(YourPersonalPhotographOrganiserBag.photos.length);
+
                     YourPersonalPhotographOrganiserBag.index = 0;
                     displayPhotos();
                 }, // end function(data)
@@ -200,6 +203,7 @@
     <body>
         <h1 id="galleryname">Your Personal Photograph Organiser</h1>
         <div id="gallerydescription"></div>
+        <div><span id="gallerystats"></span> photos</div>
         <div class="gallery_up myButton">No up</div>
         <div class="page_up myButton">Page up</div>
         <div class="page_down myButton">Page down</div>

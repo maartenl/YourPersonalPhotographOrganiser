@@ -1,0 +1,6 @@
+TODO
+====
+
+- fix the JsonIgnore, put it in the Provider
+https://www.netbeans.org/bugzilla/show_bug.cgi?id=205394
+

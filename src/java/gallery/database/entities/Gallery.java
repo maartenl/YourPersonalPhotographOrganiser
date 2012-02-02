@@ -41,6 +41,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  *
@@ -160,6 +161,7 @@ public class Gallery implements Serializable
         this.sortorder = sortorder;
     }
 
+    @JsonIgnore
     @XmlTransient
     public Collection<GalleryPhotograph> getGalleryPhotographCollection()
     {
@@ -181,6 +183,7 @@ public class Gallery implements Serializable
         this.highlight = highlight;
     }
 
+    @JsonIgnore
     @XmlTransient
     public Collection<Gallery> getGalleryCollection()
     {

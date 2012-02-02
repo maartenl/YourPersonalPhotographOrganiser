@@ -195,6 +195,8 @@ Author : maartenl
                     $("#photo_photographId_id").val(data.photographId.id);
                     $("#photo_photographId_relativepath").html(data.photographId.relativepath);
                     $("#photo_photographId_taken").html(new Date(data.photographId.taken) + "");
+                    $("#photo_photographId_hashstring").html(data.photographId.hashstring);
+                    $("#photo_photographId_filesize").html(data.photographId.filesize);
                     $("#photo_photographId_filename").html(data.photographId.filename);
 
                     $("#photo_photographId_locationId_id").html(data.photographId.locationId.id);
@@ -252,6 +254,12 @@ Author : maartenl
         </p>
         <p>
             Taken:<span id="photo_photographId_taken"></span>
+        </p>
+        <p>
+            Hash:<span id="photo_photographId_hashstring"></span>
+        </p>
+        <p>
+            Filesize:<span id="photo_photographId_filesize"></span>
         </p>
         <h3>Location</h3>
         <p>

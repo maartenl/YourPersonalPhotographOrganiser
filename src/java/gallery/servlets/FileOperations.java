@@ -16,10 +16,16 @@
  */
 package gallery.servlets;
 
+import gallery.images.ImageOperations;
 import gallery.enums.ImageSizeEnum;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.security.DigestInputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 
@@ -68,5 +74,32 @@ public class FileOperations
                 ImageIO.write(image, "jpg", outputStream);
                 break;
         }
+    }
+
+    /**
+     * Returns a string containing a 512bit hash in hexadecimal of the file.
+     * @param file the file to hash
+     * @return String with hash
+     * @throws NoSuchAlgorithmException if SHA-512 is not supported (should be, though)
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
+    public String computeHash(File file) throws NoSuchAlgorithmException, FileNotFoundException, IOException
+    {
+        // Obtain a message digest object.
+        MessageDigest md = MessageDigest.getInstance("SHA-512");
+
+        // Calculate the digest for the given file.
+        DigestInputStream in = new DigestInputStream(
+                new FileInputStream(file), md);
+        byte[] buffer = new byte[8192];
+        while (in.read(buffer) != -1); // empty statement, we're just computing hashes here.
+        byte[] hash = md.digest();
+        StringBuilder hexString = new StringBuilder();
+        for (int i = 0; i < hash.length; i++)
+        {
+            hexString.append(Integer.toHexString(0xFF & hash[i]));
+        }
+        return hexString.toString();
     }
 }
