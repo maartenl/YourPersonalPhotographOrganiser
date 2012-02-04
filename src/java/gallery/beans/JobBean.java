@@ -38,9 +38,10 @@ public class JobBean
         return em;
     }
 
+    public void addPhotos(String directory)
+    {
 
-    public void addPhotos()
-    {}
+    }
 
     public void updatePhotos()
     {}

@@ -16,19 +16,13 @@
  */
 package gallery.beans;
 
-import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
-import com.drew.metadata.Directory;
-import com.drew.metadata.Metadata;
-import com.drew.metadata.Tag;
-import com.drew.metadata.exif.ExifSubIFDDirectory;
 import gallery.database.entities.Photograph;
+import gallery.images.ImageOperations;
 import gallery.images.PhotoMetadata;
-import gallery.images.PhotoTag;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
-import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -161,26 +155,9 @@ public class PhotographBean extends AbstractBean<Photograph>
     public List<PhotoMetadata> getMetadata(@PathParam("id") Long id)
     {
         File jpegFile = getFile(id);
-        Metadata metadata;
         try
         {
-            // JDK7 : empty diamond
-            List<PhotoMetadata> metadatas = new ArrayList<>();
-            metadata = ImageMetadataReader.readMetadata(jpegFile);
-            for (Directory directory : metadata.getDirectories())
-            {
-                PhotoMetadata mymetadata = new PhotoMetadata();
-                mymetadata.name = directory.getName();
-
-                mymetadata.taken = directory.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL);
-                for (Tag tag : directory.getTags())
-                {
-                    mymetadata.tags.add(new PhotoTag(tag.getTagName(),
-                            tag.getDescription()));
-                }
-                metadatas.add(mymetadata);
-            }
-            return metadatas;
+            return ImageOperations.getMetadata(jpegFile);
             // JDK 7 - Multicatch , woohoo!
         } catch (ImageProcessingException | IOException ex)
         {

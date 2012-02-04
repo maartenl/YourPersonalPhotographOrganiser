@@ -65,7 +65,6 @@ public class Gallery implements Serializable
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "id")
     private Long id;
     @Size(max = 80)

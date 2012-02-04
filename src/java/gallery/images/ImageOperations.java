@@ -16,10 +16,21 @@
  */
 package gallery.images;
 
+import com.drew.imaging.ImageMetadataReader;
+import com.drew.imaging.ImageProcessingException;
+import com.drew.metadata.Directory;
+import com.drew.metadata.Metadata;
+import com.drew.metadata.Tag;
+import com.drew.metadata.exif.ExifSubIFDDirectory;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Transparency;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -27,6 +38,11 @@ import java.awt.image.BufferedImage;
  */
 public class ImageOperations
 {
+
+    private ImageOperations()
+    {
+        // defeat instantiation
+    }
 
     /**
      * Scale an image down to a new size. Keeps ratio.
@@ -60,6 +76,41 @@ public class ImageOperations
         g2.drawImage(originalImage, 0, 0, newWidth, newHeight, null);
         g2.dispose();
         return tmp;
+    }
+
+    public static List<PhotoMetadata> getMetadata(File jpegFile) throws ImageProcessingException, IOException
+    {
+        // JDK7 : empty diamond
+        List<PhotoMetadata> metadatas = new ArrayList<>();
+        Metadata metadata = ImageMetadataReader.readMetadata(jpegFile);
+        for (Directory directory : metadata.getDirectories())
+        {
+            PhotoMetadata mymetadata = new PhotoMetadata();
+            mymetadata.name = directory.getName();
+
+            mymetadata.taken = directory.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL);
+            for (Tag tag : directory.getTags())
+            {
+                mymetadata.tags.add(new PhotoTag(tag.getTagName(),
+                        tag.getDescription()));
+            }
+            metadatas.add(mymetadata);
+        }
+        return metadatas;
+    }
+
+    /**
+     * Returns the date and time when the photograph was taken, null if unable to retrieve.
+     * @param jpegFile
+     * @return null or Date
+     * @throws ImageProcessingException
+     * @throws IOException
+     */
+    public static Date getDateTimeTaken(File jpegFile) throws ImageProcessingException, IOException
+    {
+        Metadata metadata = ImageMetadataReader.readMetadata(jpegFile);
+        Directory directory = metadata.getDirectory(ExifSubIFDDirectory.class);
+        return directory.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL);
     }
 
 }

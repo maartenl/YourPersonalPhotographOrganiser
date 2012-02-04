@@ -188,11 +188,16 @@
                 // url [, data] [, success(data, textStatus, jqXHR)] [, dataType] )
             }
 
+            function gotoGallery()
+            {
+                window.location.replace('/YourPersonalPhotographOrganiser/gallery.jsp');
+            }
 
             $(document).ready(function() {
                 refreshPage(<%= id%>);
                 $('.page_up').click(function(){pageUp();});
                 $('.page_down').click(function(){pageDown();});
+                $('#galleryname').click(function(){gotoGallery();});
                 $('.changeview').click(function(){changeView();});
                 $('.goButton').click(function(){go();});
             }); // end document ready

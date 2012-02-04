@@ -19,10 +19,13 @@ package gallery.beans;
 import gallery.database.entities.Gallery;
 import gallery.database.entities.GalleryPhotograph;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -65,7 +68,25 @@ public class GalleryBean extends AbstractBean<Gallery>
     })
     public void create(Gallery entity)
     {
-        super.create(entity);
+        entity.setCreationDate(new Date());
+        if (entity.getParentId() != null && entity.getParentId().getId() != null)
+        {
+            Gallery parentGallery = find(entity.getParentId().getId());
+            entity.setParentId(parentGallery);
+        } else
+        {
+            entity.setParentId(null);
+        }
+        try
+        {
+            super.create(entity);
+        } catch (ConstraintViolationException e)
+        {
+            for (ConstraintViolation<?> violation : e.getConstraintViolations())
+            {
+                System.out.println(violation);
+            }
+        }
     }
 
     @PUT
@@ -76,7 +97,29 @@ public class GalleryBean extends AbstractBean<Gallery>
     })
     public void edit(Gallery entity)
     {
-        super.edit(entity);
+        try
+        {
+            Gallery updatedGallery = find(entity.getId());
+            updatedGallery.setDescription(entity.getDescription());
+            updatedGallery.setName(entity.getName());
+            updatedGallery.setSortorder(entity.getSortorder());
+            if (entity.getParentId() != null && entity.getParentId().getId() != null)
+            {
+                Gallery parent = find(entity.getParentId().getId());
+                updatedGallery.setParentId(parent);
+            } else
+            {
+                updatedGallery.setParentId(null);
+            }
+
+            // super.edit(entity);
+        } catch (ConstraintViolationException e)
+        {
+            for (ConstraintViolation<?> violation : e.getConstraintViolations())
+            {
+                System.out.println(violation);
+            }
+        }
     }
 
     @DELETE
@@ -94,7 +137,12 @@ public class GalleryBean extends AbstractBean<Gallery>
     })
     public Gallery find(@PathParam("id") Long id)
     {
-        return super.find(id);
+        Gallery found = super.find(id);
+        if (found == null)
+        {
+            throw new WebApplicationException(Status.NOT_FOUND);
+        }
+        return found;
     }
 
     @GET
@@ -130,7 +178,8 @@ public class GalleryBean extends AbstractBean<Gallery>
     {
         "application/xml", "application/json"
     })
-    public List<Gallery> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to)
+    public List<Gallery> findRange(@PathParam("from") Integer from,
+            @PathParam("to") Integer to)
     {
         return super.findRange(new int[]
                 {

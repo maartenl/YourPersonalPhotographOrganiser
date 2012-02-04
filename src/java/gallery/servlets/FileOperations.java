@@ -36,6 +36,11 @@ import javax.servlet.ServletOutputStream;
 public class FileOperations
 {
 
+    private FileOperations()
+    {
+        // defeat instantiation
+    }
+
     /**
      * Writes an image to the outputStream that has been scaled appropriately.
      * @param photo original photograph
@@ -84,7 +89,7 @@ public class FileOperations
      * @throws FileNotFoundException
      * @throws IOException
      */
-    public String computeHash(File file) throws NoSuchAlgorithmException, FileNotFoundException, IOException
+    public static String computeHash(File file) throws NoSuchAlgorithmException, FileNotFoundException, IOException
     {
         // Obtain a message digest object.
         MessageDigest md = MessageDigest.getInstance("SHA-512");
