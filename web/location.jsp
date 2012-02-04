@@ -36,19 +36,20 @@ Author : maartenl
                 index : 0
             };
 
-            function createGallery()
+            function createLocation()
             {
-                alert("createGallery");
-                var gallery = {
-                    name:$("#name").val(),
-                    description:$("#description").val(),
-                    sortorder:$("#sortorder").val(),
-                    parentId:{id:$("#parentid").val()}
+                alert("createLocation");
+                var location = {
+                    filepath:$("#filepath").val()
                 };
+                if (window.console && YourPersonalPhotographOrganiserBag.debug)
+                {
+                    console.debug(location);
+                }
                 $.ajax({
                     type: "POST",
-                    url: "/YourPersonalPhotographOrganiser/resources/galleries",
-                    data: JSON.stringify(gallery),
+                    url: "/YourPersonalPhotographOrganiser/resources/locations",
+                    data: JSON.stringify(location),
                     success: function()
                     {
                         alert("Success!");
@@ -59,22 +60,19 @@ Author : maartenl
                 });
             }
 
-            function updateGallery()
+            function updateLocation()
             {
-                var gallery = YourPersonalPhotographOrganiserBag.galleries[YourPersonalPhotographOrganiserBag.index];
-                if (gallery == null)
+                var location = YourPersonalPhotographOrganiserBag.locations[YourPersonalPhotographOrganiserBag.index];
+                if (location == null)
                 {
                     return;
                 }
-                gallery.id = $('#galleryid').html();
-                gallery.name= $('#name').val();
-                gallery.description = $('#description').val();
-                gallery.sortorder = $('#sortorder').val();
-                gallery.parentId = {id:$('#parentid').val()};
+                location.id = $('#locationid').html();
+                location.filepath= $('#filepath').val();
                 $.ajax({
                     type: "PUT",
-                    url: "/YourPersonalPhotographOrganiser/resources/galleries",
-                    data: JSON.stringify(gallery),
+                    url: "/YourPersonalPhotographOrganiser/resources/locations",
+                    data: JSON.stringify(location),
                     success: function()
                     {
                         // alert("Success!");
@@ -85,13 +83,13 @@ Author : maartenl
                 });
             }
 
-            function deleteGallery()
+            function deleteLocation()
             {
-                alert("deleteGallery");
-                var id = YourPersonalPhotographOrganiserBag.galleries[YourPersonalPhotographOrganiserBag.index].id;
+                alert("deleteLocation");
+                var id = YourPersonalPhotographOrganiserBag.locations[YourPersonalPhotographOrganiserBag.index].id;
                 $.ajax({
                     type: "DELETE",
-                    url: "/YourPersonalPhotographOrganiser/resources/galleries/" + id,
+                    url: "/YourPersonalPhotographOrganiser/resources/locations/" + id,
                     success: function()
                     {
                         alert("Success!");
@@ -105,7 +103,7 @@ Author : maartenl
             function refreshPage()
             {
                 $.get(
-                '/YourPersonalPhotographOrganiser/resources/galleries'
+                '/YourPersonalPhotographOrganiser/resources/locations'
                 ,
                 function(data)
                 {
@@ -115,25 +113,22 @@ Author : maartenl
                     }
                     if (data == null)
                     {
-                        alert("No galleries found.");
+                        alert("No locations found.");
                         return;
                     }
-                    YourPersonalPhotographOrganiserBag.galleries = data;
-                    var buffer="<table><tr><th>id</th><th>name</th><th>parent</th></tr>";
+                    YourPersonalPhotographOrganiserBag.locations = data;
+                    var buffer="<table><tr><th>id</th><th>filepath</th></tr>";
                     for (i in data)
                     {
-                        buffer+="<tr><td><a onclick=\"YourPersonalPhotographOrganiserBag.index="+i+";\">" + data[i].id + "</a></td><td>" + data[i].name + "</td><td>" + (data[i].parentId != null ? data[i].parentId.id : "-") + "</td></tr>";
+                        buffer+="<tr><td><a onclick=\"YourPersonalPhotographOrganiserBag.index="+i+";\">" + data[i].id + "</a></td><td>" + data[i].filepath + "</td></tr>";
                     }
                     buffer+="</table>";
-                    $("#galleries").html(buffer);
-                    var currentGallery = data[YourPersonalPhotographOrganiserBag.index];
-                    $('#galleryid').html(currentGallery.id);
-                    $('#name').val(currentGallery.name);
-                    $('#description').val(currentGallery.description == null ? "" : currentGallery.description);
-                    $('#sortorder').val(currentGallery.sortorder);
-                    $('#parentid').val(currentGallery.parentId == null ? "" : currentGallery.parentId.id);
+                    $("#locations").html(buffer);
+                    var currentLocation = data[YourPersonalPhotographOrganiserBag.index];
+                    $('#locationid').html(currentLocation.id);
+                    $('#filepath').val(currentLocation.filepath);
                 } // end function data
-                , "json"); // endget galleryphotograph
+                , "json"); // endget locationphotograph
                 // url [, data] [, success(data, textStatus, jqXHR)] [, dataType] )
 
             }
@@ -142,10 +137,10 @@ Author : maartenl
             {
                 refreshPage();
 
-                $('.refreshGallery').click(function(){refreshPage();});
-                $('.createGallery').click(function(){createGallery();});
-                $('.updateGallery').click(function(){updateGallery();});
-                $('.deleteGallery').click(function(){deleteGallery();});
+                $('.refreshLocation').click(function(){refreshPage();});
+                $('.createLocation').click(function(){createLocation();});
+                $('.updateLocation').click(function(){updateLocation();});
+                $('.deleteLocation').click(function(){deleteLocation();});
 
             }); // end document ready
         </script>
@@ -153,30 +148,21 @@ Author : maartenl
         <link rel="stylesheet" href="css/yppo.css" type="text/css" media="screen" />
     </head>
     <body>
-        <h1>Galleries</h1>
+        <h1>Locations</h1>
         <hr/>
-        <div id="galleries"></div>
-        <p>Gallery information</p>
-        <p>Gallery id: <span id="galleryid"></span></p>
-        <label for="name">Name</label>
-        <input type="text" name="name" id="name"/>
-        <br/>
-        <label for="description">Description</label>
-        <textarea name="description" id="description" ></textarea>
-        <br/>
-        <label for="sortorder">Sort order</label>
-        <input type="text" name="sortorder" id="sortorder" />
-        <br/>
-        <label for="parentid">Parent id</label>
-        <input type="text" name="parentid" id="parentid" />
+        <div id="locations"></div>
+        <p>Location information</p>
+        <p>Location id: <span id="locationid"></span></p>
+        <label for="name">Filepath</label>
+        <input type="text" name="filepath" id="filepath"/>
         <br/>
         <hr/>
-        <div class="refreshGallery myButton">Refresh</div>
-        <div class="createGallery myButton">Create</div>
-        <div class="updateGallery myButton">Update</div>
-        <div class="deleteGallery myButton">Delete</div>
+        <div class="refreshLocation myButton">Refresh</div>
+        <div class="createLocation myButton">Create</div>
+        <div class="updateLocation myButton">Update</div>
+        <div class="deleteLocation myButton">Delete</div>
         <br/>
-        <a href="location.jsp" >Locations</a>
+        <a href="gallery.jsp">Galleries</a>
         <a href="index.jsp" >Return</a>
     </body>
 </html>
