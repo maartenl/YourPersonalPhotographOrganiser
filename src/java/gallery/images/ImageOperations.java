@@ -110,6 +110,10 @@ public class ImageOperations
     {
         Metadata metadata = ImageMetadataReader.readMetadata(jpegFile);
         Directory directory = metadata.getDirectory(ExifSubIFDDirectory.class);
+        if (directory == null)
+        {
+            return null;
+        }
         return directory.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL);
     }
 

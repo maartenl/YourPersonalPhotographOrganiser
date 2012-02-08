@@ -16,8 +16,12 @@
  */
 package gallery.beans;
 
+import com.drew.imaging.ImageProcessingException;
 import gallery.database.entities.Location;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -29,6 +33,8 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response.Status;
 
 /**
  *
@@ -38,6 +44,9 @@ import javax.ws.rs.Produces;
 @Path("/locations")
 public class LocationBean extends AbstractBean<Location>
 {
+    @EJB
+    JobBean jobBean;
+
     @PersistenceContext(unitName = "YourPersonalPhotographOrganiserPU")
     private EntityManager em;
 
@@ -50,6 +59,7 @@ public class LocationBean extends AbstractBean<Location>
     {
         super(Location.class);
     }
+
     @POST
     @Override
     @Consumes(
@@ -87,7 +97,32 @@ public class LocationBean extends AbstractBean<Location>
     })
     public Location find(@PathParam("id") Long id)
     {
-        return super.find(id);
+        Location location = super.find(id);
+        if (location == null)
+        {
+            throw new WebApplicationException(Status.NOT_FOUND);
+        }
+        return location;
+    }
+
+    @GET
+    @Path("{id}/discover")
+    public String discover(@PathParam("id") Long id)
+    {
+        Location location = find(id);
+        String result = "";
+        try
+        {
+            result = jobBean.checkDirectory(location);
+        } catch (IOException | NoSuchAlgorithmException | ImageProcessingException ex)
+        {
+            ex.printStackTrace();
+            if (location == null)
+            {
+                throw new WebApplicationException(Status.INTERNAL_SERVER_ERROR);
+            }
+        }
+        return result;
     }
 
     @GET

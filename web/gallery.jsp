@@ -38,7 +38,10 @@ Author : maartenl
 
             function createGallery()
             {
-                alert("createGallery");
+                if (window.console && YourPersonalPhotographOrganiserBag.debug)
+                {
+                    console.debug("createGallery");
+                }
                 var gallery = {
                     name:$("#name").val(),
                     description:$("#description").val(),
@@ -51,11 +54,17 @@ Author : maartenl
                     data: JSON.stringify(gallery),
                     success: function()
                     {
-                        alert("Success!");
+                        if (window.console && YourPersonalPhotographOrganiserBag.debug)
+                        {
+                            console.debug("Success");
+                        }
                     },
                     contentType: "application/json"
                 }).done(function( msg ) {
-                    alert( "Data Saved: " + msg );
+                    if (window.console && YourPersonalPhotographOrganiserBag.debug)
+                    {
+                        console.debug("Data Saved: " + msg );
+                    }
                 });
             }
 
@@ -77,11 +86,17 @@ Author : maartenl
                     data: JSON.stringify(gallery),
                     success: function()
                     {
-                        // alert("Success!");
+                        if (window.console && YourPersonalPhotographOrganiserBag.debug)
+                        {
+                            console.debug("Success");
+                        }
                     },
                     contentType: "application/json"
                 }).done(function( msg ) {
-                    // alert( "Data Saved: " + msg );
+                    if (window.console && YourPersonalPhotographOrganiserBag.debug)
+                    {
+                        console.debug("Data Saved: " + msg );
+                    }
                 });
             }
 
@@ -94,12 +109,17 @@ Author : maartenl
                     url: "/YourPersonalPhotographOrganiser/resources/galleries/" + id,
                     success: function()
                     {
-                        alert("Success!");
+                        if (window.console && YourPersonalPhotographOrganiserBag.debug)
+                        {
+                            console.debug("Success");
+                        }
                     },
                     contentType: "application/json"
                 }).done(function( msg ) {
-                    alert( "Data Saved: " + msg );
-                });
+                    if (window.console && YourPersonalPhotographOrganiserBag.debug)
+                    {
+                        console.debug("Data Saved: " + msg );
+                    }                   });
             }
 
             function refreshPage()
@@ -119,10 +139,10 @@ Author : maartenl
                         return;
                     }
                     YourPersonalPhotographOrganiserBag.galleries = data;
-                    var buffer="<table><tr><th>id</th><th>name</th><th>parent</th></tr>";
+                    var buffer="<table><tr><th>id</th><th>name</th><th>description</th><th>parent</th></tr>";
                     for (i in data)
                     {
-                        buffer+="<tr><td><a onclick=\"YourPersonalPhotographOrganiserBag.index="+i+";\">" + data[i].id + "</a></td><td>" + data[i].name + "</td><td>" + (data[i].parentId != null ? data[i].parentId.id : "-") + "</td></tr>";
+                        buffer+="<tr><td><a onclick=\"YourPersonalPhotographOrganiserBag.index="+i+";refreshPage();\">" + data[i].id + "</a></td><td>" + data[i].name + "</td><td>" + data[i].description + "</td><td>" + (data[i].parentId != null ? data[i].parentId.id : "-") + "</td></tr>";
                     }
                     buffer+="</table>";
                     $("#galleries").html(buffer);

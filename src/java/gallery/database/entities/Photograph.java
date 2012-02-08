@@ -50,18 +50,16 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 @NamedQueries(
 {
     @NamedQuery(name = "Photograph.findAll", query = "SELECT p FROM Photograph p"),
-    @NamedQuery(name = "Photograph.findById", query = "SELECT p FROM Photograph p WHERE p.id = :id"),
-    @NamedQuery(name = "Photograph.findByFilename", query = "SELECT p FROM Photograph p WHERE p.filename = :filename"),
-    @NamedQuery(name = "Photograph.findByRelativepath", query = "SELECT p FROM Photograph p WHERE p.relativepath = :relativepath"),
-    @NamedQuery(name = "Photograph.findByTaken", query = "SELECT p FROM Photograph p WHERE p.taken = :taken")
+    @NamedQuery(name = "Photograph.findByFilename", query = "SELECT p FROM Photograph p WHERE p.filename = :filename and p.relativepath = :relativepath"),
+    @NamedQuery(name = "Photograph.findByStats", query = "SELECT p FROM Photograph p WHERE p.hashstring = :hashstring and p.filesize = :filesize")
 })
 public class Photograph implements Serializable
 {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "id")
     private Long id;
     @Size(max = 255)
@@ -71,7 +69,6 @@ public class Photograph implements Serializable
     @Column(name = "relativepath")
     private String relativepath;
     @Basic(optional = false)
-    @NotNull
     @Column(name = "taken")
     @Temporal(TemporalType.TIMESTAMP)
     private Date taken;
@@ -82,7 +79,6 @@ public class Photograph implements Serializable
     @Basic(optional = false)
     @Column(name = "filesize")
     private Long filesize;
-
     @JoinColumn(name = "location_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Location locationId;
@@ -215,5 +211,4 @@ public class Photograph implements Serializable
     {
         return "gallery.database.entities.Photograph[ id=" + id + " ]";
     }
-
 }

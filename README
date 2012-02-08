@@ -90,7 +90,13 @@ http://micemouse:8080/YourPersonalPhotographOrganiser/resources/galleries/{id}/p
 http://micemouse:8080/YourPersonalPhotographOrganiser/resources/galleryphotographs
 http://micemouse:8080/YourPersonalPhotographOrganiser/resources/galleryphotographs/{id}/comments
 http://micemouse:8080/YourPersonalPhotographOrganiser/resources/photographs
+
+Location
 http://micemouse:8080/YourPersonalPhotographOrganiser/resources/locations
+http://micemouse:8080/YourPersonalPhotographOrganiser/resources/locations/{id}
+starts to discover extra pictures, or pictures that have been removed.
+http://micemouse:8080/YourPersonalPhotographOrganiser/resources/locations/{id}/discover
+
 http://micemouse:8080/YourPersonalPhotographOrganiser/resources/comments
 
 Epected result would look a little like so:

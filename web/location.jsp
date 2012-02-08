@@ -38,7 +38,10 @@ Author : maartenl
 
             function createLocation()
             {
-                alert("createLocation");
+                if (window.console && YourPersonalPhotographOrganiserBag.debug)
+                {
+                    console.debug("createLocation");
+                }
                 var location = {
                     filepath:$("#filepath").val()
                 };
@@ -52,11 +55,18 @@ Author : maartenl
                     data: JSON.stringify(location),
                     success: function()
                     {
-                        alert("Success!");
+                        if (window.console && YourPersonalPhotographOrganiserBag.debug)
+                        {
+                            console.debug("Success");
+                        }
                     },
                     contentType: "application/json"
                 }).done(function( msg ) {
-                    alert( "Data Saved: " + msg );
+                    if (window.console && YourPersonalPhotographOrganiserBag.debug)
+                    {
+                        console.debug("Data Saved: " + msg );
+                    }
+
                 });
             }
 
@@ -75,28 +85,44 @@ Author : maartenl
                     data: JSON.stringify(location),
                     success: function()
                     {
-                        // alert("Success!");
+                        if (window.console && YourPersonalPhotographOrganiserBag.debug)
+                        {
+                            console.debug("Success");
+                        }
                     },
                     contentType: "application/json"
                 }).done(function( msg ) {
-                    // alert( "Data Saved: " + msg );
+                    if (window.console && YourPersonalPhotographOrganiserBag.debug)
+                    {
+                        console.debug("Data Saved: " + msg );
+                    }
                 });
             }
 
             function deleteLocation()
             {
-                alert("deleteLocation");
+
+                if (window.console && YourPersonalPhotographOrganiserBag.debug)
+                {
+                    console.debug("deleteLocation");
+                }
                 var id = YourPersonalPhotographOrganiserBag.locations[YourPersonalPhotographOrganiserBag.index].id;
                 $.ajax({
                     type: "DELETE",
                     url: "/YourPersonalPhotographOrganiser/resources/locations/" + id,
                     success: function()
                     {
-                        alert("Success!");
+                        if (window.console && YourPersonalPhotographOrganiserBag.debug)
+                        {
+                            console.debug("Success");
+                        }
                     },
                     contentType: "application/json"
                 }).done(function( msg ) {
-                    alert( "Data Saved: " + msg );
+                    if (window.console && YourPersonalPhotographOrganiserBag.debug)
+                    {
+                        console.debug("Data Saved: " + msg );
+                    }
                 });
             }
 
@@ -120,7 +146,7 @@ Author : maartenl
                     var buffer="<table><tr><th>id</th><th>filepath</th></tr>";
                     for (i in data)
                     {
-                        buffer+="<tr><td><a onclick=\"YourPersonalPhotographOrganiserBag.index="+i+";\">" + data[i].id + "</a></td><td>" + data[i].filepath + "</td></tr>";
+                        buffer+="<tr><td><a onclick=\"YourPersonalPhotographOrganiserBag.index="+i+";refreshPage();\">" + data[i].id + "</a></td><td>" + data[i].filepath + "</td></tr>";
                     }
                     buffer+="</table>";
                     $("#locations").html(buffer);
@@ -133,6 +159,29 @@ Author : maartenl
 
             }
 
+
+            function discoverPhotos()
+            {
+                var id = YourPersonalPhotographOrganiserBag.locations[YourPersonalPhotographOrganiserBag.index].id;
+                $.get(
+                '/YourPersonalPhotographOrganiser/resources/locations/' + id + "/discover"
+                ,
+                function(data)
+                {
+                    if (window.console && YourPersonalPhotographOrganiserBag.debug)
+                    {
+                        console.debug(data);
+                    }
+                    if (data == null)
+                    {
+                        return;
+                    }
+                    alert(data);
+                } // end function data
+                ); // endget discover
+                // url [, data] [, success(data, textStatus, jqXHR)] [, dataType] )
+            }
+
             $(document).ready(function()
             {
                 refreshPage();
@@ -141,6 +190,7 @@ Author : maartenl
                 $('.createLocation').click(function(){createLocation();});
                 $('.updateLocation').click(function(){updateLocation();});
                 $('.deleteLocation').click(function(){deleteLocation();});
+                $('.discoverPhotos').click(function(){discoverPhotos();});
 
             }); // end document ready
         </script>
@@ -161,6 +211,7 @@ Author : maartenl
         <div class="createLocation myButton">Create</div>
         <div class="updateLocation myButton">Update</div>
         <div class="deleteLocation myButton">Delete</div>
+        <div class="discoverPhotos myButton" title="Starts a rather large job that is going to walk the tree of the location, and pick up or remove photographs found.">Discover Photos</div>
         <br/>
         <a href="gallery.jsp">Galleries</a>
         <a href="index.jsp" >Return</a>

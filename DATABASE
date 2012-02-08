@@ -57,6 +57,11 @@ Tag
 tagname
 photograph_id
 
+Log
+id
+jobdate
+joblog
+
 Relations
 ---------
 
@@ -77,6 +82,7 @@ Tag.photograph_id -> Photograph.id
 SQL
 ---
 
+drop table if exists Log;
 drop table if exists Tag;
 drop table if exists Comment;
 drop table if exists GalleryPhotograph;
@@ -95,7 +101,7 @@ create table Photograph (
  filename varchar(255),
  relativepath varchar(1024),
  taken timestamp,
- hash varchar(1024),
+ hashstring varchar(1024),
  filesize bigint,
  foreign key (location_id) references Location (id)
 );
@@ -138,6 +144,12 @@ create table Tag (
  photograph_id bigint not null,
  primary key (tagname, photograph_id),
  foreign key (photograph_id) references Photograph (id)
+);
+
+create table Log (
+ id bigint not null auto_increment primary key,
+ jobdate timestamp not null default current_timestamp,
+ joblog blob not null
 );
 
 Authentication/Authorisation
