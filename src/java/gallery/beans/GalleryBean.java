@@ -21,6 +21,7 @@ import gallery.database.entities.GalleryPhotograph;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -34,6 +35,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response.Status;
 
@@ -46,6 +48,8 @@ import javax.ws.rs.core.Response.Status;
 public class GalleryBean extends AbstractBean<Gallery>
 {
 
+    @EJB
+    JobBean jobBean;
     @PersistenceContext(unitName = "YourPersonalPhotographOrganiserPU")
     private EntityManager em;
 
@@ -143,6 +147,18 @@ public class GalleryBean extends AbstractBean<Gallery>
             throw new WebApplicationException(Status.NOT_FOUND);
         }
         return found;
+    }
+
+    @GET
+    @Path("{id}/import")
+    @Produces(
+    {
+        "application/xml", "application/json"
+    })
+    public String importPhotographs(@PathParam("id") Long id, @QueryParam("location") String location)
+    {
+        Gallery found = find(id);
+        return jobBean.importPhotographs(found, location);
     }
 
     @GET

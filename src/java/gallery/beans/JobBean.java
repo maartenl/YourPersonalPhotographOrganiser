@@ -17,6 +17,8 @@
 package gallery.beans;
 
 import com.drew.imaging.ImageProcessingException;
+import gallery.database.entities.Gallery;
+import gallery.database.entities.GalleryPhotograph;
 import gallery.database.entities.Location;
 import gallery.database.entities.Photograph;
 import gallery.images.ImageOperations;
@@ -24,6 +26,7 @@ import gallery.servlets.FileOperations;
 import gallery.servlets.PhotographVisitor;
 import java.io.File;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -113,7 +116,7 @@ public class JobBean
 
     public String checkDirectory(Location location) throws IOException, NoSuchAlgorithmException, ImageProcessingException
     {
-        // System.out.println("checkDirectory " + location.getFilepath());
+        System.out.println("checkDirectory start");
         String errorMessage = null;
         try
         {
@@ -147,6 +150,48 @@ public class JobBean
             }
         }
         System.out.println("errorMessage " + errorMessage);
+        System.out.println("checkDirectory end");
         return errorMessage;
+    }
+
+    public String importPhotographs(Gallery found, String location)
+    {
+        System.out.println("importPhotographs start");
+        try
+        {
+            // get all photographs that match the mask
+            Query query = em.createNamedQuery("Photograph.findByLocation");
+            query.setParameter("mask", location);
+            List list = query.getResultList();
+            if (list == null || list.isEmpty())
+            {
+                System.out.println("importPhotographs end");
+                return "No photographs match " + location + ".";
+            }
+            int i = 0;
+            for (Object r : list)
+            {
+                Photograph photo = (Photograph) r;
+                GalleryPhotograph gphoto = new GalleryPhotograph();
+                gphoto.setGalleryId(found);
+                gphoto.setName(photo.getFilename());
+                gphoto.setPhotographId(photo);
+                gphoto.setSortorder(BigInteger.valueOf(i++));
+                em.persist(gphoto);
+            }
+            System.out.println("importPhotographs end");
+            return null;
+        } catch (ConstraintViolationException e)
+        {
+            for (ConstraintViolation<?> violation : e.getConstraintViolations())
+            {
+                System.out.println(violation);
+                System.out.println("importPhotographs end");
+                return violation.toString();
+            }
+        }
+        System.out.println("importPhotographs end");
+        return "We shouldn't even be here!";
+
     }
 }

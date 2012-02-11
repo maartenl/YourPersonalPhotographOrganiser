@@ -41,7 +41,6 @@ import javax.xml.bind.annotation.XmlTransient;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
- * TODO add hash and size
  * @author maartenl
  */
 @Entity
@@ -51,7 +50,8 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 {
     @NamedQuery(name = "Photograph.findAll", query = "SELECT p FROM Photograph p"),
     @NamedQuery(name = "Photograph.findByFilename", query = "SELECT p FROM Photograph p WHERE p.filename = :filename and p.relativepath = :relativepath"),
-    @NamedQuery(name = "Photograph.findByStats", query = "SELECT p FROM Photograph p WHERE p.hashstring = :hashstring and p.filesize = :filesize")
+    @NamedQuery(name = "Photograph.findByStats", query = "SELECT p FROM Photograph p WHERE p.hashstring = :hashstring and p.filesize = :filesize"),
+    @NamedQuery(name = "Photograph.findByLocation", query = "SELECT p FROM Photograph p WHERE concat(p.locationId.filepath, '/', p.relativepath, '/', p.filename) like :mask order by p.taken, p.filename")
 })
 public class Photograph implements Serializable
 {

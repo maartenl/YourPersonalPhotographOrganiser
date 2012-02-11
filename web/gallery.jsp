@@ -158,6 +158,27 @@ Author : maartenl
 
             }
 
+            function importPhotographs()
+            {
+                var id = YourPersonalPhotographOrganiserBag.galleries[YourPersonalPhotographOrganiserBag.index].id;
+                $.get(
+                '/YourPersonalPhotographOrganiser/resources/galleries/' + id + '/import',
+                { location: $('#location').val() }
+                    ,
+                function(data)
+                {
+                    if (window.console && YourPersonalPhotographOrganiserBag.debug)
+                    {
+                        console.debug(data);
+                    }
+                    alert(data);
+                } // end function data
+                , "json"); // endget galleryphotograph
+                // url [, data] [, success(data, textStatus, jqXHR)] [, dataType] )
+
+            }
+
+
             $(document).ready(function()
             {
                 refreshPage();
@@ -166,6 +187,7 @@ Author : maartenl
                 $('.createGallery').click(function(){createGallery();});
                 $('.updateGallery').click(function(){updateGallery();});
                 $('.deleteGallery').click(function(){deleteGallery();});
+                $('.importPhotographs').click(function(){importPhotographs();});
 
             }); // end document ready
         </script>
@@ -189,6 +211,9 @@ Author : maartenl
         <br/>
         <label for="parentid">Parent id</label>
         <input type="text" name="parentid" id="parentid" />
+        <br/>
+        <label for="location">Location</label>
+        <input type="text" name="location" id="location" /><div class="importPhotographs myButton">Import Photographs</div>
         <br/>
         <hr/>
         <div class="refreshGallery myButton">Refresh</div>
