@@ -77,7 +77,7 @@
     <target depends="javadoc-build" name="build-uml">
         <mkdir dir="${dist.javadoc.dir}/images"/>
         <!-- there is an issue where relative paths do not work -->
-        <plantuml output="/home/maartenl/NetBeansProjects/YourPersonalPhotographOrganiser/${dist.javadoc.dir}/images/" verbose="true">
+        <plantuml output="/home/maartenl/NetBeansProjects/YourPersonalPhotographOrganiser/${dist.javadoc.dir}/images/" verbose="false">
             <fileset dir="./src">
                 <include name="**/*.java" />
                 <exclude name="**/*Test.java" />

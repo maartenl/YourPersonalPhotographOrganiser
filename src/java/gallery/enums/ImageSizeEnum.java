@@ -18,7 +18,20 @@ package gallery.enums;
 
 /**
  *
+ * <p>Indicates the different sizes that are possible in the displaying
+ * of pictures. BIG being un-scaled.</p>
+ * <img src="../../images/ImageSizeEnum.png"/>
  * @author maartenl
+ *
+ * @startuml
+ * "java.lang.Enum<ImageSizeEnum>" <|-- enum ImageSizeEnum
+ * ImageSizeEnum : +ImageSizeEnum BIG
+ * ImageSizeEnum : +ImageSizeEnum LARGE
+ * ImageSizeEnum : +ImageSizeEnum MEDIUM
+ * ImageSizeEnum : +ImageSizeEnum THUMB
+ * ImageSizeEnum : +getHeight()
+ * ImageSizeEnum : +getWidth()
+ * @enduml
  */
 public enum ImageSizeEnum
 {
@@ -38,11 +51,19 @@ public enum ImageSizeEnum
         this.maxWidth = width;
     }
 
+    /**
+     * Retrieves the height of the picture.
+     * @return Integer indicating the height in pixels.
+     */
     public Integer getHeight()
     {
         return maxHeight;
     }
 
+     /**
+      * Retrieves the width of the picture.
+      * @return Integer indicating the width in pixels.
+      */
     public Integer getWidth()
     {
         return maxWidth;
