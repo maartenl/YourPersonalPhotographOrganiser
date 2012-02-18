@@ -80,7 +80,7 @@ Author : maartenl
                     data: JSON.stringify(photo),
                     success: function()
                     {
-                        // alert("Success!");
+                        alert("Photograph updated");
                     },
                     contentType: "application/json"
                 }).done(function( msg ) {
@@ -90,7 +90,11 @@ Author : maartenl
 
             function deletePhotograph()
             {
-                alert("deletePhotograph");
+                var r=confirm("Are you sure?");
+                if (r!=true)
+                {
+                    return;
+                }
                 var photo = YourPersonalPhotographOrganiserBag.photograph;
                 if (photo == null)
                 {
@@ -112,7 +116,6 @@ Author : maartenl
 
             function createComment()
             {
-                alert("createComment");
                 var comment = {
                     author:$("#author").val(),
                     comment:$("#comment").val(),
@@ -128,7 +131,7 @@ Author : maartenl
                     },
                     contentType: "application/json"
                 }).done(function( msg ) {
-                    alert( "Data Saved: " + msg );
+                    // alert( "Data Saved: " + msg );
                 });
             }
 
@@ -217,6 +220,7 @@ Author : maartenl
                 $('.createPhotograph').click(function(){createPhotograph();});
                 $('.updatePhotograph').click(function(){updatePhotograph();});
                 $('.deletePhotograph').click(function(){deletePhotograph();});
+                $('.backButton').click(function(){history.go(-1);});
 
                 $('.createComment').click(function(){createComment();});
             }); // end document ready
@@ -226,6 +230,11 @@ Author : maartenl
     </head>
     <body>
         <h1 id="photographname">Photograph</h1>
+        <div class="backButton myButton">Back</div>
+        <div class="refreshPhotograph myButton">Refresh</div>
+        <div class="createPhotograph myButton">Create</div>
+        <div class="updatePhotograph myButton">Update</div>
+        <div class="deletePhotograph myButton">Delete</div>
         <hr/>
         <div id="photograph"></div>
         <p>Photograph id: <span id="photographnumber"></span></p>
@@ -233,7 +242,7 @@ Author : maartenl
         <input type="text" name="name" id="name"/>
         <br/>
         <label for="description">Description</label>
-        <textarea name="description" id="description" ></textarea>
+        <textarea name="description" id="description" rows="7" cols="80"></textarea>
         <br/>
         <label for="sortorder">Sort order</label>
         <input type="text" name="sortorder" id="sortorder" />
@@ -241,6 +250,19 @@ Author : maartenl
         <label for="angle">Angle</label>
         <input type="text" name="angle" id="angle" />
         <br/>
+        <h3>Comment</h3>
+        <label for="id">Id</label>
+        <input type="text" name="id" id="id"/>
+        <br/>
+        <label for="author">Author</label>
+        <input type="text" name="author" id="author"/>
+        <br/>
+        <label for="comment">Comment</label>
+        <textarea name="comment" id="comment" rows="7" cols="80"></textarea>
+        <br/>
+        <p>Submitted:</p>
+
+        <div class="createComment myButton">Create</div>
         <h3>File</h3>
         <p>
             <label for="photo_photographId_id">File id</label>
@@ -269,20 +291,8 @@ Author : maartenl
             File path:<span id="photo_photographId_locationId_filepath"></span>
         </p>
         <h3>Metadata</h3><div id="metadata"></div>
-        <h3>Comment</h3>
-        <label for="id">Id</label>
-        <input type="text" name="id" id="id"/>
-        <br/>
-        <label for="author">Author</label>
-        <input type="text" name="author" id="author"/>
-        <br/>
-        <label for="comment">Comment</label>
-        <textarea name="comment" id="comment" ></textarea>
-        <br/>
-        <p>Submitted:</p>
-
-        <div class="createComment myButton">Create</div>
         <hr/>
+        <div class="backButton myButton">Back</div>
         <div class="refreshPhotograph myButton">Refresh</div>
         <div class="createPhotograph myButton">Create</div>
         <div class="updatePhotograph myButton">Update</div>

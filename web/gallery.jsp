@@ -102,7 +102,11 @@ Author : maartenl
 
             function deleteGallery()
             {
-                alert("deleteGallery");
+                var r=confirm("Are you sure?");
+                if (r!=true)
+                {
+                    return;
+                }
                 var id = YourPersonalPhotographOrganiserBag.galleries[YourPersonalPhotographOrganiserBag.index].id;
                 $.ajax({
                     type: "DELETE",

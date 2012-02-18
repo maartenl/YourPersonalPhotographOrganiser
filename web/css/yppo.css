@@ -120,3 +120,33 @@ hr {
     position:relative;
     top:1px;
 }
+
+.name a:link {
+    /* Applies to all unvisited links */
+    text-decoration:  none;
+    font-weight:      none;
+    background-color: white;
+    color:            black;
+}
+.name a:visited {
+    /* Applies to all visited links */
+    text-decoration:  none;
+    font-weight:      none;
+    background-color: white;
+    color:            black;
+}
+.name a:hover   {
+    /* Applies to links under the pointer */
+    text-decoration:  underline;
+    font-weight:      none;
+    background-color: white;
+    color:            black;
+    font-style: italic;
+}
+.name a:active  {
+    /* Applies to activated links */
+    text-decoration:  underline;
+    font-weight:      none;
+    background-color: white;
+    color:            black;
+}

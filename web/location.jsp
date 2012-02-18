@@ -101,7 +101,11 @@ Author : maartenl
 
             function deleteLocation()
             {
-
+                var r=confirm("Are you sure?");
+                if (r!=true)
+                {
+                    return;
+                }
                 if (window.console && YourPersonalPhotographOrganiserBag.debug)
                 {
                     console.debug("deleteLocation");
@@ -178,7 +182,7 @@ Author : maartenl
                     }
                     alert(data);
                 } // end function data
-                ); // endget discover
+            ); // endget discover
                 // url [, data] [, success(data, textStatus, jqXHR)] [, dataType] )
             }
 

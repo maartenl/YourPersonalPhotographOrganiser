@@ -59,8 +59,29 @@
 
             function pageDown()
             {
-                YourPersonalPhotographOrganiserBag.index += (YourPersonalPhotographOrganiserBag.view == "multiple" ? 9 : 1);
-                if (YourPersonalPhotographOrganiserBag.index>=YourPersonalPhotographOrganiserBag.photos.length) {YourPersonalPhotographOrganiserBag.index =YourPersonalPhotographOrganiserBag.photos.length - 1;}
+                var sizeme = (YourPersonalPhotographOrganiserBag.view == "multiple" ? 9 : 1);
+                if (YourPersonalPhotographOrganiserBag.index + sizeme>=YourPersonalPhotographOrganiserBag.photos.length)
+                {
+                    return;
+                }
+                YourPersonalPhotographOrganiserBag.index += sizeme;
+                displayPhotos();
+            }
+
+            function beginning()
+            {
+                YourPersonalPhotographOrganiserBag.index = 0;
+                displayPhotos();
+            }
+
+            function end()
+            {
+                var lengthy = YourPersonalPhotographOrganiserBag.photos.length;
+                YourPersonalPhotographOrganiserBag.index = lengthy - 1;
+                if (YourPersonalPhotographOrganiserBag.view == "multiple")
+                {
+                    YourPersonalPhotographOrganiserBag.index -= ((lengthy - 1) % 9)
+                }
                 displayPhotos();
             }
 
@@ -72,7 +93,14 @@
 
             function go()
             {
-                var i = parseInt($("#go_number_foto").val()) - 1;
+                if (isNaN(parseInt($("#go_number_foto").val())))
+                {
+                    alert("Number expected.");
+                }
+                else
+                {
+                    var i = parseInt($("#go_number_foto").val()) - 1;
+                }
                 if (window.console && YourPersonalPhotographOrganiserBag.debug) {console.debug(i);}
                 if (i < 0 || i > YourPersonalPhotographOrganiserBag.photos.length - 1){return;}
                 YourPersonalPhotographOrganiserBag.index = i;
@@ -126,7 +154,12 @@
 
                 var i = 0;
                 var j = 0;
-                for (i=YourPersonalPhotographOrganiserBag.index;i<=YourPersonalPhotographOrganiserBag.index+8;i++)
+                var continue_until = YourPersonalPhotographOrganiserBag.index+8;
+                if (continue_until > YourPersonalPhotographOrganiserBag.photos.length)
+                {
+                    continue_until = YourPersonalPhotographOrganiserBag.photos.length-1;
+                }
+                for (i=YourPersonalPhotographOrganiserBag.index;i<=continue_until;i++)
                 {
                     var description = photos[i].description;
                     if (description == null) {description = '';}
@@ -137,14 +170,14 @@
                             '<img src=\"/YourPersonalPhotographOrganiser/ImageServlet?id=' + photos[i].photographId.id + '&size=medium\" alt=\"\"/>' +
                             '</a><br/><div class=\"name\"><a href=\"photo.jsp?id=' + photos[i].id + '\">' + (i+1) + '. ' +
                             photos[i].name
-                            + '</a></div><div class=\"description\">' + description + '</div></div>';}
+                            + '</a></div></div>';}
                     else
                     {
                         buffer +='<div class=\"photograph ' + (j % 3 == 0 ? 'photographBegin ':' ') + (j % 3 == 2 ? 'photographEnd':'') +'">' +
                             '<a><img src=\"/YourPersonalPhotographOrganiser/images/movie.png\" alt=\"\"/></a>' +
                             '<br/><div class=\"name\">' + (i+1) + '. ' +
                             photos[i].name
-                            + '</div><div class=\"description\">' + description + '</div></div>';
+                            + '</div></div>';
                     }
                     j++;
                 }
@@ -178,6 +211,10 @@
                 $.get('/YourPersonalPhotographOrganiser/resources/galleries/' + id + '/photographs',
                 function(data){
                     if (window.console && YourPersonalPhotographOrganiserBag.debug) {console.debug(data);}
+                    data.sort(function (a, b)
+                    {
+                        return (a.sortorder - b.sortorder)
+                    });
                     YourPersonalPhotographOrganiserBag.photos = data;
                     $("#gallerystats").html(YourPersonalPhotographOrganiserBag.photos.length);
 
@@ -195,6 +232,8 @@
 
             $(document).ready(function() {
                 refreshPage(<%= id%>);
+                $('.beginning').click(function(){beginning();});
+                $('.end').click(function(){end  ();});
                 $('.page_up').click(function(){pageUp();});
                 $('.page_down').click(function(){pageDown();});
                 $('#galleryname').click(function(){gotoGallery();});
@@ -210,16 +249,20 @@
         <div id="gallerydescription"></div>
         <div><span id="gallerystats"></span> photos</div>
         <div class="gallery_up myButton">No up</div>
+        <div class="beginning myButton">Beginning</div>
         <div class="page_up myButton">Page up</div>
         <div class="page_down myButton">Page down</div>
+        <div class="end myButton">End</div>
         <div class="changeview myButton">Change view</div>
         <input id="go_number_foto" type="text"></input>
-        <div class="goButton myButton">Go</div>
+        <div class="goButton myButton">Search</div>
         <hr/>
         <div id="pictureDiv"></div><hr>
         <div class="gallery_up myButton">No up</div>
+        <div class="beginning myButton">Beginning</div>
         <div class="page_up myButton">Page up</div>
         <div class="page_down myButton">Page down</div>
+        <div class="end myButton">End</div>
         <div class="changeview myButton">Change view</div>
     </body>
 </html>

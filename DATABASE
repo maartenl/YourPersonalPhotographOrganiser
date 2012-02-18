@@ -152,6 +152,10 @@ create table Log (
  joblog blob not null
 );
 
+-- only allows a photograph to appear once in a gallery
+create unique index unique_per_photograph_per_gallery
+on GalleryPhotograph (gallery_id, photograph_id);
+
 Authentication/Authorisation
 ----------------------------
 

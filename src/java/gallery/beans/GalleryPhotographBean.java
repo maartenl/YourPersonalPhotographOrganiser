@@ -82,9 +82,16 @@ public class GalleryPhotographBean extends AbstractBean<GalleryPhotograph>
         photo.setAngle(entity.getAngle());
         photo.setDescription(entity.getDescription());
         photo.setName(entity.getName());
-        photo.setSortorder(entity.getSortorder());
         photo.setPhotographId(photographBean.find(entity.getPhotographId().getId()));
+
+        if (entity.getSortorder() != null && !entity.getSortorder().equals(photo.getSortorder()))
+        {
+            // sort order has been changed, reordering required!
+            //List<GalleryPhotograph> list = photo.getGalleryId().getGalleryPhotographCollection();
+        }
+        photo.setSortorder(entity.getSortorder());
         // super.edit(entity);
+
     }
 
     @DELETE
