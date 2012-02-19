@@ -20,20 +20,20 @@ package gallery.enums;
  *
  * <p>Indicates the different sizes that are possible in the displaying
  * of pictures. BIG being un-scaled.</p>
- * <img src="../../images/ImageSizeEnum.png"/>
+ * <img src="../../images/ImageSize.png"/>
  * @author maartenl
  *
  * @startuml
- * "java.lang.Enum<ImageSizeEnum>" <|-- enum ImageSizeEnum
- * ImageSizeEnum : +ImageSizeEnum BIG
- * ImageSizeEnum : +ImageSizeEnum LARGE
- * ImageSizeEnum : +ImageSizeEnum MEDIUM
- * ImageSizeEnum : +ImageSizeEnum THUMB
- * ImageSizeEnum : +getHeight()
- * ImageSizeEnum : +getWidth()
+ * "java.lang.Enum<ImageSize>" <|-- enum ImageSize
+ * ImageSize : +ImageSize BIG
+ * ImageSize : +ImageSize LARGE
+ * ImageSize : +ImageSize MEDIUM
+ * ImageSize : +ImageSize THUMB
+ * ImageSize : +getHeight()
+ * ImageSize : +getWidth()
  * @enduml
  */
-public enum ImageSizeEnum
+public enum ImageSize
 {
 
     BIG(), MEDIUM(350, 350), THUMB(100, 100), LARGE(1024,1024);
@@ -41,11 +41,11 @@ public enum ImageSizeEnum
     private Integer maxHeight;
     private Integer maxWidth;
 
-    private ImageSizeEnum()
+    private ImageSize()
     {
     }
 
-    private ImageSizeEnum(Integer width, Integer height)
+    private ImageSize(Integer width, Integer height)
     {
         this.maxHeight = height;
         this.maxWidth = width;

@@ -17,7 +17,7 @@
 package gallery.servlets;
 
 import gallery.images.ImageOperations;
-import gallery.enums.ImageSizeEnum;
+import gallery.enums.ImageSize;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -64,15 +64,15 @@ public class FileOperations
         switch (size)
         {
             case "thumb":
-                image = ImageOperations.scaleImage(image, ImageSizeEnum.THUMB.getWidth(), ImageSizeEnum.THUMB.getHeight());
+                image = ImageOperations.scaleImage(image, ImageSize.THUMB.getWidth(), ImageSize.THUMB.getHeight());
                 ImageIO.write(image, "jpg", outputStream);
                 break;
             case "medium":
-                image = ImageOperations.scaleImage(image, ImageSizeEnum.MEDIUM.getWidth(), ImageSizeEnum.MEDIUM.getHeight());
+                image = ImageOperations.scaleImage(image, ImageSize.MEDIUM.getWidth(), ImageSize.MEDIUM.getHeight());
                 ImageIO.write(image, "jpg", outputStream);
                 break;
             case "large":
-                image = ImageOperations.scaleImage(image, ImageSizeEnum.LARGE.getWidth(), ImageSizeEnum.LARGE.getHeight());
+                image = ImageOperations.scaleImage(image, ImageSize.LARGE.getWidth(), ImageSize.LARGE.getHeight());
                 ImageIO.write(image, "jpg", outputStream);
                 break;
             default:
