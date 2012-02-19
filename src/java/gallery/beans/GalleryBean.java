@@ -170,11 +170,20 @@ public class GalleryBean extends AbstractBean<Gallery>
     public Collection<GalleryPhotograph> getPhotographs(@PathParam("id") Long id)
     {
         Gallery gallery = find(id);
-        if (gallery == null)
-        {
-            throw new WebApplicationException(Status.NOT_FOUND);
-        }
         return gallery.getGalleryPhotographCollection();
+    }
+
+    @GET
+    @Path("{id}/galleries")
+    @Produces(
+    {
+        "application/xml", "application/json"
+    })
+    public Collection<Gallery> getGalleries(@PathParam("id") Long id)
+    {
+        Gallery gallery = find(id);
+        Collection<Gallery> collection = gallery.getGalleryCollection();
+        return collection;
     }
 
     @GET

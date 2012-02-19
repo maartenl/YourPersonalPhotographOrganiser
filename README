@@ -85,6 +85,7 @@ Gallery
 http://micemouse:8080/YourPersonalPhotographOrganiser/resources/galleries
 http://micemouse:8080/YourPersonalPhotographOrganiser/resources/galleries/{id}
 http://micemouse:8080/YourPersonalPhotographOrganiser/resources/galleries/{id}/photographs
+http://micemouse:8080/YourPersonalPhotographOrganiser/resources/galleries/{id}/galleries
 
 
 http://micemouse:8080/YourPersonalPhotographOrganiser/resources/galleryphotographs
