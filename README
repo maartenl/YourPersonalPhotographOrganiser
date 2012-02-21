@@ -122,3 +122,8 @@ dist - contains files for deploying to the glassfish server
 README - this file
 rest - files used by the REST Client Firefox addon (for testing)
 
+Blog
+----
+
+You can find some little more accessible info on 
+http://randomthoughtsonjavaprogramming.blogspot.com

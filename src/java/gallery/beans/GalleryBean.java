@@ -18,6 +18,7 @@ package gallery.beans;
 
 import gallery.database.entities.Gallery;
 import gallery.database.entities.GalleryPhotograph;
+import gallery.database.entities.Photograph;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -50,6 +51,9 @@ public class GalleryBean extends AbstractBean<Gallery>
 
     @EJB
     JobBean jobBean;
+
+    @EJB
+    PhotographBean photographBean;
     @PersistenceContext(unitName = "YourPersonalPhotographOrganiserPU")
     private EntityManager em;
 
@@ -80,6 +84,14 @@ public class GalleryBean extends AbstractBean<Gallery>
         } else
         {
             entity.setParentId(null);
+        }
+        if (entity.getHighlight() != null && entity.getHighlight().getId() != null)
+        {
+            Photograph highlight = photographBean.find(entity.getHighlight().getId());
+            entity.setHighlight(highlight);
+        } else
+        {
+            entity.setHighlight(null);
         }
         try
         {
@@ -114,6 +126,14 @@ public class GalleryBean extends AbstractBean<Gallery>
             } else
             {
                 updatedGallery.setParentId(null);
+            }
+            if (entity.getHighlight() != null && entity.getHighlight().getId() != null)
+            {
+                Photograph highlight = photographBean.find(entity.getHighlight().getId());
+                updatedGallery.setHighlight(highlight);
+            } else
+            {
+                updatedGallery.setHighlight(null);
             }
 
             // super.edit(entity);

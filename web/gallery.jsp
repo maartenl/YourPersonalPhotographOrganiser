@@ -46,7 +46,8 @@ Author : maartenl
                     name:$("#name").val(),
                     description:$("#description").val(),
                     sortorder:$("#sortorder").val(),
-                    parentId:{id:$("#parentid").val()}
+                    parentId:{id:$("#parentid").val()},
+                    highlight:{id:$('#highlight').val()}
                 };
                 $.ajax({
                     type: "POST",
@@ -80,6 +81,7 @@ Author : maartenl
                 gallery.description = $('#description').val();
                 gallery.sortorder = $('#sortorder').val();
                 gallery.parentId = {id:$('#parentid').val()};
+                gallery.highlight = {id:$('#highlight').val()};
                 $.ajax({
                     type: "PUT",
                     url: "/YourPersonalPhotographOrganiser/resources/galleries",
@@ -156,6 +158,7 @@ Author : maartenl
                     $('#description').val(currentGallery.description == null ? "" : currentGallery.description);
                     $('#sortorder').val(currentGallery.sortorder);
                     $('#parentid').val(currentGallery.parentId == null ? "" : currentGallery.parentId.id);
+                    $('#highlight').val(currentGallery.highlight == null ? "" : currentGallery.highlight.id);
                 } // end function data
                 , "json"); // endget galleryphotograph
                 // url [, data] [, success(data, textStatus, jqXHR)] [, dataType] )
@@ -168,7 +171,7 @@ Author : maartenl
                 $.get(
                 '/YourPersonalPhotographOrganiser/resources/galleries/' + id + '/import',
                 { location: $('#location').val() }
-                    ,
+                ,
                 function(data)
                 {
                     if (window.console && YourPersonalPhotographOrganiserBag.debug)
@@ -193,6 +196,7 @@ Author : maartenl
                 $('.deleteGallery').click(function(){deleteGallery();});
                 $('.importPhotographs').click(function(){importPhotographs();});
 
+                $('.backButton').click(function(){history.go(-1);});
             }); // end document ready
         </script>
         <link rel="stylesheet" href="/fancybox/jquery.fancybox-1.3.4.css" type="text/css" media="screen" />
@@ -211,15 +215,19 @@ Author : maartenl
         <textarea name="description" id="description" ></textarea>
         <br/>
         <label for="sortorder">Sort order</label>
-        <input type="text" name="sortorder" id="sortorder" />
+        <input type="text" name="sortorder" id="sortorder" rows="9" cols="120"/>
         <br/>
         <label for="parentid">Parent id</label>
         <input type="text" name="parentid" id="parentid" />
+        <br/>
+        <label for="highlight">Highlight id</label>
+        <input type="text" name="highlight" id="highlight" />
         <br/>
         <label for="location">Location</label>
         <input type="text" name="location" id="location" /><div class="importPhotographs myButton">Import Photographs</div>
         <br/>
         <hr/>
+        <div class="backButton myButton">Back</div>
         <div class="refreshGallery myButton">Refresh</div>
         <div class="createGallery myButton">Create</div>
         <div class="updateGallery myButton">Update</div>

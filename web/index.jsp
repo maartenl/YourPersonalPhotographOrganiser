@@ -9,19 +9,20 @@
 <html>
     <head>
         <%
+            Long id = null;
             String idString = request.getParameter("id");
             if (idString == null || idString.trim().equals(""))
             {
-                idString = "0";
-            }
-
-            Long id = null;
-            try
+                id = null;
+            } else
             {
-                id = Long.decode(idString);
-            } catch (NumberFormatException e)
-            {
-                id = 0l;
+                try
+                {
+                    id = Long.decode(idString);
+                } catch (NumberFormatException e)
+                {
+                    id = null;
+                }
             }
         %>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -109,6 +110,7 @@
 
             function displayPhotos()
             {
+                if (window.console && YourPersonalPhotographOrganiserBag.debug) {console.debug("displayPhotos");}
                 var buffer = "";
                 var photos = YourPersonalPhotographOrganiserBag.photos;
 
@@ -118,19 +120,19 @@
                     var description = photos[i].description;
                     if (description == null) {description = '';}
                     buffer += "<div class=\"photographCenter\">";
-                    if (photos[i].photographId === undefined)
+                    if (photos[i].photographId === undefined) // is gallery!
                     {
                         // gallery found
                         buffer += "<a href=\"/YourPersonalPhotographOrganiser/?id=" + photos[i].id + "\">";
                         if (photos[i].highlight == null)
                         {
-                            buffer += "<a><img src=\"/YourPersonalPhotographOrganiser/images/gallery.png\" alt=\"\"/>";
+                            buffer += "<img src=\"/YourPersonalPhotographOrganiser/images/gallery.png\" alt=\"\"/>";
                         }
                         else
                         {
                             buffer += "<img src=\"/YourPersonalPhotographOrganiser/ImageServlet?id=" + photos[i].highlight.id + "&size=large\" alt=\"\"/>";                                           }
                         buffer += '</a>' +
-                            '<br/><div class=\"name\">' + (i+1) + '. ' +
+                            '<br/><div class=\"name\"><img width="45px" height="45px" src=\"/YourPersonalPhotographOrganiser/images/gallery.png\" alt=\"\"/>' + (i+1) + '. ' +
                             photos[i].name
                             + '</div><div class=\"description\">' + description + '</div></div>';
                         $('#pictureDiv').html(buffer);
@@ -182,7 +184,7 @@
                 {
                     var description = photos[i].description;
                     if (description == null) {description = '';}
-                    if (photos[i].photographId === undefined)
+                    if (photos[i].photographId === undefined) // is gallery!
                     {
                         // gallery found
                         if (photos[i].highlight != null)
@@ -190,14 +192,14 @@
 
                             buffer +='<div class="photograph ' + (j % 3 == 0 ? 'photographBegin ':' ') + (j % 3 == 2 ? 'photographEnd':'') +'"><a href=\"/YourPersonalPhotographOrganiser/?id=' + photos[i].id + '\">' +
                                 '<img src=\"/YourPersonalPhotographOrganiser/ImageServlet?id=' + photos[i].highlight.id + '&size=medium\" alt=\"\"/>' +
-                                '</a><br/><div class=\"name\">' + (i+1) + '. ' +
+                                '</a><br/><div class=\"name\"><img width="45px" height="45px" src=\"/YourPersonalPhotographOrganiser/images/gallery.png\" alt=\"\"/>' + (i+1) + '. ' +
                                 photos[i].name
                                 + '</div></div>';}
                         else
                         {
                             buffer +='<div class=\"photograph ' + (j % 3 == 0 ? 'photographBegin ':' ') + (j % 3 == 2 ? 'photographEnd':'') +'">' +
                                 '<a href=\"/YourPersonalPhotographOrganiser/?id=' + photos[i].id + '\"><img width="350px" height="350px" src=\"/YourPersonalPhotographOrganiser/images/gallery.png\" alt=\"\"/></a>' +
-                                '<br/><div class=\"name\">' + (i+1) + '. ' +
+                                '<br/><div class=\"name\"><img width="45px" height="45px" src=\"/YourPersonalPhotographOrganiser/images/gallery.png\" alt=\"\"/>' + (i+1) + '. ' +
                                 photos[i].name
                                 + '</div></div>';
                         }
@@ -231,15 +233,36 @@
             function addGalleries(id)
             {
                 if (window.console && YourPersonalPhotographOrganiserBag.debug) {console.debug("addGalleries");}
-
-                $.get('/YourPersonalPhotographOrganiser/resources/galleries/' + id + '/galleries',
+                var temp_array= [];
+                var url;
+                if (id === undefined)
+                {
+                    url = '/YourPersonalPhotographOrganiser/resources/galleries';
+                }
+                else
+                {
+                    url = '/YourPersonalPhotographOrganiser/resources/galleries/' + id + '/galleries';
+                }
+                $.get(url,
                 function(data){
                     if (window.console && YourPersonalPhotographOrganiserBag.debug) {console.debug(data);}
 
-                    YourPersonalPhotographOrganiserBag.galleries = data;
                     for (i in data)
                     {
                         data[i].sortorder -= 100;
+                        if (id === undefined && data[i].parentId === null)
+                        {
+                            temp_array.push(data[i]);
+                        }
+                    }
+                    if (id === undefined)
+                    {
+                        data = temp_array;
+                    }
+                    YourPersonalPhotographOrganiserBag.galleries = data;
+                    if (YourPersonalPhotographOrganiserBag.photos === undefined)
+                    {
+                        YourPersonalPhotographOrganiserBag.photos = [];
                     }
                     YourPersonalPhotographOrganiserBag.photos = YourPersonalPhotographOrganiserBag.photos.concat(data);
                     YourPersonalPhotographOrganiserBag.photos.sort(function (a, b)
@@ -257,7 +280,12 @@
             function refreshPage(id)
             {
                 if (window.console && YourPersonalPhotographOrganiserBag.debug) {console.debug("refreshPage");}
-
+                if (id === undefined)
+                {
+                    YourPersonalPhotographOrganiserBag.index = 0;
+                    addGalleries(id);
+                    return;
+                }
                 $.get('/YourPersonalPhotographOrganiser/resources/galleries/' + id,
                 function(data){
                     if (window.console && YourPersonalPhotographOrganiserBag.debug) {console.debug(data);}
@@ -275,6 +303,13 @@
                             window.location.replace('/YourPersonalPhotographOrganiser/?id=' + data.parentId.id);
                         });// end function onclick
                     } // end if parentId
+                    else
+                    {
+                        $(".gallery_up").click(function() {
+                            // similar behavior as an HTTP redirect
+                            window.location.replace('/YourPersonalPhotographOrganiser/');
+                        });// end function onclick
+                    }
                 }, // end function(data)
                 "json"); // endget
                 // url [, data] [, success(data, textStatus, jqXHR)] [, dataType] )
@@ -302,7 +337,7 @@
             }
 
             $(document).ready(function() {
-                refreshPage(<%= id%>);
+                refreshPage(<%= id == null ? "" : id%>);
                 $('.beginning').click(function(){beginning();});
                 $('.end').click(function(){end  ();});
                 $('.page_up').click(function(){pageUp();});
@@ -319,7 +354,7 @@
         <h1 id="galleryname">Your Personal Photograph Organiser</h1>
         <div id="gallerydescription"></div>
         <div><span id="gallerystats"></span> photos</div>
-        <div class="gallery_up myButton">No up</div>
+        <div class="gallery_up myButton">Home</div>
         <div class="beginning myButton">Beginning</div>
         <div class="page_up myButton">Page up</div>
         <div class="page_down myButton">Page down</div>
@@ -329,7 +364,7 @@
         <div class="goButton myButton">Search</div>
         <hr/>
         <div id="pictureDiv"></div><hr>
-        <div class="gallery_up myButton">No up</div>
+        <div class="gallery_up myButton">Home</div>
         <div class="beginning myButton">Beginning</div>
         <div class="page_up myButton">Page up</div>
         <div class="page_down myButton">Page down</div>
