@@ -382,3 +382,13 @@ gallery.database.entities.Gallery
 https://www.netbeans.org/bugzilla/show_bug.cgi?id=205394
 
 I've choosen for now to add JsonIgnore and change it at a later date.
+
+6. WARNING: Error while trying to load Bean
+Classgallery.files.<error>$<error> : java.lang.ClassFormatError: Duplicate
+field name&signature in class file gallery/files/<error>$<error>
+
+I've manually removed these strange error classes from my build directory,
+and that seems to solve the problem. But it remains quite strange.
+
+try this: find . -name "*error*"
+and then this: rm `find . -name "*error*"`

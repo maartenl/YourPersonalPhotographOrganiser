@@ -79,7 +79,6 @@ public class GalleryPhotographBean extends AbstractBean<GalleryPhotograph>
     public void edit(GalleryPhotograph entity)
     {
         GalleryPhotograph photo = find(entity.getId());
-        photo.setAngle(entity.getAngle());
         photo.setDescription(entity.getDescription());
         photo.setName(entity.getName());
         photo.setPhotographId(photographBean.find(entity.getPhotographId().getId()));

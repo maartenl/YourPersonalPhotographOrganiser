@@ -155,7 +155,10 @@ Author : maartenl
                     for (i in data)
                     {
                         var tags = data[i].tags;
-                        buffer+="<p><strong>Name:</strong>" + data[i].name + (data[i].taken != null ? "</p><p><strong>Taken:</strong> " + (new Date(data[i].taken)) : "") + "</p>";
+                        buffer+="<p><strong>Name:</strong>" + data[i].name +
+                            (data[i].taken != null ? "</p><p><strong>Taken:</strong> " + (new Date(data[i].taken)) : "") +
+                            (data[i].angle != null ? "</p><p><strong>Angle</strong> " + data[i].angle : "") +
+                            "</p>";
                         buffer+="<table><tr><th>tag</th><th>value</th></tr>";
                         for (j in tags)
                         {
@@ -198,6 +201,7 @@ Author : maartenl
                     $("#photo_photographId_id").val(data.photographId.id);
                     $("#photo_photographId_relativepath").html(data.photographId.relativepath);
                     $("#photo_photographId_taken").html(new Date(data.photographId.taken) + "");
+                    $("#photo_photographId_angle").html(data.photographId.angle + "");
                     $("#photo_photographId_hashstring").html(data.photographId.hashstring);
                     $("#photo_photographId_filesize").html(data.photographId.filesize);
                     $("#photo_photographId_filename").html(data.photographId.filename);
@@ -247,9 +251,6 @@ Author : maartenl
         <label for="sortorder">Sort order</label>
         <input type="text" name="sortorder" id="sortorder" />
         <br/>
-        <label for="angle">Angle</label>
-        <input type="text" name="angle" id="angle" />
-        <br/>
         <h3>Comment</h3>
         <label for="id">Id</label>
         <input type="text" name="id" id="id"/>
@@ -276,6 +277,9 @@ Author : maartenl
         </p>
         <p>
             Taken:<span id="photo_photographId_taken"></span>
+        </p>
+        <p>
+            Angle:<span id="photo_photographId_angle"></span>
         </p>
         <p>
             Hash:<span id="photo_photographId_hashstring"></span>

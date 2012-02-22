@@ -26,6 +26,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.ws.rs.Consumes;
@@ -51,7 +52,6 @@ public class GalleryBean extends AbstractBean<Gallery>
 
     @EJB
     JobBean jobBean;
-
     @EJB
     PhotographBean photographBean;
     @PersistenceContext(unitName = "YourPersonalPhotographOrganiserPU")
@@ -238,5 +238,48 @@ public class GalleryBean extends AbstractBean<Gallery>
     public String countREST()
     {
         return String.valueOf(super.count());
+    }
+
+    /**
+     * Provides a plain text string indicating the current issues with the database.
+     * This can be anything from photographs that are not used yet in galleries,
+     * galleries that are still empty, etc, etc.
+     * @return String containing some html-formatted simple stuff.
+     */
+    @GET
+    @Path("issues")
+    @Produces("text/plain")
+    public String issues()
+    {
+        StringBuilder result = new StringBuilder();
+        result.append("<h2>Unused Photographs</h2>");
+
+        try
+        {
+            // get all photographs that are unused
+            Query query = em.createNamedQuery("Photograph.findUnused");
+            List list = query.getResultList();
+            if (list != null)
+            {
+                for (Object r : list)
+                {
+                    Photograph photo = (Photograph) r;
+                    result.append("Photograph unused: ");
+                    result.append(photo.getId());
+                    result.append(",");
+                    result.append(photo.getFullPath());
+                    result.append("<br/>");
+                }
+            }
+        } catch (ConstraintViolationException e)
+        {
+            for (ConstraintViolation<?> violation : e.getConstraintViolations())
+            {
+                System.out.println(violation);
+                System.out.println("importPhotographs end");
+                return violation.toString();
+            }
+        }
+        return result.toString();
     }
 }

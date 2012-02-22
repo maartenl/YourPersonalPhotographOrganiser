@@ -20,9 +20,15 @@ import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
+import com.drew.metadata.MetadataException;
 import com.drew.metadata.Tag;
+import com.drew.metadata.exif.ExifIFD0Directory;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
+import gallery.enums.ImageAngle;
 import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.RenderingHints;
 import java.awt.Transparency;
 import java.awt.image.BufferedImage;
@@ -39,9 +45,71 @@ import java.util.List;
 public class ImageOperations
 {
 
+    public static ImageAngle getAngle(File jpegFile) throws ImageProcessingException, IOException, MetadataException
+    {
+        Metadata metadata = ImageMetadataReader.readMetadata(jpegFile);
+        Directory directory = metadata.getDirectory(ExifIFD0Directory.class);
+        if (directory == null)
+        {
+            return null;
+        }
+        return ImageAngle.getAngle(directory.getInteger(ExifIFD0Directory.TAG_ORIENTATION));
+    }
+
     private ImageOperations()
     {
         // defeat instantiation
+    }
+
+    public static BufferedImage rotate(BufferedImage originalImage, ImageAngle imageAngle)
+    {
+        if (imageAngle == null)
+        {
+            return originalImage;
+        }
+        int height = originalImage.getHeight();
+        int width = originalImage.getWidth();
+        int newWidth = width;
+        int newHeight = height;
+        // 2π radians is equal to 360 degrees
+        double angle = 0;
+        switch (imageAngle)
+        {
+            case NINETYDEGREE_CLOCKWISE:
+                angle = Math.PI / 2.0;
+                newWidth = height;
+                newHeight = width;
+                break;
+            case NINETYDEGREE_COUNTER_CLOCKWISE:
+                newWidth = height;
+                newHeight = width;
+                angle = -Math.PI / 2.0;
+                break;
+            case UPSIDE_DOWN:
+                angle = Math.PI;
+                break;
+
+        }
+        double sin = Math.abs(Math.sin(angle)), cos = Math.abs(Math.cos(angle));
+        int w = originalImage.getWidth(), h = originalImage.getHeight();
+        int neww = (int) Math.floor(w * cos + h * sin), newh = (int) Math.floor(h * cos + w * sin);
+        //GraphicsConfiguration gc = getDefaultConfiguration();
+        int type = (originalImage.getTransparency() == Transparency.OPAQUE)
+                ? BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB;
+        BufferedImage result = new BufferedImage(newWidth, newHeight, type);
+        Graphics2D g = result.createGraphics();
+        g.translate((neww - w) / 2, (newh - h) / 2);
+        g.rotate(angle, w / 2, h / 2);
+        g.drawRenderedImage(originalImage, null);
+        g.dispose();
+        return result;
+    }
+
+    private static GraphicsConfiguration getDefaultConfiguration()
+    {
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice gd = ge.getDefaultScreenDevice();
+        return gd.getDefaultConfiguration();
     }
 
     /**
@@ -89,6 +157,7 @@ public class ImageOperations
             mymetadata.name = directory.getName();
 
             mymetadata.taken = directory.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL);
+            mymetadata.angle = directory.getInteger(ExifIFD0Directory.TAG_ORIENTATION);
             for (Tag tag : directory.getTags())
             {
                 mymetadata.tags.add(new PhotoTag(tag.getTagName(),
@@ -116,5 +185,4 @@ public class ImageOperations
         }
         return directory.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL);
     }
-
 }

@@ -234,6 +234,8 @@ Author : maartenl
         <div class="deleteGallery myButton">Delete</div>
         <br/>
         <a href="location.jsp" >Locations</a>
+        <a href="issues.jsp" >Issues</a>
+
         <a href="index.jsp" >Return</a>
     </body>
 </html>

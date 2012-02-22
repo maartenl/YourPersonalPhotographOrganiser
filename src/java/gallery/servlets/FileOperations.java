@@ -16,6 +16,7 @@
  */
 package gallery.servlets;
 
+import gallery.enums.ImageAngle;
 import gallery.images.ImageOperations;
 import gallery.enums.ImageSize;
 import java.awt.image.BufferedImage;
@@ -42,13 +43,13 @@ public class FileOperations
     }
 
     /**
-     * Writes an image to the outputStream that has been scaled appropriately.
+     * Writes an image to the outputStream that has been scaled appropriately and angled.
      * @param photo original photograph
      * @param outputStream the outputstream to write the image to
      * @param size the size of the image, can be "thumb", "medium" or the default.
      * @throws IOException thrown when the file cannot be access in some way.
      */
-    public static void outputImage(File file, ServletOutputStream outputStream, String size) throws IOException
+    public static void outputImage(File file, ServletOutputStream outputStream, String size, ImageAngle angle) throws IOException
     {
         BufferedImage image = ImageIO.read(file);
         if (image == null)
@@ -57,7 +58,7 @@ public class FileOperations
         }
         if (size == null)
         {
-            ImageIO.write(image, "jpg", outputStream);
+            ImageIO.write(ImageOperations.rotate(image, angle), "jpg", outputStream);
             return;
         }
         // JDK7: the new switch statement
@@ -65,20 +66,16 @@ public class FileOperations
         {
             case "thumb":
                 image = ImageOperations.scaleImage(image, ImageSize.THUMB.getWidth(), ImageSize.THUMB.getHeight());
-                ImageIO.write(image, "jpg", outputStream);
                 break;
             case "medium":
                 image = ImageOperations.scaleImage(image, ImageSize.MEDIUM.getWidth(), ImageSize.MEDIUM.getHeight());
-                ImageIO.write(image, "jpg", outputStream);
                 break;
             case "large":
                 image = ImageOperations.scaleImage(image, ImageSize.LARGE.getWidth(), ImageSize.LARGE.getHeight());
-                ImageIO.write(image, "jpg", outputStream);
                 break;
-            default:
-                ImageIO.write(image, "jpg", outputStream);
-                break;
+
         }
+        ImageIO.write(ImageOperations.rotate(image, angle), "jpg", outputStream);
     }
 
     /**

@@ -21,6 +21,7 @@ import gallery.database.entities.Gallery;
 import gallery.database.entities.GalleryPhotograph;
 import gallery.database.entities.Location;
 import gallery.database.entities.Photograph;
+import gallery.enums.ImageAngle;
 import gallery.images.ImageOperations;
 import gallery.servlets.FileOperations;
 import gallery.servlets.PhotographVisitor;
@@ -58,12 +59,17 @@ public class JobBean
         return em;
     }
 
+    private boolean isImage(Path path)
+    {
+        return !path.endsWith("avi") && !path.endsWith("AVI");
+    }
+
     /**
      * @param location
      * @param path
      * @return
      */
-    public String processPhoto(Location location, Path path) throws NoSuchAlgorithmException, IOException, ImageProcessingException
+    private String processPhoto(Location location, Path path) throws NoSuchAlgorithmException, IOException, ImageProcessingException
     {
         // System.out.println("processPhoto " + location.getFilepath());
         if (path == null)
@@ -96,24 +102,41 @@ public class JobBean
         if (list != null && !list.isEmpty())
         {
             Photograph alreadyPhoto = (Photograph) list.get(0);
-            String result = "Image with filename " + relativePath.toString() + ":" + filename.toString() + " with hash " + computeHash + " already exists with id " + alreadyPhoto.getId() + ".";
+            String result = "File with filename " + relativePath.toString() + ":" + filename.toString() + " with hash " + computeHash + " already exists with id " + alreadyPhoto.getId() + ".";
             System.out.println(result);
             return result;
         }
         // JDK7: lots of nio.Path calls
-        Date taken = ImageOperations.getDateTimeTaken(file);
+        Date taken = null;
+        ImageAngle angle = null;
+
+        if (isImage(path))
+        {
+            taken = ImageOperations.getDateTimeTaken(file);
+            angle = ImageOperations.getAngle(file);
+        }
         Photograph photo = new Photograph();
         photo.setFilesize(size);
         photo.setHashstring(computeHash);
         photo.setLocationId(location);
         photo.setTaken(taken);
         photo.setFilename(filename.toString());
+        photo.setAngle(angle);
         photo.setRelativepath(relativePath.toString());
-        // System.out.println("processPhoto " + photo.getFilename() + " " + photo.getFilesize() + " " + photo.getHashstring() + " " + photo.getTaken());
+        System.out.println("processPhoto " + photo.getFilename() + " " + photo.getFilesize() + " " + photo.getHashstring() + " " + photo.getTaken());
         em.persist(photo);
         return null;
     }
 
+    /**
+     * Checks a directory stored in "location" for new photographs.
+     * @param location the location that *may* have new photographs.
+     * @return String containing an error message, or null upon success.
+     * @throws IOException when a problem occurred with accessing the file, or
+     * the file system
+     * @throws NoSuchAlgorithmException
+     * @throws ImageProcessingException when unable to verify the image.
+     */
     public String checkDirectory(Location location) throws IOException, NoSuchAlgorithmException, ImageProcessingException
     {
         System.out.println("checkDirectory start");
@@ -154,6 +177,13 @@ public class JobBean
         return errorMessage;
     }
 
+    /**
+     * Imports photographs matching a certain mask (location) into an existing
+     * gallery.
+     * @param found the gallery to import photographs into
+     * @param location the location that should match, can use SQL wildcards like %
+     * @return a String, error message or null if successful.
+     */
     public String importPhotographs(Gallery found, String location)
     {
         System.out.println("importPhotographs start");
@@ -162,6 +192,7 @@ public class JobBean
             // get all photographs that match the mask
             Query query = em.createNamedQuery("Photograph.findByLocation");
             query.setParameter("mask", location);
+            query.setParameter("gallery", found);
             List list = query.getResultList();
             if (list == null || list.isEmpty())
             {
@@ -172,6 +203,7 @@ public class JobBean
             for (Object r : list)
             {
                 Photograph photo = (Photograph) r;
+                System.out.println("importPhotographs " + photo);
                 GalleryPhotograph gphoto = new GalleryPhotograph();
                 gphoto.setGalleryId(found);
                 gphoto.setName(photo.getFilename());

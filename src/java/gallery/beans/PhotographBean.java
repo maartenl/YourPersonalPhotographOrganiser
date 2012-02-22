@@ -18,6 +18,7 @@ package gallery.beans;
 
 import com.drew.imaging.ImageProcessingException;
 import gallery.database.entities.Photograph;
+import gallery.enums.ImageAngle;
 import gallery.images.ImageOperations;
 import gallery.images.PhotoMetadata;
 import java.io.File;
@@ -164,5 +165,11 @@ public class PhotographBean extends AbstractBean<Photograph>
             throw new WebApplicationException(Status.INTERNAL_SERVER_ERROR);
         }
 
+    }
+
+    public ImageAngle getAngle(Long id) throws ImageProcessingException, IOException
+    {
+        Photograph photo = find(id);
+        return photo.getAngle();
     }
 }

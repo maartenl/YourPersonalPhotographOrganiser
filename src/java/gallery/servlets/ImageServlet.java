@@ -16,7 +16,9 @@
  */
 package gallery.servlets;
 
+import com.drew.imaging.ImageProcessingException;
 import gallery.beans.PhotographBean;
+import gallery.enums.ImageAngle;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -92,6 +94,15 @@ public class ImageServlet extends HttpServlet
         }
 
         File file = photographBean.getFile(id);
+        ImageAngle angle;
+        try
+        {
+            angle = photographBean.getAngle(id);
+        } catch (ImageProcessingException ex)
+        {
+            throw new IOException(ex);
+        }
+
         String filename = file.getName();
         String contentType = "text/html;charset=UTF-8";
         if (filename.toLowerCase().endsWith(".jpg"))
@@ -111,7 +122,7 @@ public class ImageServlet extends HttpServlet
             contentType = "image/png";
         }
         response.setContentType(contentType);
-        FileOperations.outputImage(file, response.getOutputStream(), request.getParameter("size"));
+        FileOperations.outputImage(file, response.getOutputStream(), request.getParameter("size"), angle);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

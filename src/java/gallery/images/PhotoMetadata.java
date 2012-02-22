@@ -30,5 +30,6 @@ public class PhotoMetadata
 {
     public String name;
     public Date taken;
+    public Integer angle;
     public List<PhotoTag> tags = new ArrayList<>();
 }

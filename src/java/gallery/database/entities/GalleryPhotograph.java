@@ -33,7 +33,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -51,7 +50,6 @@ import org.codehaus.jackson.annotate.JsonIgnore;
     @NamedQuery(name = "GalleryPhotograph.findAll", query = "SELECT g FROM GalleryPhotograph g"),
     @NamedQuery(name = "GalleryPhotograph.findById", query = "SELECT g FROM GalleryPhotograph g WHERE g.id = :id"),
     @NamedQuery(name = "GalleryPhotograph.findByName", query = "SELECT g FROM GalleryPhotograph g WHERE g.name = :name"),
-    @NamedQuery(name = "GalleryPhotograph.findByAngle", query = "SELECT g FROM GalleryPhotograph g WHERE g.angle = :angle"),
     @NamedQuery(name = "GalleryPhotograph.findBySortorder", query = "SELECT g FROM GalleryPhotograph g WHERE g.sortorder = :sortorder")
 })
 public class GalleryPhotograph implements Serializable
@@ -70,8 +68,6 @@ public class GalleryPhotograph implements Serializable
     @Size(max = 65535)
     @Column(name = "description")
     private String description;
-    @Column(name = "angle")
-    private Integer angle;
     @Column(name = "sortorder")
     private BigInteger sortorder;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "galleryphotographId")
@@ -120,16 +116,6 @@ public class GalleryPhotograph implements Serializable
     public void setDescription(String description)
     {
         this.description = description;
-    }
-
-    public Integer getAngle()
-    {
-        return angle;
-    }
-
-    public void setAngle(Integer angle)
-    {
-        this.angle = angle;
     }
 
     public BigInteger getSortorder()

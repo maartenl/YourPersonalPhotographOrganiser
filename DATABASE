@@ -103,6 +103,7 @@ create table Photograph (
  taken timestamp,
  hashstring varchar(1024),
  filesize bigint,
+ angle int,
  foreign key (location_id) references Location (id)
 );
 
@@ -124,7 +125,6 @@ create table GalleryPhotograph (
  photograph_id bigint not null,
  name varchar(255),
  description text,
- angle int,
  sortorder bigint,
  foreign key (gallery_id) references Gallery (id),
  foreign key (photograph_id) references Photograph (id)

@@ -41,7 +41,6 @@
  *    -String description
  *    -BigInteger gallery_id
  *    -BigInteger photograph_id
- *    -int angle
  *    -int sortorder
  * }
  * class Location {
@@ -67,6 +66,7 @@
  *    -Date taken
  *    -String hashstring
  *    -BigInteger filesize
+ *    -int angle
  * }
  * class Log {
  *    -BigInteger id

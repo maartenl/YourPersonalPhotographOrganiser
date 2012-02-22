@@ -80,7 +80,7 @@ public class PhotographVisitor implements FileVisitor<Path>
             return FileVisitResult.CONTINUE;
         }
         matcher =
-                FileSystems.getDefault().getPathMatcher("glob:**.{jpg,jpeg,gif,png,bmp,tiff,avi}");
+                FileSystems.getDefault().getPathMatcher("glob:**.{jpg,jpeg,gif,png,bmp,tiff,avi,JPG,JPEG,GIF,PNG,BMP,TIFF,AVI}");
         if (!matcher.matches(file))
         {
             Logger.getLogger(PhotographVisitor.class.getName()).log(Level.FINEST, "visitFile ignored, not an image {0}", file);

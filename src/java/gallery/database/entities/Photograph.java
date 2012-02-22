@@ -16,6 +16,11 @@
  */
 package gallery.database.entities;
 
+import com.drew.imaging.ImageProcessingException;
+import gallery.enums.ImageAngle;
+import gallery.images.ImageOperations;
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
@@ -51,7 +56,11 @@ import org.codehaus.jackson.annotate.JsonIgnore;
     @NamedQuery(name = "Photograph.findAll", query = "SELECT p FROM Photograph p"),
     @NamedQuery(name = "Photograph.findByFilename", query = "SELECT p FROM Photograph p WHERE p.filename = :filename and p.relativepath = :relativepath"),
     @NamedQuery(name = "Photograph.findByStats", query = "SELECT p FROM Photograph p WHERE p.hashstring = :hashstring and p.filesize = :filesize"),
-    @NamedQuery(name = "Photograph.findByLocation", query = "SELECT p FROM Photograph p WHERE concat(p.locationId.filepath, '/', p.relativepath, '/', p.filename) like :mask order by p.taken, p.filename")
+    @NamedQuery(name = "Photograph.findByLocation", query = "SELECT p FROM Photograph p "
+        + "WHERE concat(p.locationId.filepath, '/', p.relativepath, '/', p.filename) like :mask "
+        + "AND not exists (select gp from GalleryPhotograph gp where gp.galleryId = :gallery and gp.photographId = p) "
+        + "order by p.taken, p.filename"),
+    @NamedQuery(name = "Photograph.findUnused", query = "SELECT p FROM Photograph p WHERE not exists (select gp from GalleryPhotograph gp where gp.photographId = p)")
 })
 public class Photograph implements Serializable
 {
@@ -82,6 +91,8 @@ public class Photograph implements Serializable
     @JoinColumn(name = "location_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Location locationId;
+    @Column(name = "angle")
+    private Integer angle;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "photograph")
     private Collection<Tag> tagCollection;
 
@@ -130,6 +141,12 @@ public class Photograph implements Serializable
         this.relativepath = relativepath;
     }
 
+    /**
+     * Indicates when the picture was taken. This is, if possible, taken
+     * from the information contained in the picture and is usually stored
+     * by the device that took the picture.
+     * @return
+     */
     public Date getTaken()
     {
         return taken;
@@ -157,6 +174,14 @@ public class Photograph implements Serializable
         return tagCollection;
     }
 
+
+    @XmlTransient
+    @JsonIgnore
+    public String getFullPath()
+    {
+        return getLocationId().getFilepath() + File.separator + getRelativepath() + File.separator + getFilename();
+    }
+
     public void setTagCollection(Collection<Tag> tagCollection)
     {
         this.tagCollection = tagCollection;
@@ -180,6 +205,31 @@ public class Photograph implements Serializable
     public void setHashstring(String hashstring)
     {
         this.hashstring = hashstring;
+    }
+
+    /**
+     * Indicates the angle at which the picture was taken. This is, if possible, stored
+     * in the information contained in the picture and is usually stored
+     * by the device that took the picture.
+     * @return
+     */
+    public ImageAngle getAngle() throws ImageProcessingException, IOException
+    {
+        if (angle == null)
+        {
+            ImageAngle result = ImageOperations.getAngle(new File(getFullPath()));
+            if (result != null)
+            {
+                angle = result.getAngle();
+            }
+            return result;
+        }
+        return ImageAngle.getAngle(angle);
+    }
+
+    public void setAngle(ImageAngle angle)
+    {
+        this.angle = angle.getAngle();
     }
 
     @Override
