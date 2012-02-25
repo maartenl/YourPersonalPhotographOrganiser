@@ -17,6 +17,7 @@
 package gallery.database.entities;
 
 import com.drew.imaging.ImageProcessingException;
+import com.drew.metadata.MetadataException;
 import gallery.enums.ImageAngle;
 import gallery.images.ImageOperations;
 import java.io.File;
@@ -57,9 +58,9 @@ import org.codehaus.jackson.annotate.JsonIgnore;
     @NamedQuery(name = "Photograph.findByFilename", query = "SELECT p FROM Photograph p WHERE p.filename = :filename and p.relativepath = :relativepath"),
     @NamedQuery(name = "Photograph.findByStats", query = "SELECT p FROM Photograph p WHERE p.hashstring = :hashstring and p.filesize = :filesize"),
     @NamedQuery(name = "Photograph.findByLocation", query = "SELECT p FROM Photograph p "
-        + "WHERE concat(p.locationId.filepath, '/', p.relativepath, '/', p.filename) like :mask "
-        + "AND not exists (select gp from GalleryPhotograph gp where gp.galleryId = :gallery and gp.photographId = p) "
-        + "order by p.taken, p.filename"),
+    + "WHERE concat(p.locationId.filepath, '/', p.relativepath, '/', p.filename) like :mask "
+    + "AND not exists (select gp from GalleryPhotograph gp where gp.galleryId = :gallery and gp.photographId = p) "
+    + "order by p.taken, p.filename"),
     @NamedQuery(name = "Photograph.findUnused", query = "SELECT p FROM Photograph p WHERE not exists (select gp from GalleryPhotograph gp where gp.photographId = p)")
 })
 public class Photograph implements Serializable
@@ -174,7 +175,6 @@ public class Photograph implements Serializable
         return tagCollection;
     }
 
-
     @XmlTransient
     @JsonIgnore
     public String getFullPath()
@@ -213,7 +213,7 @@ public class Photograph implements Serializable
      * by the device that took the picture.
      * @return
      */
-    public ImageAngle getAngle() throws ImageProcessingException, IOException
+    public ImageAngle getAngle() throws ImageProcessingException, IOException, MetadataException
     {
         if (angle == null)
         {
@@ -229,6 +229,11 @@ public class Photograph implements Serializable
 
     public void setAngle(ImageAngle angle)
     {
+        if (angle == null)
+        {
+            this.angle = null;
+            return;
+        }
         this.angle = angle.getAngle();
     }
 

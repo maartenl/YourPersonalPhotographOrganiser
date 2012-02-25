@@ -176,7 +176,7 @@
                 var i = 0;
                 var j = 0;
                 var continue_until = YourPersonalPhotographOrganiserBag.index+8;
-                if (continue_until > YourPersonalPhotographOrganiserBag.photos.length)
+                if (continue_until >= YourPersonalPhotographOrganiserBag.photos.length)
                 {
                     continue_until = YourPersonalPhotographOrganiserBag.photos.length-1;
                 }

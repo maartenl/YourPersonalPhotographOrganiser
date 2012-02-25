@@ -212,7 +212,7 @@ Author : maartenl
         <input type="text" name="name" id="name"/>
         <br/>
         <label for="description">Description</label>
-        <textarea name="description" id="description" ></textarea>
+        <textarea name="description" id="description" rows="9" cols="120"></textarea>
         <br/>
         <label for="sortorder">Sort order</label>
         <input type="text" name="sortorder" id="sortorder" rows="9" cols="120"/>

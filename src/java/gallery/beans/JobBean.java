@@ -17,6 +17,7 @@
 package gallery.beans;
 
 import com.drew.imaging.ImageProcessingException;
+import com.drew.metadata.MetadataException;
 import gallery.database.entities.Gallery;
 import gallery.database.entities.GalleryPhotograph;
 import gallery.database.entities.Location;
@@ -69,7 +70,7 @@ public class JobBean
      * @param path
      * @return
      */
-    private String processPhoto(Location location, Path path) throws NoSuchAlgorithmException, IOException, ImageProcessingException
+    private String processPhoto(Location location, Path path) throws NoSuchAlgorithmException, IOException, ImageProcessingException, MetadataException
     {
         // System.out.println("processPhoto " + location.getFilepath());
         if (path == null)
@@ -123,7 +124,15 @@ public class JobBean
         photo.setFilename(filename.toString());
         photo.setAngle(angle);
         photo.setRelativepath(relativePath.toString());
-        System.out.println("processPhoto " + photo.getFilename() + " " + photo.getFilesize() + " " + photo.getHashstring() + " " + photo.getTaken());
+        if (taken != null && taken.before(new Date(0l)))
+        {
+            photo.setTaken(null);
+            System.out.println("processPhoto cannot determine date/time! " + photo.getFilename() + " " + photo.getFilesize() + " " + photo.getHashstring() + " " + taken);
+
+        } else
+        {
+            System.out.println("processPhoto " + photo.getFilename() + " " + photo.getFilesize() + " " + photo.getHashstring() + " " + photo.getTaken());
+        }
         em.persist(photo);
         return null;
     }
@@ -137,7 +146,7 @@ public class JobBean
      * @throws NoSuchAlgorithmException
      * @throws ImageProcessingException when unable to verify the image.
      */
-    public String checkDirectory(Location location) throws IOException, NoSuchAlgorithmException, ImageProcessingException
+    public String checkDirectory(Location location) throws IOException, NoSuchAlgorithmException, ImageProcessingException, MetadataException
     {
         System.out.println("checkDirectory start");
         String errorMessage = null;
