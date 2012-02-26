@@ -138,16 +138,13 @@
                         $('#pictureDiv').html(buffer);
                         return;
                     }
-
-                    if (photos[i].photographId.filename.toLowerCase().search('[.]avi$') == -1)
+                    var imageSize = "large";
+                    if (photos[i].photographId.filename.toLowerCase().search('[.]avi$') != -1)
                     {
-                        buffer += "<a href=\"photo.jsp?id=" + photos[i].id + "\">" +
-                            "<img src=\"/YourPersonalPhotographOrganiser/ImageServlet?id=" + photos[i].photographId.id + "&size=large\" alt=\"\"/>";
+                        imageSize = "big";
                     }
-                    else
-                    {
-                        buffer += "<a><img src=\"/YourPersonalPhotographOrganiser/images/movie.png\" alt=\"\"/>";
-                    }
+                    buffer += "<a href=\"photo.jsp?id=" + photos[i].id + "\">" +
+                        "<img src=\"/YourPersonalPhotographOrganiser/ImageServlet?id=" + photos[i].photographId.id + "&size=" + imageSize + "\" alt=\"\"/>";
                     buffer += '</a>' +
                         '<br/><div class=\"name\">' + (i+1) + '. ' +
                         photos[i].name
@@ -194,7 +191,8 @@
                                 '<img src=\"/YourPersonalPhotographOrganiser/ImageServlet?id=' + photos[i].highlight.id + '&size=medium\" alt=\"\"/>' +
                                 '</a><br/><div class=\"name\"><img width="45px" height="45px" src=\"/YourPersonalPhotographOrganiser/images/gallery.png\" alt=\"\"/>' + (i+1) + '. ' +
                                 photos[i].name
-                                + '</div></div>';}
+                                + '</div></div>';
+                        }
                         else
                         {
                             buffer +='<div class=\"photograph ' + (j % 3 == 0 ? 'photographBegin ':' ') + (j % 3 == 2 ? 'photographEnd':'') +'">' +
@@ -206,22 +204,16 @@
                     }
                     else
                     {
+                        var isImage = "";
                         if (photos[i].photographId.filename.toLowerCase().search('[.]avi$') == -1)
                         {
-
-                            buffer +='<div class="photograph ' + (j % 3 == 0 ? 'photographBegin ':' ') + (j % 3 == 2 ? 'photographEnd':'') +'"><a class=\"group\" rel=\"group1\" href=\"/YourPersonalPhotographOrganiser/ImageServlet?id=' + photos[i].photographId.id + '\">' +
-                                '<img src=\"/YourPersonalPhotographOrganiser/ImageServlet?id=' + photos[i].photographId.id + '&size=medium\" alt=\"\"/>' +
-                                '</a><br/><div class=\"name\"><a href=\"photo.jsp?id=' + photos[i].id + '\">' + (i+1) + '. ' +
-                                photos[i].name
-                                + '</a></div></div>';}
-                        else
-                        {
-                            buffer +='<div class=\"photograph ' + (j % 3 == 0 ? 'photographBegin ':' ') + (j % 3 == 2 ? 'photographEnd':'') +'">' +
-                                '<a><img src=\"/YourPersonalPhotographOrganiser/images/movie.png\" alt=\"\"/></a>' +
-                                '<br/><div class=\"name\">' + (i+1) + '. ' +
-                                photos[i].name
-                                + '</div></div>';
+                            isImage = " class=\"group\" rel=\"group1\"";
                         }
+                        buffer +='<div class="photograph ' + (j % 3 == 0 ? 'photographBegin ':' ') + (j % 3 == 2 ? 'photographEnd':'') +'"><a ' + isImage + ' href=\"/YourPersonalPhotographOrganiser/ImageServlet?id=' + photos[i].photographId.id + '\">' +
+                            '<img src=\"/YourPersonalPhotographOrganiser/ImageServlet?id=' + photos[i].photographId.id + '&size=medium\" alt=\"\"/>' +
+                            '</a><br/><div class=\"name\"><a href=\"photo.jsp?id=' + photos[i].id + '\">' + (i+1) + '. ' +
+                            photos[i].name
+                            + '</a></div></div>';
                     }
                     j++;
                 }

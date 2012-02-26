@@ -60,11 +60,6 @@ public class JobBean
         return em;
     }
 
-    private boolean isImage(Path path)
-    {
-        return !path.endsWith("avi") && !path.endsWith("AVI");
-    }
-
     /**
      * @param location
      * @param path
@@ -111,7 +106,7 @@ public class JobBean
         Date taken = null;
         ImageAngle angle = null;
 
-        if (isImage(path))
+        if (ImageOperations.isImage(path))
         {
             taken = ImageOperations.getDateTimeTaken(file);
             angle = ImageOperations.getAngle(file);

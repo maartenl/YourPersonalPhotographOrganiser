@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -36,6 +37,16 @@ import javax.servlet.ServletOutputStream;
  */
 public class FileOperations
 {
+
+    public static void dumpFile(InputStream inputStream, ServletOutputStream outputStream) throws IOException
+    {
+        byte buf[] = new byte[1024];
+        int len;
+        while ((len = inputStream.read(buf)) > 0)
+        {
+            outputStream.write(buf, 0, len);
+        }
+    }
 
     private FileOperations()
     {
@@ -51,30 +62,36 @@ public class FileOperations
      */
     public static void outputImage(File file, ServletOutputStream outputStream, String size, ImageAngle angle) throws IOException
     {
+        if (!ImageOperations.isImage(file.getCanonicalPath()))
+        {
+            System.out.println("outputImage not an image!");
+            return;
+        }
         BufferedImage image = ImageIO.read(file);
+
         if (image == null)
         {
-            throw new IOException("Image is empty");
+            throw new IOException("Image " + file.getAbsolutePath() + " is empty");
         }
         if (size == null)
         {
             ImageIO.write(ImageOperations.rotate(image, angle), "jpg", outputStream);
             return;
         }
-        // JDK7: the new switch statement
+        ImageSize imageSize = null;        // JDK7: the new switch statement
         switch (size)
         {
             case "thumb":
-                image = ImageOperations.scaleImage(image, ImageSize.THUMB.getWidth(), ImageSize.THUMB.getHeight());
+                imageSize = ImageSize.THUMB;
                 break;
             case "medium":
-                image = ImageOperations.scaleImage(image, ImageSize.MEDIUM.getWidth(), ImageSize.MEDIUM.getHeight());
+                imageSize = ImageSize.MEDIUM;
                 break;
             case "large":
-                image = ImageOperations.scaleImage(image, ImageSize.LARGE.getWidth(), ImageSize.LARGE.getHeight());
+                imageSize = ImageSize.LARGE;
                 break;
-
         }
+        image = ImageOperations.scaleImage(image, imageSize.getWidth(), imageSize.getHeight());
         ImageIO.write(ImageOperations.rotate(image, angle), "jpg", outputStream);
     }
 

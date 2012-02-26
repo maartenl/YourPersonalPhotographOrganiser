@@ -17,6 +17,7 @@
 package gallery.beans;
 
 import com.drew.imaging.ImageProcessingException;
+import com.drew.metadata.MetadataException;
 import gallery.database.entities.Photograph;
 import gallery.enums.ImageAngle;
 import gallery.images.ImageOperations;
@@ -24,6 +25,7 @@ import gallery.images.PhotoMetadata;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
+import java.util.Collections;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -155,6 +157,11 @@ public class PhotographBean extends AbstractBean<Photograph>
     })
     public List<PhotoMetadata> getMetadata(@PathParam("id") Long id)
     {
+        Photograph photo = find(id);
+        if (!ImageOperations.isImage(photo.getFullPath()))
+        {
+            return Collections.emptyList();
+        }
         File jpegFile = getFile(id);
         try
         {
@@ -167,7 +174,7 @@ public class PhotographBean extends AbstractBean<Photograph>
 
     }
 
-    public ImageAngle getAngle(Long id) throws ImageProcessingException, IOException
+    public ImageAngle getAngle(Long id) throws ImageProcessingException, IOException, MetadataException
     {
         Photograph photo = find(id);
         return photo.getAngle();

@@ -36,7 +36,12 @@ package gallery.enums;
 public enum ImageSize
 {
 
-    BIG(), MEDIUM(350, 350), THUMB(100, 100), LARGE(1024,1024);
+    /**
+     * Indicates the pictures is not to be modified, but shown
+     * in its true dimensions.
+     */
+    BIG(),
+    MEDIUM(350, 350), THUMB(100, 100), LARGE(1024,1024);
 
     private Integer maxHeight;
     private Integer maxWidth;

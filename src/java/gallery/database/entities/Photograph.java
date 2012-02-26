@@ -215,7 +215,7 @@ public class Photograph implements Serializable
      */
     public ImageAngle getAngle() throws ImageProcessingException, IOException, MetadataException
     {
-        if (angle == null)
+        if (angle == null && ImageOperations.isImage(getFilename()))
         {
             ImageAngle result = ImageOperations.getAngle(new File(getFullPath()));
             if (result != null)

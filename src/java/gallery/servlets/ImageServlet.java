@@ -17,9 +17,11 @@
 package gallery.servlets;
 
 import com.drew.imaging.ImageProcessingException;
+import com.drew.metadata.MetadataException;
 import gallery.beans.PhotographBean;
 import gallery.enums.ImageAngle;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.ejb.EJB;
@@ -69,7 +71,7 @@ public class ImageServlet extends HttpServlet
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException
+            throws ServletException, IOException, MetadataException
     {
         String idString = request.getParameter("id");
         if (idString == null || "".equals(idString.trim()))
@@ -121,6 +123,27 @@ public class ImageServlet extends HttpServlet
         {
             contentType = "image/png";
         }
+        if (filename.toLowerCase().endsWith(".avi"))
+        {
+            if (request.getParameter("size") != null)
+            {
+                contentType = "image/png";
+                response.setContentType(contentType);
+                FileOperations.dumpFile(getServletContext().getResourceAsStream("/images/movie.png"), response.getOutputStream());
+            } else
+            {
+                contentType = "video/avi";
+                response.setContentType(contentType);
+                // JDK7 : try-with-resources
+                try (FileInputStream inputStream = new FileInputStream(file))
+                {
+                    FileOperations.dumpFile(inputStream, response.getOutputStream());
+                } catch (IOException e)
+                {
+                }
+            }
+            return;
+        }
         response.setContentType(contentType);
         FileOperations.outputImage(file, response.getOutputStream(), request.getParameter("size"), angle);
     }
@@ -137,7 +160,13 @@ public class ImageServlet extends HttpServlet
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
-        processRequest(request, response);
+        try
+        {
+            processRequest(request, response);
+        } catch (MetadataException ex)
+        {
+            throw new ServletException(ex);
+        }
     }
 
     /**
@@ -151,7 +180,13 @@ public class ImageServlet extends HttpServlet
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
-        processRequest(request, response);
+        try
+        {
+            processRequest(request, response);
+        } catch (MetadataException ex)
+        {
+            throw new ServletException(ex);
+        }
     }
 
     /**

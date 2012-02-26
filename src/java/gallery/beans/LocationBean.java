@@ -17,6 +17,7 @@
 package gallery.beans;
 
 import com.drew.imaging.ImageProcessingException;
+import com.drew.metadata.MetadataException;
 import gallery.database.entities.Location;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -44,9 +45,9 @@ import javax.ws.rs.core.Response.Status;
 @Path("/locations")
 public class LocationBean extends AbstractBean<Location>
 {
+
     @EJB
     JobBean jobBean;
-
     @PersistenceContext(unitName = "YourPersonalPhotographOrganiserPU")
     private EntityManager em;
 
@@ -114,7 +115,8 @@ public class LocationBean extends AbstractBean<Location>
         try
         {
             result = jobBean.checkDirectory(location);
-        } catch (IOException | NoSuchAlgorithmException | ImageProcessingException ex)
+
+        } catch (IOException | NoSuchAlgorithmException | ImageProcessingException | MetadataException ex)
         {
             ex.printStackTrace();
             if (location == null)

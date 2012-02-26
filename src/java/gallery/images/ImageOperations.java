@@ -34,6 +34,7 @@ import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -44,6 +45,16 @@ import java.util.List;
  */
 public class ImageOperations
 {
+
+        public static boolean isImage(String path)
+    {
+        return !path.endsWith(".avi") && !path.endsWith(".AVI");
+    }
+
+    public static boolean isImage(Path path)
+    {
+        return isImage(path.toString());
+    }
 
     public static ImageAngle getAngle(File jpegFile) throws ImageProcessingException, IOException, MetadataException
     {
