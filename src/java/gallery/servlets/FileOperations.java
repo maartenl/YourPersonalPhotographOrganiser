@@ -38,6 +38,12 @@ import javax.servlet.ServletOutputStream;
 public class FileOperations
 {
 
+    /**
+     * Reads from inputStream and dumps it to the outputStream.
+     * @param inputStream
+     * @param outputStream
+     * @throws IOException
+     */
     public static void dumpFile(InputStream inputStream, ServletOutputStream outputStream) throws IOException
     {
         byte buf[] = new byte[1024];
@@ -55,7 +61,7 @@ public class FileOperations
 
     /**
      * Writes an image to the outputStream that has been scaled appropriately and angled.
-     * @param photo original photograph
+     * @param photo original photograph, can only process images of type <ul><li>JPEG</li><li>TIFF</li><li>Camera Raw (NEF/CRW/CR2/...) </li></ul>
      * @param outputStream the outputstream to write the image to
      * @param size the size of the image, can be "thumb", "medium" or the default.
      * @throws IOException thrown when the file cannot be access in some way.

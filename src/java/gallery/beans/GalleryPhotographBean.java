@@ -16,8 +16,12 @@
  */
 package gallery.beans;
 
+import com.drew.imaging.ImageProcessingException;
+import com.drew.metadata.MetadataException;
 import gallery.database.entities.Comment;
 import gallery.database.entities.GalleryPhotograph;
+import gallery.enums.ImageAngle;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import javax.ejb.EJB;
@@ -82,6 +86,17 @@ public class GalleryPhotographBean extends AbstractBean<GalleryPhotograph>
         photo.setDescription(entity.getDescription());
         photo.setName(entity.getName());
         photo.setPhotographId(photographBean.find(entity.getPhotographId().getId()));
+
+        if (!entity.getPhotographId().hasNoAngle())
+        {
+            try
+            {
+                System.out.println("edit " + entity.getPhotographId().getAngle());
+                photo.getPhotographId().setAngle(entity.getPhotographId().getAngle());
+            } catch (ImageProcessingException | MetadataException | IOException ex)
+            {
+            }
+        }
 
         if (entity.getSortorder() != null && !entity.getSortorder().equals(photo.getSortorder()))
         {

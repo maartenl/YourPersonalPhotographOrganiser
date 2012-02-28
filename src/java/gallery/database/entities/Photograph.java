@@ -207,6 +207,11 @@ public class Photograph implements Serializable
         this.hashstring = hashstring;
     }
 
+    public boolean hasNoAngle()
+    {
+        return angle == null;
+    }
+
     /**
      * Indicates the angle at which the picture was taken. This is, if possible, stored
      * in the information contained in the picture and is usually stored

@@ -74,6 +74,7 @@ Author : maartenl
                 photo.name = $("#name").val();
                 photo.sortorder = $("#sortorder").val();
                 photo.photographId.id = $("#photo_photographId_id").val();
+                photo.photographId.angle = $("#photo_photographId_angle").val();
                 $.ajax({
                     type: "PUT",
                     url: "/YourPersonalPhotographOrganiser/resources/galleryphotographs",
@@ -201,7 +202,7 @@ Author : maartenl
                     $("#photo_photographId_id").val(data.photographId.id);
                     $("#photo_photographId_relativepath").html(data.photographId.relativepath);
                     $("#photo_photographId_taken").html(new Date(data.photographId.taken) + "");
-                    $("#photo_photographId_angle").html(data.photographId.angle + "");
+                    $("#photo_photographId_angle").val(data.photographId.angle + "");
                     $("#photo_photographId_hashstring").html(data.photographId.hashstring);
                     $("#photo_photographId_filesize").html(data.photographId.filesize);
                     $("#photo_photographId_filename").html(data.photographId.filename);
@@ -278,8 +279,9 @@ Author : maartenl
         <p>
             Taken:<span id="photo_photographId_taken"></span>
         </p>
-        <p>
-            Angle:<span id="photo_photographId_angle"></span>
+               <p>
+            <label for="photo_photographId_angle">Angle:</label>
+            <input type="text" name="photo_photographId_angle" id="photo_photographId_angle"/> (NORMAL,UPSIDE_DOWN,NINETYDEGREE_CLOCKWISE,NINETYDEGREE_COUNTER_CLOCKWISE)
         </p>
         <p>
             Hash:<span id="photo_photographId_hashstring"></span>
