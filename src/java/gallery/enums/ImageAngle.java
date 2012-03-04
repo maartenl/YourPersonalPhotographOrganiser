@@ -25,13 +25,13 @@ package gallery.enums;
  *
  * @startuml
  * "java.lang.Enum<ImageAngle>" <|-- enum ImageAngle
- * ImageAngle : +ImageAngle NORMAL
- * ImageAngle : +ImageAngle UPSIDE_DOWN
- * ImageAngle : +ImageAngle NINETYDEGREE_CLOCKWISE
- * ImageAngle : +ImageAngle NINETYDEGREE_COUNTER_CLOCKWISE
- * ImageAngle : +Integer getAngle()
- * ImageAngle : +toString()
- * ImageAngle : +ImageAngle getAngle(int angle)
+ * ImageAngle : +NORMAL
+ * ImageAngle : +UPSIDE_DOWN
+ * ImageAngle : +NINETYDEGREE_CLOCKWISE
+ * ImageAngle : +NINETYDEGREE_COUNTER_CLOCKWISE
+ * ImageAngle : +getAngle() : Integer
+ * ImageAngle : +toString() : String
+ * ImageAngle : +getAngle(angle : int) : ImageAngle
  * @enduml
  * @see http://www.impulseadventure.com/photo/exif-orientation.html
  */

@@ -47,6 +47,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
+ * An entity representing the file containing the image.
  * @author maartenl
  */
 @Entity
@@ -112,31 +113,56 @@ public class Photograph implements Serializable
         this.taken = taken;
     }
 
+    /**
+     * Identification/Primary Key for Photographs.
+     * @return
+     */
     public Long getId()
     {
         return id;
     }
 
+    /**
+     * Sets the id of this Photograph.
+     * @param id new primary key/unique number of this photograph
+     */
     public void setId(Long id)
     {
         this.id = id;
     }
 
+    /**
+     * The filename and extension of the photograph.
+     * @return String containing the filename, for example "DSCN0034.JPG".
+     */
     public String getFilename()
     {
         return filename;
     }
 
+    /**
+     * Sets the appropriate filename of the picture.
+     * @param filename String containing the filename without a path.
+     */
     public void setFilename(String filename)
     {
         this.filename = filename;
     }
 
+    /**
+     * The path to the filename, a relative path based from the Location
+     * @see #getLocationId()
+     * @return String with the relative path, for example "vacation/2010".
+     */
     public String getRelativepath()
     {
         return relativepath;
     }
 
+    /**
+     * Sets the relative path.
+     * @param relativepath String, for example "vacation/2010"
+     */
     public void setRelativepath(String relativepath)
     {
         this.relativepath = relativepath;
@@ -145,29 +171,46 @@ public class Photograph implements Serializable
     /**
      * Indicates when the picture was taken. This is, if possible, taken
      * from the information contained in the picture and is usually stored
-     * by the device that took the picture.
-     * @return
+     * by the device that took the picture. Does not automatically retrieve
+     * this from the picture. This is done when the picture is imported.
+     * @return the Date, or null if not set.
      */
     public Date getTaken()
     {
         return taken;
     }
 
+    /**
+     * Sets the date at which the picture was taken.
+     * @param taken the new date when the picture was taken.
+     */
     public void setTaken(Date taken)
     {
         this.taken = taken;
     }
 
+    /**
+     * Indicates in what location the picture resides (amongst other pictures).
+     * @return Location of the picture, contains an absolute path.
+     */
     public Location getLocationId()
     {
         return locationId;
     }
 
+    /**
+     * Sets the location.
+     * @param locationId the new location of this photograph.
+     */
     public void setLocationId(Location locationId)
     {
         this.locationId = locationId;
     }
 
+    /**
+     * Returns the tags associated with this picture.
+     * @return a collection of tags.
+     */
     @XmlTransient
     @JsonIgnore
     public Collection<Tag> getTagCollection()
@@ -175,6 +218,10 @@ public class Photograph implements Serializable
         return tagCollection;
     }
 
+    /**
+     * Provides a full absolute file path to this file.
+     * @return an absolute path to the file, for example "/home/mrbear/gallery/vacation/2012/DSCN00244.JPG".
+     */
     @XmlTransient
     @JsonIgnore
     public String getFullPath()
@@ -182,31 +229,58 @@ public class Photograph implements Serializable
         return getLocationId().getFilepath() + File.separator + getRelativepath() + File.separator + getFilename();
     }
 
+    /**
+     * Sets the tags collection.
+     * @param tagCollection a new tags collection.
+     */
     public void setTagCollection(Collection<Tag> tagCollection)
     {
         this.tagCollection = tagCollection;
     }
 
+    /**
+     * Returns the size of the file in bytes.
+     * @return Long containing the filesize in bytes.
+     */
     public Long getFilesize()
     {
         return filesize;
     }
 
+    /**
+     * Sets the filesize of the file in bytes. Only really used when creating a new
+     * photograph.
+     * @param filesize a new filesize.
+     */
     public void setFilesize(Long filesize)
     {
         this.filesize = filesize;
     }
 
+    /**
+     * Returns a hash string representing the file. This makes it easier to compare this file
+     * to other files, without having to do a byte-wise compare of file contents. Slight risk
+     * of double hashes, but we don't mind.
+     * @return String containing a hash.
+     */
     public String getHashstring()
     {
         return hashstring;
     }
 
+    /**
+     * Sets the hashstring.
+     * @param hashstring the new hash string.
+     */
     public void setHashstring(String hashstring)
     {
         this.hashstring = hashstring;
     }
 
+    /**
+     * Indicates if an angle has been stored in the entity.
+     * @return true if no angle is stored.
+     */
     public boolean hasNoAngle()
     {
         return angle == null;
@@ -215,8 +289,9 @@ public class Photograph implements Serializable
     /**
      * Indicates the angle at which the picture was taken. This is, if possible, stored
      * in the information contained in the picture and is usually stored
-     * by the device that took the picture.
-     * @return
+     * by the device that took the picture. If not set for this picture, will attempt
+     * to retrieve it from the metadata.
+     * @return an ImageAngle or null if unable to determine.
      */
     public ImageAngle getAngle() throws ImageProcessingException, IOException, MetadataException
     {
@@ -232,6 +307,10 @@ public class Photograph implements Serializable
         return ImageAngle.getAngle(angle);
     }
 
+    /**
+     * Sets the angle of the photograph.
+     * @param angle the new angle, may be null.
+     */
     public void setAngle(ImageAngle angle)
     {
         if (angle == null)

@@ -20,40 +20,71 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 /**
- *
+ * Abstract class that provides default implementations for retrieving
+ * entities.
  * @author maartenl
  */
 public abstract class AbstractBean<T>
 {
     private Class<T> entityClass;
 
+    /**
+     * Constructor
+     * @param entityClass the class of the entity on which this class
+     * is to perform its operations.
+     */
     public AbstractBean(Class<T> entityClass)
     {
         this.entityClass = entityClass;
     }
 
+    /**
+     * Returns the Entity manager.
+     * @return EntityManager
+     */
     protected abstract EntityManager getEntityManager();
 
+    /**
+     * Persist an entity to the database.
+     * @param entity
+     */
     public void create(T entity)
     {
         getEntityManager().persist(entity);
     }
 
+    /**
+     * Updates an entity.
+     * @param entity
+     */
     public void edit(T entity)
     {
         getEntityManager().merge(entity);
     }
 
+    /**
+     * Deletes an entity.
+     * @param entity
+     */
     public void remove(T entity)
     {
         getEntityManager().remove(getEntityManager().merge(entity));
     }
 
-    public T find(Object id)
+    /**
+     * Retrieves an identity.
+     * @param id the primary key/unique identifier of the entity
+     * @return the entity found, or null if not found.
+     */
+    public T find(Long id)
     {
         return getEntityManager().find(entityClass, id);
     }
 
+    /**
+     * Retrieve <i>all</i> instances of the entity.
+     * @return List of entities
+     */
     public List<T> findAll()
     {
         javax.persistence.criteria.CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
@@ -61,6 +92,12 @@ public abstract class AbstractBean<T>
         return getEntityManager().createQuery(cq).getResultList();
     }
 
+    /**
+     * TODO: an array? Seems weird.
+     * Retrieve a range of entities, for paging possibilities.
+     * @param range
+     * @return List of entities
+     */
     public List<T> findRange(int[] range)
     {
         javax.persistence.criteria.CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
@@ -71,6 +108,10 @@ public abstract class AbstractBean<T>
         return q.getResultList();
     }
 
+    /**
+     * Returns the number of entities available.
+     * @return integer indicating how many entities there are.
+     */
     public int count()
     {
         javax.persistence.criteria.CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();

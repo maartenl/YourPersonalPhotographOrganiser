@@ -24,7 +24,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
- *
+ * Primary key for tags.
  * @author maartenl
  */
 @Embeddable
@@ -50,21 +50,37 @@ public class TagPK implements Serializable
         this.photographId = photographId;
     }
 
+    /**
+     * Returns the tag name.
+     * @return String containing tag name
+     */
     public String getTagname()
     {
         return tagname;
     }
 
+    /**
+     * Sets the tag name.
+     * @param tagname the new tagname
+     */
     public void setTagname(String tagname)
     {
         this.tagname = tagname;
     }
 
+    /**
+     * Returns the id of the photograph
+     * @return long containing id of the photograph
+     */
     public long getPhotographId()
     {
         return photographId;
     }
 
+    /**
+     * Sets the id of the photograph
+     * @param photographId  long containing the id of the photograph
+     */
     public void setPhotographId(long photographId)
     {
         this.photographId = photographId;

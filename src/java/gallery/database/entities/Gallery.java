@@ -44,7 +44,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
- *
+ * A collection of references to Photographs and other galleries.
  * @author maartenl
  */
 @Entity
@@ -110,56 +110,101 @@ public class Gallery implements Serializable
         this.sortorder = sortorder;
     }
 
+    /**
+     * Gets the unique identifier/primary key.
+     * @return Long containing the identifier.
+     */
     public Long getId()
     {
         return id;
     }
 
+    /**
+     * Sets the unique identifier/primary key.
+     * @param id Long containing the (new) identifier.
+     */
     public void setId(Long id)
     {
         this.id = id;
     }
 
+    /**
+     * Name of the gallery
+     * @return String containing the name
+     */
     public String getName()
     {
         return name;
     }
 
+    /**
+     * Sets the name of the gallery.
+     * @param name the new name.
+     */
     public void setName(String name)
     {
         this.name = name;
     }
 
+    /**
+     * Description of the gallery
+     * @return String containing the description.
+     */
     public String getDescription()
     {
         return description;
     }
 
+    /**
+     * Sets the description of the gallery
+     * @param description String with the new description.
+     */
     public void setDescription(String description)
     {
         this.description = description;
     }
 
+    /**
+     * Creation date of the gallery.
+     * @return the date of creation, default the current date.
+     */
     public Date getCreationDate()
     {
         return creationDate;
     }
 
+    /**
+     * Sets the creation date of the gallery.
+     * @param creationDate the (new) creation date
+     */
     public void setCreationDate(Date creationDate)
     {
         this.creationDate = creationDate;
     }
 
+    /**
+     * Sort order, indicates the order in which the galleries should be displayed,
+     * where 0 is the first gallery, 1 is the next, etc.
+     * @return the sort order, 0..infinity
+     */
     public int getSortorder()
     {
         return sortorder;
     }
 
+    /**
+     * Sets the sort order.
+     * @param sortorder the sort order, 0..infinity.
+     */
     public void setSortorder(int sortorder)
     {
         this.sortorder = sortorder;
     }
 
+    /**
+     * Photographs contained in this gallery.
+     * @return Collection of photographs contained in the gallery.
+     */
     @JsonIgnore
     @XmlTransient
     public Collection<GalleryPhotograph> getGalleryPhotographCollection()
@@ -167,21 +212,38 @@ public class Gallery implements Serializable
         return galleryPhotographCollection;
     }
 
+    /**
+     * Sets the photographs in the gallery.
+     * @param galleryPhotographCollection the new collection of photographs
+     * contained in this gallery.
+     */
     public void setGalleryPhotographCollection(Collection<GalleryPhotograph> galleryPhotographCollection)
     {
         this.galleryPhotographCollection = galleryPhotographCollection;
     }
 
+    /**
+     * The photograph providing a visual cue about what this gallery is about.
+     * @return the Photograph resembling the gallery
+     */
     public Photograph getHighlight()
     {
         return highlight;
     }
 
+    /**
+     * Sets the photograph to use as visual identifier for this gallery
+     * @param highlight the Photograph resembling the gallery
+     */
     public void setHighlight(Photograph highlight)
     {
         this.highlight = highlight;
     }
 
+    /**
+     * All the galleries contained in this gallery.
+     * @return Collection of all galleries contained.
+     */
     @JsonIgnore
     @XmlTransient
     public Collection<Gallery> getGalleryCollection()
@@ -189,16 +251,28 @@ public class Gallery implements Serializable
         return galleryCollection;
     }
 
+    /**
+     * Sets the collection of all galleries contained in this gallery.
+     * @param galleryCollection the new collection of galleries.
+     */
     public void setGalleryCollection(Collection<Gallery> galleryCollection)
     {
         this.galleryCollection = galleryCollection;
     }
 
+    /**
+     * Provides the gallery of which this one is a child.
+     * @return parent gallery
+     */
     public Gallery getParentId()
     {
         return parentId;
     }
 
+    /**
+     * Sets the parent of this gallery
+     * @param parentId new parent gallery.
+     */
     public void setParentId(Gallery parentId)
     {
         this.parentId = parentId;

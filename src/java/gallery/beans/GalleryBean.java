@@ -42,7 +42,8 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response.Status;
 
 /**
- *
+ * Gallery Enterprise Java Bean, maps to a Gallery Hibernate Entity.
+ * Also a REST service mapping to /YourPersonalPhotographOrganiser/resources/galleries.
  * @author maartenl
  */
 @Stateless
@@ -51,9 +52,11 @@ public class GalleryBean extends AbstractBean<Gallery>
 {
 
     @EJB
-    JobBean jobBean;
+    private JobBean jobBean;
+
     @EJB
-    PhotographBean photographBean;
+    private PhotographBean photographBean;
+
     @PersistenceContext(unitName = "YourPersonalPhotographOrganiserPU")
     private EntityManager em;
 
@@ -68,6 +71,11 @@ public class GalleryBean extends AbstractBean<Gallery>
         super(Gallery.class);
     }
 
+    /**
+     * Creates an empty Gallery. POST to /YourPersonalPhotographOrganiser/resources/galleries.
+     * Will accept both application/xml as well as application/json.
+     * @param entity Gallery
+     */
     @POST
     @Override
     @Consumes(
@@ -105,6 +113,11 @@ public class GalleryBean extends AbstractBean<Gallery>
         }
     }
 
+    /**
+     * Updates a Gallery. PUT to /YourPersonalPhotographOrganiser/resources/galleries.
+     * Will accept both application/xml as well as application/json.
+     * @param entity Gallery
+     */
     @PUT
     @Override
     @Consumes(
@@ -146,13 +159,24 @@ public class GalleryBean extends AbstractBean<Gallery>
         }
     }
 
+    /**
+     * Removes a Gallery. DELETE to /YourPersonalPhotographOrganiser/resources/galleries/{id}.
+     * @param id unique identifier for the gallery, present in the url.
+     */
     @DELETE
     @Path("{id}")
     public void remove(@PathParam("id") Long id)
     {
-        super.remove(super.find(id));
+        super.remove(find(id));
     }
 
+    /**
+     * Retrieves a Gallery. GET to /YourPersonalPhotographOrganiser/resources/galleries/{id}.
+     * Can produce both application/xml as well as application/json when asked.
+     * @param id unique identifier for the Gallery, present in the url.
+     * @return Gallery entity
+     * @throws WebApplicationException with status {@link Status#NOT_FOUND} if Gallery with that id does not exist (any more).
+     */
     @GET
     @Path("{id}")
     @Produces(

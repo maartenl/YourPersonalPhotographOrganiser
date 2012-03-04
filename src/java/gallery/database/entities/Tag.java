@@ -27,7 +27,7 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
+ * A Tag, word to identify picture(s) for easy searching.
  * @author maartenl
  */
 @Entity
@@ -62,21 +62,37 @@ public class Tag implements Serializable
         this.tagPK = new TagPK(tagname, photographId);
     }
 
+    /**
+     * Returns the primary key of a Tag, consisting of a tagname and the photograph id.
+     * @return primary key of a Tag
+     */
     public TagPK getTagPK()
     {
         return tagPK;
     }
 
+    /**
+     * Sets the primary key of a Tag.
+     * @param tagPK primary key of a Tag
+     */
     public void setTagPK(TagPK tagPK)
     {
         this.tagPK = tagPK;
     }
 
+    /**
+     * Get the photograph associated with this key.
+     * @return the photograph matching the tag.
+     */
     public Photograph getPhotograph()
     {
         return photograph;
     }
 
+    /**
+     * Indicate which photograph matches this tag.
+     * @param photograph the photograph that corresponds to the tagname.
+     */
     public void setPhotograph(Photograph photograph)
     {
         this.photograph = photograph;

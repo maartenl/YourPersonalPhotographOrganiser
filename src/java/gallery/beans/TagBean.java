@@ -31,7 +31,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 /**
- *
+ * Tag Enterprise Java Bean, maps to a Tag Hibernate Entity.
+ * Also a REST service mapping to /YourPersonalPhotographOrganiser/resources/tags.
  * @author maartenl
  */
 @Stateless
@@ -41,6 +42,7 @@ public class TagBean extends AbstractBean<Tag>
     @PersistenceContext(unitName = "YourPersonalPhotographOrganiserPU")
     private EntityManager em;
 
+    @Override
     protected EntityManager getEntityManager()
     {
         return em;
@@ -50,6 +52,12 @@ public class TagBean extends AbstractBean<Tag>
     {
         super(Tag.class);
     }
+
+    /**
+     * Creates a Tag. POST to /YourPersonalPhotographOrganiser/resources/tags.
+     * Will accept both application/xml as well as application/json.
+     * @param entity Tag
+     */
     @POST
     @Override
     @Consumes(
@@ -61,6 +69,11 @@ public class TagBean extends AbstractBean<Tag>
         super.create(entity);
     }
 
+    /**
+     * Updates a Tag. PUT to /YourPersonalPhotographOrganiser/resources/tags.
+     * Will accept both application/xml as well as application/json.
+     * @param entity Tag
+     */
     @PUT
     @Override
     @Consumes(
@@ -72,13 +85,24 @@ public class TagBean extends AbstractBean<Tag>
         super.edit(entity);
     }
 
+    /**
+     * Removes a Tag. DELETE to /YourPersonalPhotographOrganiser/resources/tags/{id}.
+     * @param id unique identifier for the Tag, present in the url.
+     */
     @DELETE
     @Path("{id}")
     public void remove(@PathParam("id") Long id)
     {
-        super.remove(super.find(id));
+        super.remove(find(id));
     }
 
+    /**
+     * Retrieves a Tag. GET to /YourPersonalPhotographOrganiser/resources/tags/{id}.
+     * Can produce both application/xml as well as application/json when asked.
+     * @param id unique identifier for the comment, present in the url.
+     * @return Tag entity
+     * @throws WebApplicationException with status {@link Status#NOT_FOUND} if Tag with that id does not exist (any more).
+     */
     @GET
     @Path("{id}")
     @Produces(

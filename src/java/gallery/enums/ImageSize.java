@@ -25,12 +25,14 @@ package gallery.enums;
  *
  * @startuml
  * "java.lang.Enum<ImageSize>" <|-- enum ImageSize
- * ImageSize : +ImageSize BIG
- * ImageSize : +ImageSize LARGE
- * ImageSize : +ImageSize MEDIUM
- * ImageSize : +ImageSize THUMB
- * ImageSize : +getHeight()
- * ImageSize : +getWidth()
+ * ImageSize : +BIG
+ * ImageSize : +LARGE
+ * ImageSize : +MEDIUM
+ * ImageSize : +THUMB
+ * ImageSize : -maxHeight
+ * ImageSize : -maxWidth
+ * ImageSize : +getHeight() : Integer
+ * ImageSize : +getWidth() : Integer
  * @enduml
  */
 public enum ImageSize

@@ -44,7 +44,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 
 /**
- * Creates jobs to do on gallery level.
+ * Enterprise Java Bean that executes jobs monstly on gallery level.
  * @author maartenl
  */
 @Stateless
@@ -133,12 +133,12 @@ public class JobBean
     }
 
     /**
-     * Checks a directory stored in "location" for new photographs.
+     * Checks a directory stored in "location" for new photographs or films.
      * @param location the location that *may* have new photographs.
      * @return String containing an error message, or null upon success.
      * @throws IOException when a problem occurred with accessing the file, or
      * the file system
-     * @throws NoSuchAlgorithmException
+     * @throws NoSuchAlgorithmException if unable to create a hash using the algorithm.
      * @throws ImageProcessingException when unable to verify the image.
      */
     public String checkDirectory(Location location) throws IOException, NoSuchAlgorithmException, ImageProcessingException, MetadataException
@@ -182,7 +182,7 @@ public class JobBean
     }
 
     /**
-     * Imports photographs matching a certain mask (location) into an existing
+     * Imports photographs/films matching a certain mask (location) into an existing
      * gallery.
      * @param found the gallery to import photographs into
      * @param location the location that should match, can use SQL wildcards like %

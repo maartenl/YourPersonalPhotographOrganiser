@@ -32,17 +32,17 @@ import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 
 /**
- *
+ * Operations on files.
  * @author maartenl
  */
 public class FileOperations
 {
 
     /**
-     * Reads from inputStream and dumps it to the outputStream.
-     * @param inputStream
-     * @param outputStream
-     * @throws IOException
+     * Reads from inputStream and dumps it to the outputStream. Does not close input nor outputstream.
+     * @param inputStream the input
+     * @param outputStream the output
+     * @throws IOException an error occurred reading/writing to streams
      */
     public static void dumpFile(InputStream inputStream, ServletOutputStream outputStream) throws IOException
     {
@@ -54,9 +54,11 @@ public class FileOperations
         }
     }
 
+    /**
+     * Defeat instantiation
+     */
     private FileOperations()
     {
-        // defeat instantiation
     }
 
     /**
@@ -106,8 +108,8 @@ public class FileOperations
      * @param file the file to hash
      * @return String with hash
      * @throws NoSuchAlgorithmException if SHA-512 is not supported (should be, though)
-     * @throws FileNotFoundException
-     * @throws IOException
+     * @throws FileNotFoundException if file is not found on the filesystem
+     * @throws IOException if an error occurred whilst reading the file.
      */
     public static String computeHash(File file) throws NoSuchAlgorithmException, FileNotFoundException, IOException
     {

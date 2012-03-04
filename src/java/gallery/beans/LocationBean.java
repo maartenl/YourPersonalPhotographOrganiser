@@ -38,7 +38,8 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response.Status;
 
 /**
- *
+ * Location Enterprise Java Bean, maps to a Location Hibernate Entity.
+ * Also a REST service mapping to /YourPersonalPhotographOrganiser/resources/locations.
  * @author maartenl
  */
 @Stateless
@@ -51,6 +52,7 @@ public class LocationBean extends AbstractBean<Location>
     @PersistenceContext(unitName = "YourPersonalPhotographOrganiserPU")
     private EntityManager em;
 
+    @Override
     protected EntityManager getEntityManager()
     {
         return em;
@@ -60,6 +62,12 @@ public class LocationBean extends AbstractBean<Location>
     {
         super(Location.class);
     }
+
+    /**
+     * Creates a Location. POST to /YourPersonalPhotographOrganiser/resources/locations.
+     * Will accept both application/xml as well as application/json.
+     * @param entity Location
+     */
 
     @POST
     @Override
@@ -72,6 +80,11 @@ public class LocationBean extends AbstractBean<Location>
         super.create(entity);
     }
 
+    /**
+     * Updates a Location. PUT to /YourPersonalPhotographOrganiser/resources/locations.
+     * Will accept both application/xml as well as application/json.
+     * @param entity Location
+     */
     @PUT
     @Override
     @Consumes(
@@ -83,6 +96,10 @@ public class LocationBean extends AbstractBean<Location>
         super.edit(entity);
     }
 
+    /**
+     * Removes a Location. DELETE to /YourPersonalPhotographOrganiser/resources/locations/{id}.
+     * @param id unique identifier for the Location, present in the url.
+     */
     @DELETE
     @Path("{id}")
     public void remove(@PathParam("id") Long id)
@@ -90,6 +107,13 @@ public class LocationBean extends AbstractBean<Location>
         super.remove(super.find(id));
     }
 
+    /**
+     * Retrieves a Location. GET to /YourPersonalPhotographOrganiser/resources/locations/{id}.
+     * Can produce both application/xml as well as application/json when asked.
+     * @param id unique identifier for the comment, present in the url.
+     * @return Location entity
+     * @throws WebApplicationException with status {@link Status#NOT_FOUND} if Location with that id does not exist (any more).
+     */
     @GET
     @Path("{id}")
     @Produces(

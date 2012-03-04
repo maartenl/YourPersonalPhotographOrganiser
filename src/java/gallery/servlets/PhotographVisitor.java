@@ -31,7 +31,7 @@ import java.util.logging.Logger;
 
 /**
  * The photograph visitor. JDK7: derived from the JDK7 class containing
- * file tree visiting.
+ * file tree visiting. Simply adds files found to a list.
  * @author maartenl
  */
 public class PhotographVisitor implements FileVisitor<Path>

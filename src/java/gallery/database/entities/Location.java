@@ -31,7 +31,7 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
+ * Location where a number of files, which are pictures, reside.
  * @author maartenl
  */
 @Entity
@@ -64,21 +64,37 @@ public class Location implements Serializable
         this.id = id;
     }
 
+    /**
+     * Unique identified/primary key.
+     * @return Long containing the identifier.
+     */
     public Long getId()
     {
         return id;
     }
 
+    /**
+     * Sets the unique identifier/primary key.
+     * @param id the new primary key.
+     */
     public void setId(Long id)
     {
         this.id = id;
     }
 
+    /**
+     * The absolute file path correctly identifying the location on the filesystem. Should point to a directory.
+     * @return String containing the file path.
+     */
     public String getFilepath()
     {
         return filepath;
     }
 
+    /**
+     * Sets the file path.
+     * @param filepath the new filepath.
+     */
     public void setFilepath(String filepath)
     {
         this.filepath = filepath;

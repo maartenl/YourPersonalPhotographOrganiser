@@ -37,7 +37,7 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
+ * Comments provided by people on photographs in a gallery.
  * @author maartenl
  */
 @Entity
@@ -90,51 +90,91 @@ public class Comment implements Serializable
         this.submitted = submitted;
     }
 
+    /**
+     * Unique number, primary key, identification of a comment.
+     * @return Long containing identifier.
+     */
     public Long getId()
     {
         return id;
     }
 
+    /**
+     * Sets the identifier
+     * @param id the unique identifier, Long.
+     */
     public void setId(Long id)
     {
         this.id = id;
     }
 
+    /**
+     * Author of the comment.
+     * @return String containing the name of the Author.
+     */
     public String getAuthor()
     {
         return author;
     }
 
+    /**
+     * Sets the author of the comment.
+     * @param author the new author.
+     */
     public void setAuthor(String author)
     {
         this.author = author;
     }
 
+    /**
+     * date/time when the comment was submitted.
+     * @return Date/time when the comment was submitted.
+     */
     public Date getSubmitted()
     {
         return submitted;
     }
 
+    /**
+     * Set the date/time when the comment was submitted.
+     * @param submitted the new Date/time.
+     */
     public void setSubmitted(Date submitted)
     {
         this.submitted = submitted;
     }
 
+    /**
+     * The actual comment.
+     * @return String containing the comment.
+     */
     public String getComment()
     {
         return comment;
     }
 
+    /**
+     * Sets the comment. May be large.
+     * @param comment the (new) comment
+     */
     public void setComment(String comment)
     {
         this.comment = comment;
     }
 
+    /**
+     * The photograph in the gallery, on which this comment applies.
+     * @return the photograph in the gallery
+     */
     public GalleryPhotograph getGalleryphotographId()
     {
         return galleryphotographId;
     }
 
+    /**
+     * Sets the photograph to which this comment applies.
+     * @param galleryphotographId the photograph in the gallery
+     */
     public void setGalleryphotographId(GalleryPhotograph galleryphotographId)
     {
         this.galleryphotographId = galleryphotographId;

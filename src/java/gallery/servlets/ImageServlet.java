@@ -32,7 +32,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- *
+ * The image servlet, returns images properly scaled and rotated, based on a
+ * photograph id provided in the parameters as "id".
+ * Accessible at for example /YourPersonalPhotographOrganiser/ImageServlet?id=123.
  * @author maartenl
  */
 @WebServlet(name = "ImageServlet", urlPatterns =
@@ -43,7 +45,7 @@ public class ImageServlet extends HttpServlet
 {
 
     @EJB
-    PhotographBean photographBean;
+    private PhotographBean photographBean;
 
     private void writeError(String error, HttpServletResponse response) throws IOException
     {

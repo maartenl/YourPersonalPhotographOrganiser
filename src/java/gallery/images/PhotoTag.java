@@ -17,7 +17,7 @@
 package gallery.images;
 
 /**
- *
+ * Single tag of metadata retrieved from an image.
  * @author maartenl
  */
 public class PhotoTag
@@ -32,6 +32,7 @@ public class PhotoTag
     }
 
     /**
+     * Name of the metadata property item.
      * @return the name
      */
     public String getName()
@@ -40,6 +41,7 @@ public class PhotoTag
     }
 
     /**
+     * Name of the metadata property item.
      * @param name the name to set
      */
     public void setName(String name)
@@ -48,6 +50,7 @@ public class PhotoTag
     }
 
     /**
+     * Value of the metadata property item.
      * @return the value
      */
     public String getValue()
@@ -56,6 +59,7 @@ public class PhotoTag
     }
 
     /**
+     * Value of the metadata property item.
      * @param value the value to set
      */
     public void setValue(String value)

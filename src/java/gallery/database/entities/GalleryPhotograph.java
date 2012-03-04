@@ -39,7 +39,8 @@ import javax.xml.bind.annotation.XmlTransient;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
- *
+ * A photograph contained in a gallery, with references to both the gallery and
+ * the original photograph itself.
  * @author maartenl
  */
 @Entity
@@ -88,46 +89,84 @@ public class GalleryPhotograph implements Serializable
         this.id = id;
     }
 
+    /**
+     * Primary key/unique identifier.
+     * @return Long containing the id.
+     */
     public Long getId()
     {
         return id;
     }
 
+    /**
+     * Sets the unique identifier.
+     * @param id the new primary key/unique identifier
+     */
     public void setId(Long id)
     {
         this.id = id;
     }
 
+    /**
+     * Name belonging to the picture, originally this is the name of the file,
+     * but can be anything.
+     * @return the name of the photograph
+     */
     public String getName()
     {
         return name;
     }
 
+    /**
+     * Sets the name of the photograph, may be anything.
+     * @param name the new name
+     */
     public void setName(String name)
     {
         this.name = name;
     }
 
+    /**
+     * Full description of the photograph. Can be large.
+     * @return the description of the photograph
+     */
     public String getDescription()
     {
         return description;
     }
 
+    /**
+     * Sets the full description of the photograph.
+     * @param description String with the new description
+     */
     public void setDescription(String description)
     {
         this.description = description;
     }
 
+    /**
+     * Sort order, indicates the order in which the photographs should be displayed,
+     * where 0 is the first photograph, 1 is the next, etc.
+     * @return the sort order, 0..infinity.
+     */
     public BigInteger getSortorder()
     {
         return sortorder;
     }
 
+    /**
+     * Sets the sort order.
+     * @param sortorder BigInteger, 0..infinity.
+     */
     public void setSortorder(BigInteger sortorder)
     {
         this.sortorder = sortorder;
     }
 
+    /**
+     * Comments on this photograph.
+     * @return Collection of comments.
+     */
     @JsonIgnore
     @XmlTransient
     public Collection<Comment> getCommentCollection()
@@ -135,21 +174,37 @@ public class GalleryPhotograph implements Serializable
         return commentCollection;
     }
 
+    /**
+     * Sets the collection of comments.
+     * @param commentCollection a new collection of comments.
+     */
     public void setCommentCollection(Collection<Comment> commentCollection)
     {
         this.commentCollection = commentCollection;
     }
 
+    /**
+     * Reference to the original file containing the photograph.
+     * @return the photograph/file itself.
+     */
     public Photograph getPhotographId()
     {
         return photographId;
     }
 
+    /**
+     * Sets the photograph where this galleryphotograph refers to.
+     * @param photographId the new photograph
+     */
     public void setPhotographId(Photograph photographId)
     {
         this.photographId = photographId;
     }
 
+    /**
+     * Reference to the gallery, that contains this photograph.
+     * @return the Gallery
+     */
     @JsonIgnore
     @XmlTransient
     public Gallery getGalleryId()
@@ -157,6 +212,10 @@ public class GalleryPhotograph implements Serializable
         return galleryId;
     }
 
+    /**
+     * For setting to which gallery this galleryphotograph belongs.
+     * @param galleryId the gallery
+     */
     @JsonIgnore
     @XmlTransient
     public void setGalleryId(Gallery galleryId)

@@ -40,22 +40,41 @@ import java.util.Date;
 import java.util.List;
 
 /**
- *
+ * Operations on images like resizing and rotating as well as reading metadata
+ * in image files.
  * @author maartenl
  */
 public class ImageOperations
 {
 
-        public static boolean isImage(String path)
+    /**
+     * Indicates if a path refers to an image or not.
+     * @param path a path to a file
+     * @return true if it is an image, false otherwise.
+     */
+    public static boolean isImage(String path)
     {
         return !path.endsWith(".avi") && !path.endsWith(".AVI");
     }
 
+    /**
+     * Equivalent functionality regarding {@link #isImage(java.lang.String) }.
+     * @param path
+     * @return
+     */
     public static boolean isImage(Path path)
     {
         return isImage(path.toString());
     }
 
+    /**
+     * Returns the angle stored in the jpeg file.
+     * @param jpegFile file containing an image
+     * @return the angle, or null if not able to retrieve it from the image.
+     * @throws ImageProcessingException if an image processing error occurred
+     * @throws IOException if a file error occurred
+     * @throws MetadataException if the reading of the image metadata failed.
+     */
     public static ImageAngle getAngle(File jpegFile) throws ImageProcessingException, IOException, MetadataException
     {
         Metadata metadata = ImageMetadataReader.readMetadata(jpegFile);
@@ -67,11 +86,20 @@ public class ImageOperations
         return ImageAngle.getAngle(directory.getInteger(ExifIFD0Directory.TAG_ORIENTATION));
     }
 
+    /**
+     * Defeat instantiation
+     */
     private ImageOperations()
     {
-        // defeat instantiation
     }
 
+    /**
+     * Rotate an image with the appropriate angle.
+     * @param originalImage the original image that needs to be rotated
+     * @param imageAngle the image angle, may be null. In which case, the original
+     * image is returned.
+     * @return returns a possibly rotated BufferImage.
+     */
     public static BufferedImage rotate(BufferedImage originalImage, ImageAngle imageAngle)
     {
         if (imageAngle == null)
@@ -116,18 +144,11 @@ public class ImageOperations
         return result;
     }
 
-    private static GraphicsConfiguration getDefaultConfiguration()
-    {
-        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        GraphicsDevice gd = ge.getDefaultScreenDevice();
-        return gd.getDefaultConfiguration();
-    }
-
     /**
      * Scale an image down to a new size. Keeps ratio.
      * @param originalImage the original image
-     * @param newWidth the new width
-     * @param newHeight the new height
+     * @param newWidth the new width in pixels
+     * @param newHeight the new height  in pixels
      * @return a new image that is at most newWidth
      */
     public static BufferedImage scaleImage(BufferedImage originalImage, int newWidth, int newHeight)
@@ -157,6 +178,14 @@ public class ImageOperations
         return tmp;
     }
 
+    /**
+     * Retrieve the metadata from an image file.
+     * @param jpegFile the image file
+     * @return List of {@link PhotoMetadata}
+     * @throws ImageProcessingException an image processing error occurred when
+     * interpreting the image.
+     * @throws IOException an error occurred when reading the file
+     */
     public static List<PhotoMetadata> getMetadata(File jpegFile) throws ImageProcessingException, IOException
     {
         // JDK7 : empty diamond
@@ -181,10 +210,11 @@ public class ImageOperations
 
     /**
      * Returns the date and time when the photograph was taken, null if unable to retrieve.
-     * @param jpegFile
-     * @return null or Date
-     * @throws ImageProcessingException
-     * @throws IOException
+     * @param jpegFile a file containing an image.
+     * @return date or null if unable to determine the date when the photograph was taken
+     * @throws ImageProcessingException an image processing error occurred when
+     * interpreting the image.
+     * @throws IOException an error occurred when reading the file
      */
     public static Date getDateTimeTaken(File jpegFile) throws ImageProcessingException, IOException
     {

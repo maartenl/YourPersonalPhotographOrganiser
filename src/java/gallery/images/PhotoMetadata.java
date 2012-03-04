@@ -16,20 +16,37 @@
  */
 package gallery.images;
 
+import gallery.enums.ImageAngle;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
+ * Data Object for returning information as JSON to the client.
  * @author maartenl
  */
 @XmlRootElement
 public class PhotoMetadata
 {
+    /**
+     * Name of the photo.
+     */
     public String name;
+
+    /**
+     * The date the photo was taken, or null.
+     */
     public Date taken;
+
+    /**
+     * The angle at which the photo was taken, or null.
+     * See {@link ImageAngle}
+     */
     public Integer angle;
+
+    /**
+     * A list of all the metadata of the image.
+     */
     public List<PhotoTag> tags = new ArrayList<>();
 }

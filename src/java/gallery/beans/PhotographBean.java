@@ -42,7 +42,8 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response.Status;
 
 /**
- *
+ * Photograph Enterprise Java Bean, maps to a Photograph Hibernate Entity.
+ * Also a REST service mapping to /YourPersonalPhotographOrganiser/resources/photographs.
  * @author maartenl
  */
 @Stateless
@@ -53,6 +54,7 @@ public class PhotographBean extends AbstractBean<Photograph>
     @PersistenceContext(unitName = "YourPersonalPhotographOrganiserPU")
     private EntityManager em;
 
+    @Override
     protected EntityManager getEntityManager()
     {
         return em;
@@ -63,6 +65,11 @@ public class PhotographBean extends AbstractBean<Photograph>
         super(Photograph.class);
     }
 
+    /**
+     * Creates an Photograph. POST to /YourPersonalPhotographOrganiser/resources/photographs.
+     * Will accept both application/xml as well as application/json.
+     * @param entity Photograph
+     */
     @POST
     @Override
     @Consumes(
@@ -74,6 +81,11 @@ public class PhotographBean extends AbstractBean<Photograph>
         super.create(entity);
     }
 
+    /**
+     * Updates a Photograph. PUT to /YourPersonalPhotographOrganiser/resources/photographs.
+     * Will accept both application/xml as well as application/json.
+     * @param entity Photograph
+     */
     @PUT
     @Override
     @Consumes(
@@ -85,13 +97,24 @@ public class PhotographBean extends AbstractBean<Photograph>
         super.edit(entity);
     }
 
+    /**
+     * Removes a Photograph. DELETE to /YourPersonalPhotographOrganiser/resources/photographs/{id}.
+     * @param id unique identifier for the Photograph, present in the url.
+     */
     @DELETE
     @Path("{id}")
     public void remove(@PathParam("id") Long id)
     {
-        super.remove(super.find(id));
+        super.remove(find(id));
     }
 
+    /**
+     * Retrieves a Photograph. GET to /YourPersonalPhotographOrganiser/resources/photographs/{id}.
+     * Can produce both application/xml as well as application/json when asked.
+     * @param id unique identifier for the comment, present in the url.
+     * @return Photograph entity
+     * @throws WebApplicationException with status {@link Status#NOT_FOUND} if Photograph with that id does not exist (any more).
+     */
     @GET
     @Path("{id}")
     @Produces(

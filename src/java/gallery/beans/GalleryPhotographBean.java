@@ -40,7 +40,8 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response.Status;
 
 /**
- *
+ * GalleryPhotograph Enterprise Java Bean, maps to a GalleryPhotograph Hibernate Entity.
+ * Also a REST service mapping to /YourPersonalPhotographOrganiser/resources/galleryphotographs.
  * @author maartenl
  */
 @Stateless
@@ -50,9 +51,11 @@ public class GalleryPhotographBean extends AbstractBean<GalleryPhotograph>
 
     @PersistenceContext(unitName = "YourPersonalPhotographOrganiserPU")
     private EntityManager em;
-    @EJB
-    PhotographBean photographBean;
 
+    @EJB
+    private PhotographBean photographBean;
+
+    @Override
     protected EntityManager getEntityManager()
     {
         return em;
@@ -63,6 +66,11 @@ public class GalleryPhotographBean extends AbstractBean<GalleryPhotograph>
         super(GalleryPhotograph.class);
     }
 
+    /**
+     * Creates an GalleryPhotograph. POST to /YourPersonalPhotographOrganiser/resources/galleryphotographs.
+     * Will accept both application/xml as well as application/json.
+     * @param entity GalleryPhotograph
+     */
     @POST
     @Override
     @Consumes(
@@ -74,6 +82,11 @@ public class GalleryPhotographBean extends AbstractBean<GalleryPhotograph>
         super.create(entity);
     }
 
+    /**
+     * Updates a GalleryPhotograph. PUT to /YourPersonalPhotographOrganiser/resources/galleryphotographs.
+     * Will accept both application/xml as well as application/json.
+     * @param entity GalleryPhotograph
+     */
     @PUT
     @Override
     @Consumes(
@@ -91,7 +104,6 @@ public class GalleryPhotographBean extends AbstractBean<GalleryPhotograph>
         {
             try
             {
-                System.out.println("edit " + entity.getPhotographId().getAngle());
                 photo.getPhotographId().setAngle(entity.getPhotographId().getAngle());
             } catch (ImageProcessingException | MetadataException | IOException ex)
             {
@@ -108,11 +120,15 @@ public class GalleryPhotographBean extends AbstractBean<GalleryPhotograph>
 
     }
 
+    /**
+     * Removes a GalleryPhotograph. DELETE to /YourPersonalPhotographOrganiser/resources/galleryphotographs/{id}.
+     * @param id unique identifier for the GalleryPhotograph, present in the url.
+     */
     @DELETE
     @Path("{id}")
     public void remove(@PathParam("id") Long id)
     {
-        super.remove(super.find(id));
+        super.remove(find(id));
     }
 
     @GET
@@ -131,6 +147,13 @@ public class GalleryPhotographBean extends AbstractBean<GalleryPhotograph>
         return photo.getCommentCollection();
     }
 
+    /**
+     * Retrieves a GalleryPhotograph. GET to /YourPersonalPhotographOrganiser/resources/galleryphotographs/{id}.
+     * Can produce both application/xml as well as application/json when asked.
+     * @param id unique identifier for the comment, present in the url.
+     * @return GalleryPhotograph entity
+     * @throws WebApplicationException with status {@link Status#NOT_FOUND} if GalleryPhotograph with that id does not exist (any more).
+     */
     @GET
     @Path("{id}")
     @Produces(
