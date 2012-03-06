@@ -83,16 +83,16 @@ public class Gallery implements Serializable
     @NotNull
     @Column(name = "sortorder")
     private int sortorder;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "galleryId")
+        @OneToMany(cascade = CascadeType.ALL, mappedBy = "gallery")
     private Collection<GalleryPhotograph> galleryPhotographCollection;
     @JoinColumn(name = "highlight", referencedColumnName = "id")
     @ManyToOne
     private Photograph highlight;
-    @OneToMany(mappedBy = "parentId")
+        @OneToMany(mappedBy = "parent")
     private Collection<Gallery> galleryCollection;
     @JoinColumn(name = "parent_id", referencedColumnName = "id")
     @ManyToOne
-    private Gallery parentId;
+    private Gallery parent;
 
     public Gallery()
     {
@@ -264,18 +264,18 @@ public class Gallery implements Serializable
      * Provides the gallery of which this one is a child.
      * @return parent gallery
      */
-    public Gallery getParentId()
+    public Gallery getParent()
     {
-        return parentId;
+        return parent;
     }
 
     /**
      * Sets the parent of this gallery
-     * @param parentId new parent gallery.
+     * @param parent new parent gallery.
      */
-    public void setParentId(Gallery parentId)
+    public void setParent(Gallery parent)
     {
-        this.parentId = parentId;
+        this.parent = parent;
     }
 
     @Override

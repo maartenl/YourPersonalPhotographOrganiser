@@ -76,13 +76,13 @@ public class CommentBean extends AbstractBean<Comment>
     })
     public void create(Comment entity)
     {
-        GalleryPhotograph photo = galleryphotographBean.find(entity.getGalleryphotographId().getId());
-        entity.setGalleryphotographId(photo);
+        GalleryPhotograph photo = galleryphotographBean.find(entity.getGalleryphotograph().getId());
+        entity.setGalleryphotograph(photo);
         Comment newComment = new Comment();
         newComment.setAuthor(entity.getAuthor());
         newComment.setComment(entity.getComment());
         newComment.setSubmitted(new Date());
-        newComment.setGalleryphotographId(photo);
+        newComment.setGalleryphotograph(photo);
         photo.getCommentCollection().add(newComment);
         System.out.println(newComment);
         try

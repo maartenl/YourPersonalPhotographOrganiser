@@ -167,7 +167,7 @@ public class PhotographBean extends AbstractBean<Photograph>
             return null;
         }
 
-        java.nio.file.Path newPath = FileSystems.getDefault().getPath(photo.getLocationId().getFilepath(), photo.getRelativepath(), photo.getFilename());
+        java.nio.file.Path newPath = FileSystems.getDefault().getPath(photo.getLocation().getFilepath(), photo.getRelativepath(), photo.getFilename());
         File file = newPath.toFile();
         return file;
     }

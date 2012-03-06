@@ -40,7 +40,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -59,10 +58,10 @@ import org.codehaus.jackson.annotate.JsonIgnore;
     @NamedQuery(name = "Photograph.findByFilename", query = "SELECT p FROM Photograph p WHERE p.filename = :filename and p.relativepath = :relativepath"),
     @NamedQuery(name = "Photograph.findByStats", query = "SELECT p FROM Photograph p WHERE p.hashstring = :hashstring and p.filesize = :filesize"),
     @NamedQuery(name = "Photograph.findByLocation", query = "SELECT p FROM Photograph p "
-    + "WHERE concat(p.locationId.filepath, '/', p.relativepath, '/', p.filename) like :mask "
-    + "AND not exists (select gp from GalleryPhotograph gp where gp.galleryId = :gallery and gp.photographId = p) "
+    + "WHERE concat(p.location.filepath, '/', p.relativepath, '/', p.filename) like :mask "
+    + "AND not exists (select gp from GalleryPhotograph gp where gp.gallery = :gallery and gp.photograph = p) "
     + "order by p.taken, p.filename"),
-    @NamedQuery(name = "Photograph.findUnused", query = "SELECT p FROM Photograph p WHERE not exists (select gp from GalleryPhotograph gp where gp.photographId = p)")
+    @NamedQuery(name = "Photograph.findUnused", query = "SELECT p FROM Photograph p WHERE not exists (select gp from GalleryPhotograph gp where gp.photograph = p)")
 })
 public class Photograph implements Serializable
 {
@@ -92,7 +91,7 @@ public class Photograph implements Serializable
     private Long filesize;
     @JoinColumn(name = "location_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private Location locationId;
+    private Location location;
     @Column(name = "angle")
     private Integer angle;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "photograph")
@@ -151,7 +150,7 @@ public class Photograph implements Serializable
 
     /**
      * The path to the filename, a relative path based from the Location
-     * @see #getLocationId()
+     * @see #getLocation()
      * @return String with the relative path, for example "vacation/2010".
      */
     public String getRelativepath()
@@ -193,18 +192,18 @@ public class Photograph implements Serializable
      * Indicates in what location the picture resides (amongst other pictures).
      * @return Location of the picture, contains an absolute path.
      */
-    public Location getLocationId()
+    public Location getLocation()
     {
-        return locationId;
+        return location;
     }
 
     /**
      * Sets the location.
-     * @param locationId the new location of this photograph.
+     * @param location the new location of this photograph.
      */
-    public void setLocationId(Location locationId)
+    public void setLocation(Location location)
     {
-        this.locationId = locationId;
+        this.location = location;
     }
 
     /**
@@ -226,7 +225,7 @@ public class Photograph implements Serializable
     @JsonIgnore
     public String getFullPath()
     {
-        return getLocationId().getFilepath() + File.separator + getRelativepath() + File.separator + getFilename();
+        return getLocation().getFilepath() + File.separator + getRelativepath() + File.separator + getFilename();
     }
 
     /**

@@ -46,7 +46,7 @@ Author : maartenl
                     name:$("#name").val(),
                     description:$("#description").val(),
                     sortorder:$("#sortorder").val(),
-                    parentId:{id:$("#parentid").val()},
+                    parent:{id:$("#parentid").val()},
                     highlight:{id:$('#highlight').val()}
                 };
                 $.ajax({
@@ -80,7 +80,7 @@ Author : maartenl
                 gallery.name= $('#name').val();
                 gallery.description = $('#description').val();
                 gallery.sortorder = $('#sortorder').val();
-                gallery.parentId = {id:$('#parentid').val()};
+                gallery.parent = {id:$('#parentid').val()};
                 gallery.highlight = {id:$('#highlight').val()};
                 $.ajax({
                     type: "PUT",
@@ -148,7 +148,7 @@ Author : maartenl
                     var buffer="<table><tr><th>id</th><th>name</th><th>description</th><th>parent</th></tr>";
                     for (i in data)
                     {
-                        buffer+="<tr><td><a onclick=\"YourPersonalPhotographOrganiserBag.index="+i+";refreshPage();\">" + data[i].id + "</a></td><td>" + data[i].name + "</td><td>" + data[i].description + "</td><td>" + (data[i].parentId != null ? data[i].parentId.id : "-") + "</td></tr>";
+                        buffer+="<tr><td><a onclick=\"YourPersonalPhotographOrganiserBag.index="+i+";refreshPage();\">" + data[i].id + "</a></td><td>" + data[i].name + "</td><td>" + data[i].description + "</td><td>" + (data[i].parent != null ? data[i].parent.id : "-") + "</td></tr>";
                     }
                     buffer+="</table>";
                     $("#galleries").html(buffer);
@@ -157,7 +157,7 @@ Author : maartenl
                     $('#name').val(currentGallery.name);
                     $('#description').val(currentGallery.description == null ? "" : currentGallery.description);
                     $('#sortorder').val(currentGallery.sortorder);
-                    $('#parentid').val(currentGallery.parentId == null ? "" : currentGallery.parentId.id);
+                    $('#parentid').val(currentGallery.parent == null ? "" : currentGallery.parent.id);
                     $('#highlight').val(currentGallery.highlight == null ? "" : currentGallery.highlight.id);
                 } // end function data
                 , "json"); // endget galleryphotograph

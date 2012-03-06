@@ -37,7 +37,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 {
     @NamedQuery(name = "Tag.findAll", query = "SELECT t FROM Tag t"),
     @NamedQuery(name = "Tag.findByTagname", query = "SELECT t FROM Tag t WHERE t.tagPK.tagname = :tagname"),
-    @NamedQuery(name = "Tag.findByPhotographId", query = "SELECT t FROM Tag t WHERE t.tagPK.photographId = :photographId")
+    @NamedQuery(name = "Tag.findByPhotograph", query = "SELECT t FROM Tag t WHERE t.tagPK.photographId = :photographId")
 })
 public class Tag implements Serializable
 {

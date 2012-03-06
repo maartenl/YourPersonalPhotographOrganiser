@@ -98,13 +98,13 @@ public class GalleryPhotographBean extends AbstractBean<GalleryPhotograph>
         GalleryPhotograph photo = find(entity.getId());
         photo.setDescription(entity.getDescription());
         photo.setName(entity.getName());
-        photo.setPhotographId(photographBean.find(entity.getPhotographId().getId()));
+        photo.setPhotograph(photographBean.find(entity.getPhotograph().getId()));
 
-        if (!entity.getPhotographId().hasNoAngle())
+        if (!entity.getPhotograph().hasNoAngle())
         {
             try
             {
-                photo.getPhotographId().setAngle(entity.getPhotographId().getAngle());
+                photo.getPhotograph().setAngle(entity.getPhotograph().getAngle());
             } catch (ImageProcessingException | MetadataException | IOException ex)
             {
             }
@@ -113,7 +113,7 @@ public class GalleryPhotographBean extends AbstractBean<GalleryPhotograph>
         if (entity.getSortorder() != null && !entity.getSortorder().equals(photo.getSortorder()))
         {
             // sort order has been changed, reordering required!
-            //List<GalleryPhotograph> list = photo.getGalleryId().getGalleryPhotographCollection();
+            //List<GalleryPhotograph> list = photo.getGallery().getGalleryPhotographCollection();
         }
         photo.setSortorder(entity.getSortorder());
         // super.edit(entity);

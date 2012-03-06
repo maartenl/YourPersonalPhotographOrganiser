@@ -73,8 +73,8 @@ Author : maartenl
                 photo.angle = $("#angle").val();
                 photo.name = $("#name").val();
                 photo.sortorder = $("#sortorder").val();
-                photo.photographId.id = $("#photo_photographId_id").val();
-                photo.photographId.angle = $("#photo_photographId_angle").val();
+                photo.photograph.id = $("#photo_photograph_id").val();
+                photo.photograph.angle = $("#photo_photograph_angle").val();
                 $.ajax({
                     type: "PUT",
                     url: "/YourPersonalPhotographOrganiser/resources/galleryphotographs",
@@ -120,7 +120,7 @@ Author : maartenl
                 var comment = {
                     author:$("#author").val(),
                     comment:$("#comment").val(),
-                    galleryphotographId: YourPersonalPhotographOrganiserBag.photograph
+                    galleryphotograph: YourPersonalPhotographOrganiserBag.photograph
                 };
                 $.ajax({
                     type: "POST",
@@ -139,7 +139,7 @@ Author : maartenl
             function refreshMetadata()
             {
                 $.get(
-                '/YourPersonalPhotographOrganiser/resources/photographs/' + YourPersonalPhotographOrganiserBag.photograph.photographId.id + '/metadata'
+                '/YourPersonalPhotographOrganiser/resources/photographs/' + YourPersonalPhotographOrganiserBag.photograph.photograph.id + '/metadata'
                 ,
                 function(data)
                 {
@@ -197,18 +197,18 @@ Author : maartenl
                     $("#angle").val(data.angle);
                     $("#description").val(data.description);
                     $("#sortorder").val(data.sortorder);
-                    $("#photograph").html("<img src=\"/YourPersonalPhotographOrganiser/ImageServlet?id=" + data.photographId.id + "&size=medium\"/>");
+                    $("#photograph").html("<img src=\"/YourPersonalPhotographOrganiser/ImageServlet?id=" + data.photograph.id + "&size=medium\"/>");
 
-                    $("#photo_photographId_id").val(data.photographId.id);
-                    $("#photo_photographId_relativepath").html(data.photographId.relativepath);
-                    $("#photo_photographId_taken").html(new Date(data.photographId.taken) + "");
-                    $("#photo_photographId_angle").val(data.photographId.angle + "");
-                    $("#photo_photographId_hashstring").html(data.photographId.hashstring);
-                    $("#photo_photographId_filesize").html(data.photographId.filesize);
-                    $("#photo_photographId_filename").html(data.photographId.filename);
+                    $("#photo_photograph_id").val(data.photograph.id);
+                    $("#photo_photograph_relativepath").html(data.photograph.relativepath);
+                    $("#photo_photograph_taken").html(new Date(data.photograph.taken) + "");
+                    $("#photo_photograph_angle").val(data.photograph.angle + "");
+                    $("#photo_photograph_hashstring").html(data.photograph.hashstring);
+                    $("#photo_photograph_filesize").html(data.photograph.filesize);
+                    $("#photo_photograph_filename").html(data.photograph.filename);
 
-                    $("#photo_photographId_locationId_id").html(data.photographId.locationId.id);
-                    $("#photo_photographId_locationId_filepath").html(data.photographId.locationId.filepath);
+                    $("#photo_photograph_location_id").html(data.photograph.location.id);
+                    $("#photo_photograph_location_filepath").html(data.photograph.location.filepath);
                     refreshMetadata();
 
                 } // end function data
@@ -267,34 +267,34 @@ Author : maartenl
         <div class="createComment myButton">Create</div>
         <h3>File</h3>
         <p>
-            <label for="photo_photographId_id">File id</label>
-            <input type="text" name="photo_photographId_id" id="photo_photographId_id"/>
+            <label for="photo_photograph_id">File id</label>
+            <input type="text" name="photo_photograph_id" id="photo_photograph_id"/>
         </p>
         <p>
-            Filename: <span id="photo_photographId_filename"></span>
+            Filename: <span id="photo_photograph_filename"></span>
         </p>
         <p>
-            Relative path:<span id="photo_photographId_relativepath"></span>
+            Relative path:<span id="photo_photograph_relativepath"></span>
         </p>
         <p>
-            Taken:<span id="photo_photographId_taken"></span>
+            Taken:<span id="photo_photograph_taken"></span>
         </p>
                <p>
-            <label for="photo_photographId_angle">Angle:</label>
-            <input type="text" name="photo_photographId_angle" id="photo_photographId_angle"/> (NORMAL,UPSIDE_DOWN,NINETYDEGREE_CLOCKWISE,NINETYDEGREE_COUNTER_CLOCKWISE)
+            <label for="photo_photograph_angle">Angle:</label>
+            <input type="text" name="photo_photograph_angle" id="photo_photograph_angle"/> (NORMAL,UPSIDE_DOWN,NINETYDEGREE_CLOCKWISE,NINETYDEGREE_COUNTER_CLOCKWISE)
         </p>
         <p>
-            Hash:<span id="photo_photographId_hashstring"></span>
+            Hash:<span id="photo_photograph_hashstring"></span>
         </p>
         <p>
-            Filesize:<span id="photo_photographId_filesize"></span>
+            Filesize:<span id="photo_photograph_filesize"></span>
         </p>
         <h3>Location</h3>
         <p>
-            Id: <span id="photo_photographId_locationId_id"></span>
+            Id: <span id="photo_photograph_location_id"></span>
         </p>
         <p>
-            File path:<span id="photo_photographId_locationId_filepath"></span>
+            File path:<span id="photo_photograph_location_filepath"></span>
         </p>
         <h3>Metadata</h3><div id="metadata"></div>
         <hr/>

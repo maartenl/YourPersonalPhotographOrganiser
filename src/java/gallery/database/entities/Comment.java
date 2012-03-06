@@ -52,6 +52,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 })
 public class Comment implements Serializable
 {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -73,7 +74,7 @@ public class Comment implements Serializable
     private String comment;
     @JoinColumn(name = "galleryphotograph_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private GalleryPhotograph galleryphotographId;
+    private GalleryPhotograph galleryphotograph;
 
     public Comment()
     {
@@ -166,18 +167,18 @@ public class Comment implements Serializable
      * The photograph in the gallery, on which this comment applies.
      * @return the photograph in the gallery
      */
-    public GalleryPhotograph getGalleryphotographId()
+    public GalleryPhotograph getGalleryphotograph()
     {
-        return galleryphotographId;
+        return galleryphotograph;
     }
 
     /**
      * Sets the photograph to which this comment applies.
-     * @param galleryphotographId the photograph in the gallery
+     * @param galleryphotograph the photograph in the gallery
      */
-    public void setGalleryphotographId(GalleryPhotograph galleryphotographId)
+    public void setGalleryphotograph(GalleryPhotograph galleryphotograph)
     {
-        this.galleryphotographId = galleryphotographId;
+        this.galleryphotograph = galleryphotograph;
     }
 
     @Override
@@ -209,5 +210,4 @@ public class Comment implements Serializable
     {
         return "gallery.database.entities.Comment[ id=" + id + " author=" + author + " comment=" + comment + "]";
     }
-
 }

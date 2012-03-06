@@ -114,7 +114,7 @@ public class JobBean
         Photograph photo = new Photograph();
         photo.setFilesize(size);
         photo.setHashstring(computeHash);
-        photo.setLocationId(location);
+        photo.setLocation(location);
         photo.setTaken(taken);
         photo.setFilename(filename.toString());
         photo.setAngle(angle);
@@ -209,9 +209,9 @@ public class JobBean
                 Photograph photo = (Photograph) r;
                 System.out.println("importPhotographs " + photo);
                 GalleryPhotograph gphoto = new GalleryPhotograph();
-                gphoto.setGalleryId(found);
+                gphoto.setGallery(found);
                 gphoto.setName(photo.getFilename());
-                gphoto.setPhotographId(photo);
+                gphoto.setPhotograph(photo);
                 gphoto.setSortorder(BigInteger.valueOf(i++));
                 em.persist(gphoto);
             }

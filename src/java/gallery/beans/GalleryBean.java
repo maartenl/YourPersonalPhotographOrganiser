@@ -85,13 +85,13 @@ public class GalleryBean extends AbstractBean<Gallery>
     public void create(Gallery entity)
     {
         entity.setCreationDate(new Date());
-        if (entity.getParentId() != null && entity.getParentId().getId() != null)
+        if (entity.getParent() != null && entity.getParent().getId() != null)
         {
-            Gallery parentGallery = find(entity.getParentId().getId());
-            entity.setParentId(parentGallery);
+            Gallery parentGallery = find(entity.getParent().getId());
+            entity.setParent(parentGallery);
         } else
         {
-            entity.setParentId(null);
+            entity.setParent(null);
         }
         if (entity.getHighlight() != null && entity.getHighlight().getId() != null)
         {
@@ -132,13 +132,13 @@ public class GalleryBean extends AbstractBean<Gallery>
             updatedGallery.setDescription(entity.getDescription());
             updatedGallery.setName(entity.getName());
             updatedGallery.setSortorder(entity.getSortorder());
-            if (entity.getParentId() != null && entity.getParentId().getId() != null)
+            if (entity.getParent() != null && entity.getParent().getId() != null)
             {
-                Gallery parent = find(entity.getParentId().getId());
-                updatedGallery.setParentId(parent);
+                Gallery parent = find(entity.getParent().getId());
+                updatedGallery.setParent(parent);
             } else
             {
-                updatedGallery.setParentId(null);
+                updatedGallery.setParent(null);
             }
             if (entity.getHighlight() != null && entity.getHighlight().getId() != null)
             {

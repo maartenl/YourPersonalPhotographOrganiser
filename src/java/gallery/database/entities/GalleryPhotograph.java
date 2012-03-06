@@ -71,14 +71,14 @@ public class GalleryPhotograph implements Serializable
     private String description;
     @Column(name = "sortorder")
     private BigInteger sortorder;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "galleryphotographId")
+        @OneToMany(cascade = CascadeType.ALL, mappedBy = "galleryphotograph")
     private Collection<Comment> commentCollection;
     @JoinColumn(name = "photograph_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private Photograph photographId;
+    private Photograph photograph;
     @JoinColumn(name = "gallery_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private Gallery galleryId;
+    private Gallery gallery;
 
     public GalleryPhotograph()
     {
@@ -187,18 +187,18 @@ public class GalleryPhotograph implements Serializable
      * Reference to the original file containing the photograph.
      * @return the photograph/file itself.
      */
-    public Photograph getPhotographId()
+    public Photograph getPhotograph()
     {
-        return photographId;
+        return photograph;
     }
 
     /**
      * Sets the photograph where this galleryphotograph refers to.
-     * @param photographId the new photograph
+     * @param photograph the new photograph
      */
-    public void setPhotographId(Photograph photographId)
+    public void setPhotograph(Photograph photograph)
     {
-        this.photographId = photographId;
+        this.photograph = photograph;
     }
 
     /**
@@ -207,20 +207,20 @@ public class GalleryPhotograph implements Serializable
      */
     @JsonIgnore
     @XmlTransient
-    public Gallery getGalleryId()
+    public Gallery getGallery()
     {
-        return galleryId;
+        return gallery;
     }
 
     /**
      * For setting to which gallery this galleryphotograph belongs.
-     * @param galleryId the gallery
+     * @param gallery the gallery
      */
     @JsonIgnore
     @XmlTransient
-    public void setGalleryId(Gallery galleryId)
+    public void setGallery(Gallery gallery)
     {
-        this.galleryId = galleryId;
+        this.gallery = gallery;
     }
 
     @Override

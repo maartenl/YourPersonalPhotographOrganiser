@@ -120,7 +120,7 @@
                     var description = photos[i].description;
                     if (description == null) {description = '';}
                     buffer += "<div class=\"photographCenter\">";
-                    if (photos[i].photographId === undefined) // is gallery!
+                    if (photos[i].photograph === undefined) // is gallery!
                     {
                         // gallery found
                         buffer += "<a href=\"/YourPersonalPhotographOrganiser/?id=" + photos[i].id + "\">";
@@ -139,12 +139,12 @@
                         return;
                     }
                     var imageSize = "large";
-                    if (photos[i].photographId.filename.toLowerCase().search('[.]avi$') != -1)
+                    if (photos[i].photograph.filename.toLowerCase().search('[.]avi$') != -1)
                     {
                         imageSize = "big";
                     }
                     buffer += "<a href=\"photo.jsp?id=" + photos[i].id + "\">" +
-                        "<img src=\"/YourPersonalPhotographOrganiser/ImageServlet?id=" + photos[i].photographId.id + "&size=" + imageSize + "\" alt=\"\"/>";
+                        "<img src=\"/YourPersonalPhotographOrganiser/ImageServlet?id=" + photos[i].photograph.id + "&size=" + imageSize + "\" alt=\"\"/>";
                     buffer += '</a>' +
                         '<br/><div class=\"name\">' + (i+1) + '. ' +
                         photos[i].name
@@ -181,7 +181,7 @@
                 {
                     var description = photos[i].description;
                     if (description == null) {description = '';}
-                    if (photos[i].photographId === undefined) // is gallery!
+                    if (photos[i].photograph === undefined) // is gallery!
                     {
                         // gallery found
                         if (photos[i].highlight != null)
@@ -205,12 +205,12 @@
                     else
                     {
                         var isImage = "";
-                        if (photos[i].photographId.filename.toLowerCase().search('[.]avi$') == -1)
+                        if (photos[i].photograph.filename.toLowerCase().search('[.]avi$') == -1)
                         {
                             isImage = " class=\"group\" rel=\"group1\"";
                         }
-                        buffer +='<div class="photograph ' + (j % 3 == 0 ? 'photographBegin ':' ') + (j % 3 == 2 ? 'photographEnd':'') +'"><a ' + isImage + ' href=\"/YourPersonalPhotographOrganiser/ImageServlet?id=' + photos[i].photographId.id + '\">' +
-                            '<img src=\"/YourPersonalPhotographOrganiser/ImageServlet?id=' + photos[i].photographId.id + '&size=medium\" alt=\"\"/>' +
+                        buffer +='<div class="photograph ' + (j % 3 == 0 ? 'photographBegin ':' ') + (j % 3 == 2 ? 'photographEnd':'') +'"><a ' + isImage + ' href=\"/YourPersonalPhotographOrganiser/ImageServlet?id=' + photos[i].photograph.id + '\">' +
+                            '<img src=\"/YourPersonalPhotographOrganiser/ImageServlet?id=' + photos[i].photograph.id + '&size=medium\" alt=\"\"/>' +
                             '</a><br/><div class=\"name\"><a href=\"photo.jsp?id=' + photos[i].id + '\">' + (i+1) + '. ' +
                             photos[i].name
                             + '</a></div></div>';
@@ -242,7 +242,7 @@
                     for (i in data)
                     {
                         data[i].sortorder -= 100;
-                        if (id === undefined && data[i].parentId === null)
+                        if (id === undefined && data[i].parent === null)
                         {
                             temp_array.push(data[i]);
                         }
@@ -287,14 +287,14 @@
                     }
                     $("#galleryname").html(data.name);
                     $("#gallerydescription").html(data.description);
-                    if (data.parentId != null)
+                    if (data.parent != null)
                     {
                         $(".gallery_up").html("Up");
                         $(".gallery_up").click(function() {
                             // similar behavior as an HTTP redirect
-                            window.location.replace('/YourPersonalPhotographOrganiser/?id=' + data.parentId.id);
+                            window.location.replace('/YourPersonalPhotographOrganiser/?id=' + data.parent.id);
                         });// end function onclick
-                    } // end if parentId
+                    } // end if parent
                     else
                     {
                         $(".gallery_up").click(function() {
