@@ -18,7 +18,8 @@ package gallery.enums;
 
 /**
  *
- * <p>Indicates the different angle at which the pictures were taken,
+ * <p>Indicates the rotation required for a picture, to display it properly.
+ * Also indicates the angle at which the original pictures were taken,
  * if supported by the camera/mobile/device.</p>
  * <img src="../../images/ImageAngle.png"/>
  * @author maartenl
@@ -38,11 +39,28 @@ package gallery.enums;
 public enum ImageAngle
 {
 
+    /**
+     * Normal angle.
+     * <pre>        ___
+     *  _____/___|
+     * /         |
+     * |    O    |
+     * |_________|</pre>
+     */
     NORMAL(1, "Top/Left side"),
     /**
      * Not used.
      */
-    TOP_RIGHTSIDE(2, "Top/RIght side"),
+    TOP_RIGHTSIDE(2, "Top/Right side"),
+    /**
+     * Photocamera was upside down.
+     * <pre>  _________
+     * |         |
+     * |    O    |
+     * |_________|
+     * \___|
+     * </pre>
+     */
     UPSIDE_DOWN(3, "Bottom/Right side"),
     /**
      * Not used.
@@ -52,11 +70,29 @@ public enum ImageAngle
      * Not used.
      */
     BOTTOM_LEFTSIDE(4, "Bottom/Left side"),
+    /**
+     * Photocamera was turned 90 degrees counter clockwise originally.
+     * <pre>   _______
+     *  |       |
+     *  |       |
+     * /|   O   |
+     * ||       |
+     * |________|</pre>
+     */
     NINETYDEGREE_CLOCKWISE(6, "Right side/Top"),
     /**
      * Not used.
      */
     LEFTSIDE_TOP(5, "Left side/Top"),
+    /**
+     * Photocamera was turned 90 degrees clockwise originally.
+     * <pre>   _______
+     *  |       |
+     *  |       |
+     *  |   O   |\
+     *  |       ||
+     *  |________|</pre>
+     */
     NINETYDEGREE_COUNTER_CLOCKWISE(8, "Left side/Bottom");
 
     private Integer angle;
