@@ -47,9 +47,7 @@ Author : maartenl
         %>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Your Personal Photograph Organiser</title>
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-        <script type="text/javascript" src="/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
-        <script type="text/javascript" src="/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+        <%@ include file="WEB-INF/includes/javascripts.jspf" %>
         <script type="text/javascript">
 
             var YourPersonalPhotographOrganiserBag = {
