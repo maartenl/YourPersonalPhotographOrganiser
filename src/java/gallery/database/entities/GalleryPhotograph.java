@@ -36,7 +36,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  * A photograph contained in a gallery, with references to both the gallery and
@@ -167,7 +166,6 @@ public class GalleryPhotograph implements Serializable
      * Comments on this photograph.
      * @return Collection of comments.
      */
-    @JsonIgnore
     @XmlTransient
     public Collection<Comment> getCommentCollection()
     {
@@ -178,6 +176,7 @@ public class GalleryPhotograph implements Serializable
      * Sets the collection of comments.
      * @param commentCollection a new collection of comments.
      */
+    @XmlTransient
     public void setCommentCollection(Collection<Comment> commentCollection)
     {
         this.commentCollection = commentCollection;
@@ -205,7 +204,6 @@ public class GalleryPhotograph implements Serializable
      * Reference to the gallery, that contains this photograph.
      * @return the Gallery
      */
-    @JsonIgnore
     @XmlTransient
     public Gallery getGallery()
     {
@@ -216,7 +214,6 @@ public class GalleryPhotograph implements Serializable
      * For setting to which gallery this galleryphotograph belongs.
      * @param gallery the gallery
      */
-    @JsonIgnore
     @XmlTransient
     public void setGallery(Gallery gallery)
     {

@@ -41,7 +41,6 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  * A collection of references to Photographs and other galleries.
@@ -205,7 +204,6 @@ public class Gallery implements Serializable
      * Photographs contained in this gallery.
      * @return Collection of photographs contained in the gallery.
      */
-    @JsonIgnore
     @XmlTransient
     public Collection<GalleryPhotograph> getGalleryPhotographCollection()
     {
@@ -217,6 +215,7 @@ public class Gallery implements Serializable
      * @param galleryPhotographCollection the new collection of photographs
      * contained in this gallery.
      */
+    @XmlTransient
     public void setGalleryPhotographCollection(Collection<GalleryPhotograph> galleryPhotographCollection)
     {
         this.galleryPhotographCollection = galleryPhotographCollection;
@@ -244,7 +243,6 @@ public class Gallery implements Serializable
      * All the galleries contained in this gallery.
      * @return Collection of all galleries contained.
      */
-    @JsonIgnore
     @XmlTransient
     public Collection<Gallery> getGalleryCollection()
     {
@@ -255,6 +253,7 @@ public class Gallery implements Serializable
      * Sets the collection of all galleries contained in this gallery.
      * @param galleryCollection the new collection of galleries.
      */
+    @XmlTransient
     public void setGalleryCollection(Collection<Gallery> galleryCollection)
     {
         this.galleryCollection = galleryCollection;

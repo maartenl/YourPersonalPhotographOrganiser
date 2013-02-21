@@ -43,7 +43,6 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  * An entity representing the file containing the image.
@@ -211,7 +210,6 @@ public class Photograph implements Serializable
      * @return a collection of tags.
      */
     @XmlTransient
-    @JsonIgnore
     public Collection<Tag> getTagCollection()
     {
         return tagCollection;
@@ -222,7 +220,6 @@ public class Photograph implements Serializable
      * @return an absolute path to the file, for example "/home/mrbear/gallery/vacation/2012/DSCN00244.JPG".
      */
     @XmlTransient
-    @JsonIgnore
     public String getFullPath()
     {
         return getLocation().getFilepath() + File.separator + getRelativepath() + File.separator + getFilename();

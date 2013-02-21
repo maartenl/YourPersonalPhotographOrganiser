@@ -3,7 +3,6 @@
     Created on : Dec 18, 2011, 11:46:17 AM
     Author     : maartenl
 --%>
-<%@ page import="gallery.beans.PhotographFacadeLocal"%>
 <%@ page import="gallery.database.entities.Photograph"%>
 <%@ page import="java.io.IOException"%>
 <%@ page import="java.nio.file.Files"%>
