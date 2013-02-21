@@ -176,7 +176,6 @@ public class GalleryPhotograph implements Serializable
      * Sets the collection of comments.
      * @param commentCollection a new collection of comments.
      */
-    @XmlTransient
     public void setCommentCollection(Collection<Comment> commentCollection)
     {
         this.commentCollection = commentCollection;
@@ -214,7 +213,6 @@ public class GalleryPhotograph implements Serializable
      * For setting to which gallery this galleryphotograph belongs.
      * @param gallery the gallery
      */
-    @XmlTransient
     public void setGallery(Gallery gallery)
     {
         this.gallery = gallery;

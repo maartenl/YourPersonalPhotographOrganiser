@@ -82,7 +82,7 @@ public class Gallery implements Serializable
     @NotNull
     @Column(name = "sortorder")
     private int sortorder;
-        @OneToMany(cascade = CascadeType.ALL, mappedBy = "gallery")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "gallery")
     private Collection<GalleryPhotograph> galleryPhotographCollection;
     @JoinColumn(name = "highlight", referencedColumnName = "id")
     @ManyToOne
@@ -215,7 +215,6 @@ public class Gallery implements Serializable
      * @param galleryPhotographCollection the new collection of photographs
      * contained in this gallery.
      */
-    @XmlTransient
     public void setGalleryPhotographCollection(Collection<GalleryPhotograph> galleryPhotographCollection)
     {
         this.galleryPhotographCollection = galleryPhotographCollection;
@@ -253,7 +252,6 @@ public class Gallery implements Serializable
      * Sets the collection of all galleries contained in this gallery.
      * @param galleryCollection the new collection of galleries.
      */
-    @XmlTransient
     public void setGalleryCollection(Collection<Gallery> galleryCollection)
     {
         this.galleryCollection = galleryCollection;

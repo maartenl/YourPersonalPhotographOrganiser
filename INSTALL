@@ -6,9 +6,11 @@ Installing this package requires the following components:
 - Glassfish (comes with Netbeans)
 - JDK 7
 - MySQL
-- MySQL JConnect jdbc driver in glassfish
+- MySQL JConnect jdbc driver in glassfish ($GLASSFISH/glassfish/lib)
 - JQuery (automatically connects to a CDN, so no worries there)
-- Fancybox (Lightbox replacement for jquery)
+- Fancybox (Lightbox replacement for jquery, I'm using an old version,
+  version jquery.fancybox-1.3.4.zip. To be on the safe side, I included it
+  into git.)
 
 Steps
 -----
@@ -24,7 +26,10 @@ Steps
 Addendum
 --------
 
-Don't for get to properly specify the data source in glassfish.
+Don't forget to properly specify the data source in glassfish.
+
+The software is looking for a JDBC Resource named 
+YourPersonalPhotographOrganiser.
 
 References
 ----------

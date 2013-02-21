@@ -255,6 +255,9 @@
                         YourPersonalPhotographOrganiserBag.photos = [];
                     }
                     YourPersonalPhotographOrganiserBag.photos = YourPersonalPhotographOrganiserBag.photos.concat(data);
+                    // filter out null values
+                    // TODO: find out why there are null values in there in the first place.
+                    YourPersonalPhotographOrganiserBag.photos = YourPersonalPhotographOrganiserBag.photos.filter(function(e){return e}); 
                     YourPersonalPhotographOrganiserBag.photos.sort(function (a, b)
                     {
                         return (a.sortorder - b.sortorder)
@@ -285,7 +288,7 @@
                     }
                     $("#galleryname").html(data.name);
                     $("#gallerydescription").html(data.description);
-                    if (data.parent != null)
+                    if (data.parent !== null)
                     {
                         $(".gallery_up").html("Up");
                         $(".gallery_up").click(function() {
@@ -306,6 +309,7 @@
 
                 $.get('/YourPersonalPhotographOrganiser/resources/galleries/' + id + '/photographs',
                 function(data){
+                    data = data.galleryPhotograph;
                     if (window.console && YourPersonalPhotographOrganiserBag.debug) {console.debug(data);}
                     data.sort(function (a, b)
                     {

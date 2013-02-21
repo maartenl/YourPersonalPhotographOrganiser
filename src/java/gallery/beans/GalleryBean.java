@@ -20,6 +20,7 @@ import gallery.database.entities.Gallery;
 import gallery.database.entities.GalleryPhotograph;
 import gallery.database.entities.Photograph;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
@@ -214,7 +215,12 @@ public class GalleryBean extends AbstractBean<Gallery>
     public Collection<GalleryPhotograph> getPhotographs(@PathParam("id") Long id)
     {
         Gallery gallery = find(id);
-        return gallery.getGalleryPhotographCollection();
+        Collection<GalleryPhotograph> result = gallery.getGalleryPhotographCollection();
+        if (result == null || result.isEmpty())
+        {
+            return Collections.emptyList();
+        }
+        return result;
     }
 
     @GET
@@ -227,6 +233,10 @@ public class GalleryBean extends AbstractBean<Gallery>
     {
         Gallery gallery = find(id);
         Collection<Gallery> collection = gallery.getGalleryCollection();
+        if (collection == null || collection.isEmpty())
+        {
+            return Collections.emptyList();
+        }
         return collection;
     }
 
