@@ -23,6 +23,7 @@ import gallery.database.entities.GalleryPhotograph;
 import gallery.enums.ImageAngle;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -144,7 +145,12 @@ public class GalleryPhotographBean extends AbstractBean<GalleryPhotograph>
         {
             throw new WebApplicationException(Status.NOT_FOUND);
         }
-        return photo.getCommentCollection();
+        Collection<Comment> result = photo.getCommentCollection();
+        if (result == null || result.isEmpty())
+        {
+            return Collections.emptyList();
+        }        
+        return result;
     }
 
     /**

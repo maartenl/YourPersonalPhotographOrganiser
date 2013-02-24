@@ -240,6 +240,12 @@ public class GalleryBean extends AbstractBean<Gallery>
         return collection;
     }
 
+    /**
+     * Retrieves all galleries on toplevel (so without a parent). 
+     * GET to /YourPersonalPhotographOrganiser/resources/galleries.
+     * Can produce both application/xml as well as application/json when asked.
+     * @return List<Gallery> list of galleries
+     */
     @GET
     @Override
     @Produces(
@@ -248,7 +254,7 @@ public class GalleryBean extends AbstractBean<Gallery>
     })
     public List<Gallery> findAll()
     {
-        return super.findAll();
+        return getEntityManager().createNamedQuery("Gallery.findRoot").getResultList();
     }
 
     @GET

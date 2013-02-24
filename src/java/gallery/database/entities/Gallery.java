@@ -52,6 +52,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries(
 {
     @NamedQuery(name = "Gallery.findAll", query = "SELECT g FROM Gallery g"),
+    @NamedQuery(name = "Gallery.findRoot", query = "SELECT g FROM Gallery g WHERE g.parent is null"),
     @NamedQuery(name = "Gallery.findById", query = "SELECT g FROM Gallery g WHERE g.id = :id"),
     @NamedQuery(name = "Gallery.findByName", query = "SELECT g FROM Gallery g WHERE g.name = :name"),
     @NamedQuery(name = "Gallery.findByCreationDate", query = "SELECT g FROM Gallery g WHERE g.creationDate = :creationDate"),

@@ -75,7 +75,15 @@ public class FileOperations
             System.out.println("outputImage not an image!");
             return;
         }
-        BufferedImage image = ImageIO.read(file);
+        BufferedImage image = null;
+        try
+        {
+            image = ImageIO.read(file);
+        }
+        catch (javax.imageio.IIOException e)
+        {
+            throw new RuntimeException("Error reading file " + file.getCanonicalPath(), e);
+        }
 
         if (image == null)
         {
