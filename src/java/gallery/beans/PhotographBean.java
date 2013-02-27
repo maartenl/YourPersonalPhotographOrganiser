@@ -27,6 +27,8 @@ import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -199,7 +201,9 @@ public class PhotographBean extends AbstractBean<Photograph>
 
     public ImageAngle getAngle(Long id) throws ImageProcessingException, IOException, MetadataException
     {
+        Logger.getLogger(PhotographBean.class.getName()).log(Level.FINE, "getAngle {0}", id);
         Photograph photo = find(id);
+        Logger.getLogger(PhotographBean.class.getName()).log(Level.FINE, "getAngle returns {0}", photo.getAngle());
         return photo.getAngle();
     }
 }

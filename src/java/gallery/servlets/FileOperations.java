@@ -28,6 +28,8 @@ import java.io.InputStream;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 
@@ -70,6 +72,8 @@ public class FileOperations
      */
     public static void outputImage(File file, ServletOutputStream outputStream, String size, ImageAngle angle) throws IOException
     {
+        Object[] params = {file.getCanonicalPath(), size, angle};
+        Logger.getLogger(FileOperations.class.getName()).log(Level.FINE, "outputImage {0} {1} {2}", params);
         if (!ImageOperations.isImage(file.getCanonicalPath()))
         {
             System.out.println("outputImage not an image!");
@@ -94,7 +98,8 @@ public class FileOperations
             ImageIO.write(ImageOperations.rotate(image, angle), "jpg", outputStream);
             return;
         }
-        ImageSize imageSize = null;        // JDK7: the new switch statement
+        ImageSize imageSize = null;        
+        // JDK7: the new switch statement
         switch (size)
         {
             case "thumb":

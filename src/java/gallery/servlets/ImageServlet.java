@@ -24,6 +24,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -81,6 +83,7 @@ public class ImageServlet extends HttpServlet
             writeError("Photograph id not found.", response);
             return;
         }
+        Logger.getLogger(ImageServlet.class.getName()).log(Level.FINE, "processRequest {0}", idString);
         Long id = null;
 
         try

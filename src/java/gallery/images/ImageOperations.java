@@ -38,6 +38,9 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 /**
  * Operations on images like resizing and rotating as well as reading metadata
@@ -102,6 +105,7 @@ public class ImageOperations
      */
     public static BufferedImage rotate(BufferedImage originalImage, ImageAngle imageAngle)
     {
+        Logger.getLogger(ImageOperations.class.getName()).log(Level.FINE, "rotate {0}", imageAngle);
         if (imageAngle == null)
         {
             return originalImage;

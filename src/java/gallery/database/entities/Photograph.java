@@ -18,6 +18,7 @@ package gallery.database.entities;
 
 import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.MetadataException;
+import gallery.beans.PhotographBean;
 import gallery.enums.ImageAngle;
 import gallery.images.ImageOperations;
 import java.io.File;
@@ -25,6 +26,8 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -291,6 +294,7 @@ public class Photograph implements Serializable
      */
     public ImageAngle getAngle() throws ImageProcessingException, IOException, MetadataException
     {
+        Logger.getLogger(Photograph.class.getName()).log(Level.FINE, "getAngle {0}", angle);
         if (angle == null && ImageOperations.isImage(getFilename()))
         {
             ImageAngle result = ImageOperations.getAngle(new File(getFullPath()));
@@ -298,9 +302,12 @@ public class Photograph implements Serializable
             {
                 angle = result.getAngle();
             }
+            Logger.getLogger(Photograph.class.getName()).log(Level.FINE, "getAngle 1 returns {0}", result);
             return result;
         }
-        return ImageAngle.getAngle(angle);
+        ImageAngle result = ImageAngle.getAngle(angle);
+        Logger.getLogger(Photograph.class.getName()).log(Level.FINE, "getAngle 2 returns {0}", result);
+        return result;
     }
 
     /**

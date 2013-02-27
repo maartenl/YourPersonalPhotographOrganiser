@@ -40,7 +40,8 @@ public enum ImageAngle
 {
 
     /**
-     * Normal angle.
+     * Normal angle. (1)
+     * No rotation is required.
      * <pre>        ___
      *  _____/___|
      * /         |
@@ -49,11 +50,12 @@ public enum ImageAngle
      */
     NORMAL(1, "Top/Left side"),
     /**
-     * Not used.
+     * Not used. (2)
      */
     TOP_RIGHTSIDE(2, "Top/Right side"),
     /**
-     * Photocamera was upside down.
+     * Photocamera was upside down. (3)
+     * 180 degrees rotation either way.
      * <pre>  _________
      * |         |
      * |    O    |
@@ -65,13 +67,14 @@ public enum ImageAngle
     /**
      * Not used.
      */
-    BOTTOM_RIGHTSIDE(3, "Bottom/Right side"),
+    BOTTOM_LEFTSIDE(4, "Bottom/Left side"),
     /**
      * Not used.
      */
-    BOTTOM_LEFTSIDE(4, "Bottom/Left side"),
+    LEFTSIDE_TOP(5, "Left side/Top"),
     /**
-     * Photocamera was turned 90 degrees counter clockwise originally.
+     * Photocamera was turned 90 degrees counter clockwise originally. (6)
+     * Rotation 90 degrees clockwise required.
      * <pre>   _______
      *  |       |
      *  |       |
@@ -83,9 +86,10 @@ public enum ImageAngle
     /**
      * Not used.
      */
-    LEFTSIDE_TOP(5, "Left side/Top"),
+    RIGHTSIDE_BOTTOM(7, "Right side/Bottom"),
     /**
-     * Photocamera was turned 90 degrees clockwise originally.
+     * Photocamera was turned 90 degrees clockwise originally. (8)
+     * Rotation 90 degrees counter clockwise required.
      * <pre>   _______
      *  |       |
      *  |       |
@@ -136,7 +140,7 @@ public enum ImageAngle
         }
         for (ImageAngle imageAngle : ImageAngle.values())
         {
-            if (angle == imageAngle.getAngle())
+            if (angle.equals(imageAngle.getAngle()))
             {
                 return imageAngle;
             }
