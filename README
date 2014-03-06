@@ -3,6 +3,17 @@ YourPersonalPhotographOrganiser
 
 An attempt from me at creating a Photo gallery.
 
+TABLE OF CONTENTS
+-----------------
+
+- WHY
+- REQUIREMENTS
+- INSTALLATION
+- USE
+- REST SERVICES
+- CONTENTS
+- REFERENCES
+
 WHY
 ---
 
@@ -15,7 +26,8 @@ your chance
 3. it has almost everything you need for home use, I do not recommend it for
 website use.
 
-Requirements
+REQUIREMENTS
+------------
 
 1. simple database, easy to make changes directly, if so required
 2. used for home use
@@ -26,7 +38,6 @@ all the new stuff in there.
 in java, in memory, in glassfish. *)
 6. flexible in where these photographs are located (no need to keep them in
 the webdir, for example)
-
 
 *) I've had too many instances where:
 1. changing files from webinterface is a security risk, and requires proper
@@ -50,6 +61,18 @@ JEE 3.1
 1. no local interfaces on beans
 2. EJBs inside the WAR, no longer is an EAR required
 
+INSTALLATION
+------------
+
+- Install Glassfish
+- Start Glassfish glassfish-4.0/bin/asadmin start-domain domain1
+- Put in an administration password, it asks for one.
+- Go to http://localhost:4848 en log in with user admin/password you just supplied
+- select updatetool and install the addons you need. Hibernate isn't very stable, so wait for a final release
+that support JPA 2.1
+- Install JDBC drivers for MySQL (or whatever databaseyou wish to use)
+- Install the war
+- Check the logs
 
 USE
 ---
@@ -122,8 +145,8 @@ dist - contains files for deploying to the glassfish server
 README - this file
 rest - files used by the REST Client Firefox addon (for testing)
 
-Blog
-----
+REFERENCES
+----------
 
 You can find some little more accessible info on 
 http://randomthoughtsonjavaprogramming.blogspot.com
