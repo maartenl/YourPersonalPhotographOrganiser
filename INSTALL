@@ -1,9 +1,8 @@
-INSTALL
-=======
+INSTALLATION
+============
 
-Installing this package requires the following components:
-- Netbeans
-- Glassfish (comes with Netbeans)
+Installing this war requires the following components:
+- Glassfish 4
 - JDK 7
 - MySQL
 - MySQL JConnect jdbc driver in glassfish ($GLASSFISH/glassfish/lib)
@@ -16,12 +15,25 @@ Steps
 -----
 
 1. create a database
-2. run the database script
-3. load up the project in netbeans
-4. deploy it to glassfish
-5. deploy the fancybox stuff to
-~GlassFish_Server/glassfish/domains/domain1/docroot (assuming defaults here)
-5. profit
+2. install Glassfish
+3. Start Glassfish glassfish-4.0/bin/asadmin start-domain domain1
+4. Put in an administration password, it asks for one.
+5. Go to http://localhost:4848 en log in with user admin/password you just supplied
+6. Install JDBC drivers for MySQL (or whatever databaseyou wish to use)
+7. deploy the war to glassfish
+8. deploy the fancybox stuff to ~GlassFish_Server/glassfish/domains/domain1/docroot (assuming defaults here)
+9. Check the logs
+
+Logging
+-------
+
+Add the following entries to glassfish3/glassfish/domains/domain1/config/logging.properties:
+
+gallery.images.ImageOperations.level=FINEST
+gallery.servlets.FileOperations.level=FINEST
+gallery.servlets.ImageServlet.level=FINEST
+gallery.beans.PhotographBean.level=FINEST
+gallery.database.entities.Photograph.level=FINEST
 
 Addendum
 --------
