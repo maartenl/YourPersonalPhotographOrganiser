@@ -45,7 +45,12 @@ Steps
     Select the poolname of the pool you created in the previous step.
 11. deploy the war to glassfish
 12. deploy the fancybox stuff to ~GlassFish_Server/glassfish/domains/domain1/docroot (assuming defaults here)
-13. Check the logs
+13. Check the database, it should show some tables
+14.  The last step.
+
+Surf in your webbrowser to http://localhost.localdomain:8080/YourPersonalPhotographOrganiser/
+
+Or surf for administation to http://localhost.localdomain:8080/YourPersonalPhotographOrganiser/faces/admin/index.xhtml
 
 Logging
 -------
@@ -64,7 +69,7 @@ Addendum
 Don't forget to properly specify the data source in glassfish.
 
 The software is looking for a JDBC Resource named 
-YourPersonalPhotographOrganiser.
+"jdbc/YourPersonalPhotographOrganiser".
 
 References
 ----------
