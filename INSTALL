@@ -4,8 +4,8 @@ INSTALLATION
 Installing this war requires the following components:
 - Glassfish 4
 - JDK 7
-- MySQL
-- MySQL JConnect jdbc driver in glassfish ($GLASSFISH/glassfish/lib)
+- MariaDB
+- MariaDB JConnect jdbc driver in glassfish ($GLASSFISH/glassfish/lib)
 - JQuery (automatically connects to a CDN, so no worries there)
 - Fancybox (Lightbox replacement for jquery, I'm using an old version,
   version jquery.fancybox-1.3.4.zip. To be on the safe side, I included it
@@ -14,15 +14,38 @@ Installing this war requires the following components:
 Steps
 -----
 
-1. create a database
-2. install Glassfish
-3. Start Glassfish glassfish-4.0/bin/asadmin start-domain domain1
-4. Put in an administration password, it asks for one.
-5. Go to http://localhost:4848 en log in with user admin/password you just supplied
-6. Install JDBC drivers for MySQL (or whatever databaseyou wish to use)
-7. deploy the war to glassfish
-8. deploy the fancybox stuff to ~GlassFish_Server/glassfish/domains/domain1/docroot (assuming defaults here)
-9. Check the logs
+0. install MariaDB
+1. start MariaDB ("systemctl start mysqld")
+2. create a database (using, for example, mysql-workbench executing 
+    "create database YourPersonalPhotographOrganiser")
+3. create a user with appropriate rights in the new database
+4. install Glassfish 4
+5. Put in an administration password, it asks for one.
+6. Install MariaDB Client Library for Java Applications (JDBC driver)
+    You can do this by copying the JDBC jar file into glassfish/domain1/lib
+    (requires glassfish restart)  
+7. Start Glassfish glassfish-4.0/bin/asadmin start-domain domain1
+8. Go to http://localhost:4848 en log in with user admin/password you just supplied
+9. Setup the jdbc connection pool to the database created.
+    For instance with the following settings:
+    Poolname: YourPersonalPhotographOrganiser
+    Resource type: javax.sql.DataSource (local transactions, which are fine)
+    Database Driver Vendor: org.mariadb.jdbc.Driver
+    Select Next.
+    Datasource Classname: org.mariadb.jdbc.MySQLDataSource
+
+    portNumber: 3306
+    databaseName: YourPersonalPhotographOrganiser
+    serverName: localhost
+    user: photographer
+    user: photographer
+10. Setup the jdbc resource, the war assumes it is called "jdbc/YourPersonalPhotographOrganiser".
+    For instance with the following settings:
+    JNDI Name: jdbc/YourPersonalPhotographOrganiser (this is the same name as in the persistence.xml)
+    Select the poolname of the pool you created in the previous step.
+11. deploy the war to glassfish
+12. deploy the fancybox stuff to ~GlassFish_Server/glassfish/domains/domain1/docroot (assuming defaults here)
+13. Check the logs
 
 Logging
 -------
