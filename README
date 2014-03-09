@@ -3,6 +3,10 @@ YourPersonalPhotographOrganiser
 
 An attempt from me at creating a Photo gallery.
 
+Thank you for your interest. I've done my best to create the longest name
+for this project that at the same time did not contain the word Gallery in
+any way. If you really feel like it, you can abbreviate it as YPPO.
+
 TABLE OF CONTENTS
 -----------------
 
@@ -20,7 +24,7 @@ Given the fact that there are numerous other photo galleries, why should
 you use this one?
 
 1. it's very easy to comprehend and very simple
-2. it uses the JDK 7 and JEE 3.1 (under Glassfish), if you wish to learn these two, here's
+2. it uses the JDK 7 and JEE 7 (under Glassfish), if you wish to learn these two, here's
 your chance
 3. it has almost everything you need for home use, I do not recommend it for
 website use.
@@ -31,7 +35,7 @@ REQUIREMENTS
 1. simple database, easy to make changes directly, if so required
 2. used for home use
 3. no authentication or authorization required
-4. helps me to understand the jdk 7, glassfish and jee 3.1, by using
+4. helps me to understand the jdk 7, glassfish and jee 7, by using
 all the new stuff in there.
 5. absolutely NO changing of the photographs, all changes are done
 in java, in memory, in glassfish. *)
@@ -46,8 +50,8 @@ photocameras to be discarded
 3. changing files potentially causes deterioration of the quality of the
 jpegs
 4. changing files has sometimes caused the file to be damaged in some way
-5. changing files makes it impossible to determine if the photo is already 
-present in your collection
+5. changing files makes it impossible (or at the very least, extremely hard) 
+to determine if the photo is already present in your collection
 
 Some of the new stuff that is being used here:
 JDK7 (Look for "JDK7" in the sourcecode)
@@ -56,7 +60,7 @@ JDK7 (Look for "JDK7" in the sourcecode)
 3. diamond-notation
 4. filevisitor interface
 5. Path class usage
-JEE 3.1
+JEE 7
 1. no local interfaces on beans
 2. EJBs inside the WAR, no longer is an EAR required
 
