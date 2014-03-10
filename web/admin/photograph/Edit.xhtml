@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.EditPhotographTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle.EditPhotographLabel_id}" for="id" />
+                    <h:inputText id="id" value="#{photographController.selected.id}" title="#{bundle.EditPhotographTitle_id}" required="true" requiredMessage="#{bundle.EditPhotographRequiredMessage_id}"/>
+                    <h:outputLabel value="#{bundle.EditPhotographLabel_filename}" for="filename" />
+                    <h:inputText id="filename" value="#{photographController.selected.filename}" title="#{bundle.EditPhotographTitle_filename}" />
+                    <h:outputLabel value="#{bundle.EditPhotographLabel_relativepath}" for="relativepath" />
+                    <h:inputText id="relativepath" value="#{photographController.selected.relativepath}" title="#{bundle.EditPhotographTitle_relativepath}" />
+                    <h:outputLabel value="#{bundle.EditPhotographLabel_taken}" for="taken" />
+                    <h:inputText id="taken" value="#{photographController.selected.taken}" title="#{bundle.EditPhotographTitle_taken}" required="true" requiredMessage="#{bundle.EditPhotographRequiredMessage_taken}">
+                        <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                    </h:inputText>
+                    <h:outputLabel value="#{bundle.EditPhotographLabel_location}" for="location" />
+                    <h:selectOneMenu id="location" value="#{photographController.selected.location}" title="#{bundle.EditPhotographTitle_location}" required="true" requiredMessage="#{bundle.EditPhotographRequiredMessage_location}">
+                        <f:selectItems value="#{locationController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
+                    <h:outputLabel value="#{bundle.EditPhotographLabel_fullPath}" for="fullPath" />
+                    <h:inputText id="fullPath" value="#{photographController.selected.fullPath}" title="#{bundle.EditPhotographTitle_fullPath}" />
+                    <h:outputLabel value="#{bundle.EditPhotographLabel_filesize}" for="filesize" />
+                    <h:inputText id="filesize" value="#{photographController.selected.filesize}" title="#{bundle.EditPhotographTitle_filesize}" required="true" requiredMessage="#{bundle.EditPhotographRequiredMessage_filesize}"/>
+                    <h:outputLabel value="#{bundle.EditPhotographLabel_hashstring}" for="hashstring" />
+                    <h:inputText id="hashstring" value="#{photographController.selected.hashstring}" title="#{bundle.EditPhotographTitle_hashstring}" required="true" requiredMessage="#{bundle.EditPhotographRequiredMessage_hashstring}"/>
+                    <h:outputLabel value="#{bundle.EditPhotographLabel_angle}" for="angle" />
+                    <h:inputText id="angle" value="#{photographController.selected.angle}" title="#{bundle.EditPhotographTitle_angle}" />
+                </h:panelGrid>
+                <h:commandLink action="#{photographController.update}" value="#{bundle.EditPhotographSaveLink}"/>
+                <br />
+                <br />
+                <h:link outcome="View" value="#{bundle.EditPhotographViewLink}"/>
+                <br />
+                <h:commandLink action="#{photographController.prepareList}" value="#{bundle.EditPhotographShowAllLink}" immediate="true"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.EditPhotographIndexLink}" />
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

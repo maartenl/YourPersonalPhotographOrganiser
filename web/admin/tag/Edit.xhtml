@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.EditTagTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle.EditTagLabel_tagPK_tagname}" for="tagPK_tagname" />
+                    <h:inputText id="tagPK_tagname" value="#{tagController.selected.tagPK.tagname}" title="#{bundle.EditTagTitle_tagPK_tagname}" required="true" requiredMessage="#{bundle.EditTagRequiredMessage_tagPK_tagname}"/>
+                    <h:outputLabel value="#{bundle.EditTagLabel_photograph}" for="photograph" />
+                    <h:selectOneMenu id="photograph" value="#{tagController.selected.photograph}" title="#{bundle.EditTagTitle_photograph}" required="true" requiredMessage="#{bundle.EditTagRequiredMessage_photograph}">
+                        <f:selectItems value="#{photographController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
+                </h:panelGrid>
+                <h:commandLink action="#{tagController.update}" value="#{bundle.EditTagSaveLink}"/>
+                <br />
+                <br />
+                <h:link outcome="View" value="#{bundle.EditTagViewLink}"/>
+                <br />
+                <h:commandLink action="#{tagController.prepareList}" value="#{bundle.EditTagShowAllLink}" immediate="true"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.EditTagIndexLink}" />
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

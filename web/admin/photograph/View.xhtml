@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ViewPhotographTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputText value="#{bundle.ViewPhotographLabel_id}"/>
+                    <h:outputText value="#{photographController.selected.id}" title="#{bundle.ViewPhotographTitle_id}"/>
+                    <h:outputText value="#{bundle.ViewPhotographLabel_filename}"/>
+                    <h:outputText value="#{photographController.selected.filename}" title="#{bundle.ViewPhotographTitle_filename}"/>
+                    <h:outputText value="#{bundle.ViewPhotographLabel_relativepath}"/>
+                    <h:outputText value="#{photographController.selected.relativepath}" title="#{bundle.ViewPhotographTitle_relativepath}"/>
+                    <h:outputText value="#{bundle.ViewPhotographLabel_taken}"/>
+                    <h:outputText value="#{photographController.selected.taken}" title="#{bundle.ViewPhotographTitle_taken}">
+                        <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                    </h:outputText>
+                    <h:outputText value="#{bundle.ViewPhotographLabel_location}"/>
+                    <h:outputText value="#{photographController.selected.location}" title="#{bundle.ViewPhotographTitle_location}"/>
+                    <h:outputText value="#{bundle.ViewPhotographLabel_fullPath}"/>
+                    <h:outputText value="#{photographController.selected.fullPath}" title="#{bundle.ViewPhotographTitle_fullPath}"/>
+                    <h:outputText value="#{bundle.ViewPhotographLabel_filesize}"/>
+                    <h:outputText value="#{photographController.selected.filesize}" title="#{bundle.ViewPhotographTitle_filesize}"/>
+                    <h:outputText value="#{bundle.ViewPhotographLabel_hashstring}"/>
+                    <h:outputText value="#{photographController.selected.hashstring}" title="#{bundle.ViewPhotographTitle_hashstring}"/>
+                    <h:outputText value="#{bundle.ViewPhotographLabel_angle}"/>
+                    <h:outputText value="#{photographController.selected.angle}" title="#{bundle.ViewPhotographTitle_angle}"/>
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{photographController.destroyAndView}" value="#{bundle.ViewPhotographDestroyLink}"/>
+                <br />
+                <br />
+                <h:link outcome="Edit" value="#{bundle.ViewPhotographEditLink}"/>
+                <br />
+                <h:commandLink action="#{photographController.prepareCreate}" value="#{bundle.ViewPhotographCreateLink}" />
+                <br />
+                <h:commandLink action="#{photographController.prepareList}" value="#{bundle.ViewPhotographShowAllLink}"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.ViewPhotographIndexLink}"/>
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

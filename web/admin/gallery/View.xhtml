@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ViewGalleryTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputText value="#{bundle.ViewGalleryLabel_id}"/>
+                    <h:outputText value="#{galleryController.selected.id}" title="#{bundle.ViewGalleryTitle_id}"/>
+                    <h:outputText value="#{bundle.ViewGalleryLabel_name}"/>
+                    <h:outputText value="#{galleryController.selected.name}" title="#{bundle.ViewGalleryTitle_name}"/>
+                    <h:outputText value="#{bundle.ViewGalleryLabel_description}"/>
+                    <h:outputText value="#{galleryController.selected.description}" title="#{bundle.ViewGalleryTitle_description}"/>
+                    <h:outputText value="#{bundle.ViewGalleryLabel_creationDate}"/>
+                    <h:outputText value="#{galleryController.selected.creationDate}" title="#{bundle.ViewGalleryTitle_creationDate}">
+                        <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                    </h:outputText>
+                    <h:outputText value="#{bundle.ViewGalleryLabel_sortorder}"/>
+                    <h:outputText value="#{galleryController.selected.sortorder}" title="#{bundle.ViewGalleryTitle_sortorder}"/>
+                    <h:outputText value="#{bundle.ViewGalleryLabel_highlight}"/>
+                    <h:outputText value="#{galleryController.selected.highlight}" title="#{bundle.ViewGalleryTitle_highlight}"/>
+                    <h:outputText value="#{bundle.ViewGalleryLabel_parent}"/>
+                    <h:outputText value="#{galleryController.selected.parent}" title="#{bundle.ViewGalleryTitle_parent}"/>
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{galleryController.destroyAndView}" value="#{bundle.ViewGalleryDestroyLink}"/>
+                <br />
+                <br />
+                <h:link outcome="Edit" value="#{bundle.ViewGalleryEditLink}"/>
+                <br />
+                <h:commandLink action="#{galleryController.prepareCreate}" value="#{bundle.ViewGalleryCreateLink}" />
+                <br />
+                <h:commandLink action="#{galleryController.prepareList}" value="#{bundle.ViewGalleryShowAllLink}"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.ViewGalleryIndexLink}"/>
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

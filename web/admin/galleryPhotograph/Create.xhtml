@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.CreateGalleryPhotographTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle.CreateGalleryPhotographLabel_id}" for="id" />
+                    <h:inputText id="id" value="#{galleryPhotographController.selected.id}" title="#{bundle.CreateGalleryPhotographTitle_id}" required="true" requiredMessage="#{bundle.CreateGalleryPhotographRequiredMessage_id}"/>
+                    <h:outputLabel value="#{bundle.CreateGalleryPhotographLabel_name}" for="name" />
+                    <h:inputText id="name" value="#{galleryPhotographController.selected.name}" title="#{bundle.CreateGalleryPhotographTitle_name}" />
+                    <h:outputLabel value="#{bundle.CreateGalleryPhotographLabel_description}" for="description" />
+                    <h:inputTextarea rows="4" cols="30" id="description" value="#{galleryPhotographController.selected.description}" title="#{bundle.CreateGalleryPhotographTitle_description}" />
+                    <h:outputLabel value="#{bundle.CreateGalleryPhotographLabel_sortorder}" for="sortorder" />
+                    <h:inputText id="sortorder" value="#{galleryPhotographController.selected.sortorder}" title="#{bundle.CreateGalleryPhotographTitle_sortorder}" />
+                    <h:outputLabel value="#{bundle.CreateGalleryPhotographLabel_photograph}" for="photograph" />
+                    <h:selectOneMenu id="photograph" value="#{galleryPhotographController.selected.photograph}" title="#{bundle.CreateGalleryPhotographTitle_photograph}" required="true" requiredMessage="#{bundle.CreateGalleryPhotographRequiredMessage_photograph}">
+                        <f:selectItems value="#{photographController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
+                    <h:outputLabel value="#{bundle.CreateGalleryPhotographLabel_gallery}" for="gallery" />
+                    <h:selectOneMenu id="gallery" value="#{galleryPhotographController.selected.gallery}" title="#{bundle.CreateGalleryPhotographTitle_gallery}" required="true" requiredMessage="#{bundle.CreateGalleryPhotographRequiredMessage_gallery}">
+                        <f:selectItems value="#{galleryController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{galleryPhotographController.create}" value="#{bundle.CreateGalleryPhotographSaveLink}" />
+                <br />
+                <br />
+                <h:commandLink action="#{galleryPhotographController.prepareList}" value="#{bundle.CreateGalleryPhotographShowAllLink}" immediate="true"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.CreateGalleryPhotographIndexLink}"/>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>
