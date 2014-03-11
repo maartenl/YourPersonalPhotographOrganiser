@@ -1,5 +1,6 @@
 package gallery.admin;
 
+import gallery.admin.util.GalleryException;
 import gallery.database.entities.Location;
 import gallery.admin.util.JsfUtil;
 import gallery.admin.util.PaginationHelper;
@@ -98,14 +99,18 @@ public class LocationController implements Serializable
     {
         try
         {
+            current.checkPath();
             getFacade().create(current);
             JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/bundle").getString("LocationCreated"));
             return prepareCreate();
+        } catch (GalleryException ge)
+        {
+            JsfUtil.addErrorMessage(ge, ge.getMessage());
         } catch (Exception e)
         {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/bundle").getString("PersistenceErrorOccured"));
-            return null;
         }
+        return null;
     }
 
     public String prepareEdit()

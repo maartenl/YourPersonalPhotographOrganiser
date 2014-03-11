@@ -7,31 +7,38 @@
         <title>Richfaces Welcome Page</title>
     </h:head>
     <h:body>
-        <h:form>
-            <rich:panel header="Welcome to Richfaces">
-                RichFaces is an advanced UI component framework for easily integrating Ajax capabilities into business applications using JSF.  Check out the links below to lear more about using RichFaces in your application.
-                <ul>
-                    <li><h:outputLink value="http://richfaces.org" >Richfaces Project Home Page</h:outputLink></li>
-                    <li><h:outputLink value="http://showcase.richfaces.org" >Richfaces Showcase</h:outputLink></li>
-                    <li><h:outputLink value="https://community.jboss.org/en/richfaces?view=discussions" >User Forum</h:outputLink></li>
-                    <li><h:outputLink value="http://www.jboss.org/richfaces/docs" >Richfaces documentation...</h:outputLink>
-                        <ul>
-                            <li><h:outputLink value="http://docs.jboss.org/richfaces/latest_4_X/Developer_Guide/en-US/html_single/" >Development Guide</h:outputLink></li>
-                            <li><h:outputLink value="http://docs.jboss.org/richfaces/latest_4_X/Component_Reference/en-US/html/" >Component Reference</h:outputLink></li>
-                            <li><h:outputLink value="http://docs.jboss.org/richfaces/latest_4_X/vdldoc/" >Tag Library Docs</h:outputLink></li>
-                        </ul>
-                    </li>
-                </ul>
-            </rich:panel>
-            <rich:panel header="Location">
-                <h1>Location</h1>
-                <ul>
-                    <li><h:commandLink action="location/Create.xhtml">Create</h:commandLink></li>
-                    <li><h:commandLink action="location/Edit.xhtml" >Edit</h:commandLink></li>
-                    <li><h:commandLink action="location/List.xhtml" >List</h:commandLink></li>
-                    <li><h:commandLink action="location/View.xhtml" >View</h:commandLink></li>
-                </ul>
-            </rich:panel>
+        <h:form>        
+            <h:panelGrid columns="2">
+                <rich:panel header="Location">
+                    <br />
+                    <h:link outcome="/admin/location/List" value="Show All Locations"/>
+                    <br />
+                    <h:link outcome="/admin/comment/List" value="Show All Comments"/>
+                    <br />
+                    <h:link outcome="/admin/gallery/List" value="Show All Gallerys"/>
+                    <br />
+                    <h:link outcome="/admin/galleryPhotograph/List" value="Show All GalleryPhotographs"/>
+                    <br />
+                    <h:link outcome="/admin/photograph/List" value="Show All Photographs"/>
+                    <br />
+                    <h:link outcome="/admin/tag/List" value="Show All Tags"/>
+                </rich:panel>      
+                <rich:panel header="Welcome to Richfaces">
+                    RichFaces is an advanced UI component framework for easily integrating Ajax capabilities into business applications using JSF.  Check out the links below to lear more about using RichFaces in your application.
+                    <ul>
+                        <li><h:outputLink value="http://richfaces.org" >Richfaces Project Home Page</h:outputLink></li>
+                        <li><h:outputLink value="http://showcase.richfaces.org" >Richfaces Showcase</h:outputLink></li>
+                        <li><h:outputLink value="https://community.jboss.org/en/richfaces?view=discussions" >User Forum</h:outputLink></li>
+                        <li><h:outputLink value="http://www.jboss.org/richfaces/docs" >Richfaces documentation...</h:outputLink>
+                            <ul>
+                                <li><h:outputLink value="http://docs.jboss.org/richfaces/latest_4_X/Developer_Guide/en-US/html_single/" >Development Guide</h:outputLink></li>
+                                <li><h:outputLink value="http://docs.jboss.org/richfaces/latest_4_X/Component_Reference/en-US/html/" >Component Reference</h:outputLink></li>
+                                <li><h:outputLink value="http://docs.jboss.org/richfaces/latest_4_X/vdldoc/" >Tag Library Docs</h:outputLink></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </rich:panel>
+            </h:panelGrid>
         </h:form>
     </h:body>
 </html>

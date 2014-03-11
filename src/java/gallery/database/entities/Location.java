@@ -16,7 +16,10 @@
  */
 package gallery.database.entities;
 
+import gallery.admin.util.GalleryException;
 import java.io.Serializable;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -123,6 +126,23 @@ public class Location implements Serializable
         return true;
     }
 
+    public void checkPath() throws GalleryException
+    {
+        final Path path = FileSystems.getDefault().getPath(filepath);
+        if (!path.toFile().exists())
+        {
+            throw new GalleryException("path.does.not.exist");
+        }
+        if (!path.toFile().isDirectory())
+        {
+            throw new GalleryException("path.is.not.a.directory");
+        }
+        if (!path.toFile().canRead())
+        {
+            throw new GalleryException("path.is.unreadable");
+        }
+    }
+    
     @Override
     public String toString()
     {
