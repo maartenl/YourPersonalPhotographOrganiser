@@ -295,17 +295,19 @@ public class LocationController implements Serializable
 
     }
 
-    public String refresh()
-    {
-        logger.entering(this.getClass().getName(), "refresh");
-        logger.exiting(this.getClass().getName(), "refresh");
-        return null;
-    }
-
     public String verify()
     {
         logger.entering(this.getClass().getName(), "verify");
+        getFacade().verify(current.getId());
         logger.exiting(this.getClass().getName(), "verify");
+        return null;
+    }
+
+    public String discover()
+    {
+        logger.entering(this.getClass().getName(), "discover");
+        getFacade().discover(current.getId());
+        logger.exiting(this.getClass().getName(), "discover");
         return null;
     }
 

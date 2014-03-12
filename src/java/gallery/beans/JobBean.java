@@ -254,4 +254,11 @@ public class JobBean
         return "We shouldn't even be here!";
 
     }
+
+    public String verifyPhotographs(Location location)
+    {
+        logger.entering(this.getClass().getName(), "verifyPhotographs");
+        logger.exiting(this.getClass().getName(), "verifyPhotographs");
+        return null;
+    }
 }
