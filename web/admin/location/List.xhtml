@@ -41,6 +41,10 @@
                             <h:commandLink action="#{locationController.prepareEdit}" value="#{bundle.ListLocationEditLink}"/>
                             <h:outputText value=" "/>
                             <h:commandLink action="#{locationController.destroy}" value="#{bundle.ListLocationDestroyLink}"/>
+                            <h:outputText value=" "/>
+                            <h:commandLink action="#{locationController.refresh}" value="#{bundle.ListLocationRefreshLink}"/>
+                            <h:outputText value=" "/>
+                            <h:commandLink action="#{locationController.verify}" value="#{bundle.ListLocationVerifyLink}"/>
                         </h:column>
                     </h:dataTable>
                 </h:panelGroup>

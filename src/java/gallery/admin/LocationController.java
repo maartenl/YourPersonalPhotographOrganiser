@@ -291,4 +291,16 @@ public class LocationController implements Serializable
 
     }
 
+    public String refresh()
+    {
+        System.out.println("refresh");
+        return null;
+    }
+
+    public String verify()
+    {
+        System.out.println("verify");
+        return null;
+    }
+
 }
