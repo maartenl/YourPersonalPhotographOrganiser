@@ -3,6 +3,7 @@ package gallery.admin;
 import gallery.database.entities.Tag;
 import gallery.admin.util.JsfUtil;
 import gallery.admin.util.PaginationHelper;
+import gallery.beans.TagBean;
 
 import java.io.Serializable;
 import java.util.ResourceBundle;
@@ -25,7 +26,7 @@ public class TagController implements Serializable
     private Tag current;
     private DataModel items = null;
     @EJB
-    private gallery.admin.TagFacade ejbFacade;
+    private TagBean tagBean;
     private PaginationHelper pagination;
     private int selectedItemIndex;
 
@@ -44,9 +45,9 @@ public class TagController implements Serializable
         return current;
     }
 
-    private TagFacade getFacade()
+    private TagBean getFacade()
     {
-        return ejbFacade;
+        return tagBean;
     }
 
     public PaginationHelper getPagination()
@@ -228,17 +229,18 @@ public class TagController implements Serializable
 
     public SelectItem[] getItemsAvailableSelectMany()
     {
-        return JsfUtil.getSelectItems(ejbFacade.findAll(), false);
+        return JsfUtil.getSelectItems(tagBean.findAll(), false);
     }
 
     public SelectItem[] getItemsAvailableSelectOne()
     {
-        return JsfUtil.getSelectItems(ejbFacade.findAll(), true);
+        return JsfUtil.getSelectItems(tagBean.findAll(), true);
     }
 
     public Tag getTag(gallery.database.entities.TagPK id)
     {
-        return ejbFacade.find(id);
+        // TODO: fix this
+        return null; // return tagBean.find(id);
     }
 
     @FacesConverter(forClass = Tag.class)

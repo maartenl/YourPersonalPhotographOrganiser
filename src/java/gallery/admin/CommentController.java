@@ -3,6 +3,7 @@ package gallery.admin;
 import gallery.database.entities.Comment;
 import gallery.admin.util.JsfUtil;
 import gallery.admin.util.PaginationHelper;
+import gallery.beans.CommentBean;
 
 import java.io.Serializable;
 import java.util.ResourceBundle;
@@ -25,7 +26,7 @@ public class CommentController implements Serializable
     private Comment current;
     private DataModel items = null;
     @EJB
-    private gallery.admin.CommentFacade ejbFacade;
+    private CommentBean commentBean;
     private PaginationHelper pagination;
     private int selectedItemIndex;
 
@@ -43,9 +44,9 @@ public class CommentController implements Serializable
         return current;
     }
 
-    private CommentFacade getFacade()
+    private CommentBean getFacade()
     {
-        return ejbFacade;
+        return commentBean;
     }
 
     public PaginationHelper getPagination()
@@ -224,17 +225,17 @@ public class CommentController implements Serializable
 
     public SelectItem[] getItemsAvailableSelectMany()
     {
-        return JsfUtil.getSelectItems(ejbFacade.findAll(), false);
+        return JsfUtil.getSelectItems(commentBean.findAll(), false);
     }
 
     public SelectItem[] getItemsAvailableSelectOne()
     {
-        return JsfUtil.getSelectItems(ejbFacade.findAll(), true);
+        return JsfUtil.getSelectItems(commentBean.findAll(), true);
     }
 
     public Comment getComment(java.lang.Long id)
     {
-        return ejbFacade.find(id);
+        return commentBean.find(id);
     }
 
     @FacesConverter(forClass = Comment.class)

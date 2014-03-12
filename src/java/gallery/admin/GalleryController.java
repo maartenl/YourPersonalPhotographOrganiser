@@ -3,6 +3,7 @@ package gallery.admin;
 import gallery.database.entities.Gallery;
 import gallery.admin.util.JsfUtil;
 import gallery.admin.util.PaginationHelper;
+import gallery.beans.GalleryBean;
 
 import java.io.Serializable;
 import java.util.ResourceBundle;
@@ -25,7 +26,7 @@ public class GalleryController implements Serializable
     private Gallery current;
     private DataModel items = null;
     @EJB
-    private gallery.admin.GalleryFacade ejbFacade;
+    private GalleryBean galleryBean;
     private PaginationHelper pagination;
     private int selectedItemIndex;
 
@@ -43,9 +44,9 @@ public class GalleryController implements Serializable
         return current;
     }
 
-    private GalleryFacade getFacade()
+    private GalleryBean getFacade()
     {
-        return ejbFacade;
+        return galleryBean;
     }
 
     public PaginationHelper getPagination()
@@ -224,17 +225,17 @@ public class GalleryController implements Serializable
 
     public SelectItem[] getItemsAvailableSelectMany()
     {
-        return JsfUtil.getSelectItems(ejbFacade.findAll(), false);
+        return JsfUtil.getSelectItems(galleryBean.findAll(), false);
     }
 
     public SelectItem[] getItemsAvailableSelectOne()
     {
-        return JsfUtil.getSelectItems(ejbFacade.findAll(), true);
+        return JsfUtil.getSelectItems(galleryBean.findAll(), true);
     }
 
     public Gallery getGallery(java.lang.Long id)
     {
-        return ejbFacade.find(id);
+        return galleryBean.find(id);
     }
 
     @FacesConverter(forClass = Gallery.class)

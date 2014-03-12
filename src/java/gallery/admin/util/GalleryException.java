@@ -20,12 +20,18 @@ package gallery.admin.util;
 import java.util.ResourceBundle;
 
 /**
- *
+ * A GalleryException, a specific Exception that can be used to 
+ * validate things. Primarily good for JSF.
  * @author maartenl
  */
 public class GalleryException extends Exception
 {
 
+    /**
+     * Creates a GalleryException. The message is supposed
+     * to be a key to a value in the bundle.properties file.
+     * @param message 
+     */
     public GalleryException(String message)
     {
         super(ResourceBundle.getBundle("/bundle").getString(message));       

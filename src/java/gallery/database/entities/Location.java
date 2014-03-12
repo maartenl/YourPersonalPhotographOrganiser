@@ -126,6 +126,12 @@ public class Location implements Serializable
         return true;
     }
 
+    /**
+     * Makes sure this location points to a readable directory
+     * that actually exists.
+     * @throws GalleryException thrown when one of the requirements
+     * fails.
+     */
     public void checkPath() throws GalleryException
     {
         final Path path = FileSystems.getDefault().getPath(filepath);

@@ -4,6 +4,7 @@ import gallery.admin.util.GalleryException;
 import gallery.database.entities.Location;
 import gallery.admin.util.JsfUtil;
 import gallery.admin.util.PaginationHelper;
+import gallery.beans.LocationBean;
 
 import java.io.Serializable;
 import java.util.ResourceBundle;
@@ -26,7 +27,7 @@ public class LocationController implements Serializable
     private Location current;
     private DataModel items = null;
     @EJB
-    private gallery.admin.LocationFacade ejbFacade;
+    private LocationBean locationBean;
     private PaginationHelper pagination;
     private int selectedItemIndex;
 
@@ -44,9 +45,9 @@ public class LocationController implements Serializable
         return current;
     }
 
-    private LocationFacade getFacade()
+    private LocationBean getFacade()
     {
-        return ejbFacade;
+        return locationBean;
     }
 
     public PaginationHelper getPagination()
@@ -229,17 +230,17 @@ public class LocationController implements Serializable
 
     public SelectItem[] getItemsAvailableSelectMany()
     {
-        return JsfUtil.getSelectItems(ejbFacade.findAll(), false);
+        return JsfUtil.getSelectItems(locationBean.findAll(), false);
     }
 
     public SelectItem[] getItemsAvailableSelectOne()
     {
-        return JsfUtil.getSelectItems(ejbFacade.findAll(), true);
+        return JsfUtil.getSelectItems(locationBean.findAll(), true);
     }
 
     public Location getLocation(java.lang.Long id)
     {
-        return ejbFacade.find(id);
+        return locationBean.find(id);
     }
 
     @FacesConverter(forClass = Location.class)
