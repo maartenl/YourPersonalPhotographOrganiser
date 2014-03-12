@@ -71,7 +71,7 @@
 <!-- task definition -->
     <taskdef name="plantuml"
   classname="net.sourceforge.plantuml.ant.PlantUmlTask"
-  classpath="plantuml.jar" />
+  classpath="lib/plantuml.jar" />
 
     <!-- process ./src files -->
     <target depends="javadoc-build" name="build-uml">
