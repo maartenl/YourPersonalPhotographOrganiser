@@ -35,6 +35,8 @@ import java.nio.file.Path;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
 import javax.persistence.EntityManager;
@@ -45,12 +47,15 @@ import javax.validation.ConstraintViolationException;
 
 /**
  * Enterprise Java Bean that executes jobs monstly on gallery level.
+ *
  * @author maartenl
  */
 @Stateless
 @LocalBean
 public class JobBean
 {
+
+    private static final Logger logger = Logger.getLogger(JobBean.class.getName());
 
     @PersistenceContext(unitName = "YourPersonalPhotographOrganiserPU")
     private EntityManager em;
@@ -67,12 +72,15 @@ public class JobBean
      */
     private String processPhoto(Location location, Path path) throws NoSuchAlgorithmException, IOException, ImageProcessingException, MetadataException
     {
-        // System.out.println("processPhoto " + location.getFilepath());
+        logger.entering(this.getClass().getName(), "processPhoto");
         if (path == null)
         {
             throw new NullPointerException();
         }
-        // System.out.println(path.toString());
+        logger.log(Level.FINE, "processPhoto {0} {1}", new Object[]
+        {
+            location.getFilepath(), path.toString()
+        });
         Path filename = path.getFileName();
         Path locationPath = FileSystems.getDefault().getPath(location.getFilepath());
         Path relativePath = locationPath.relativize(path).getParent();
@@ -84,7 +92,7 @@ public class JobBean
         List list = query.getResultList();
         if (list != null && !list.isEmpty())
         {
-            // System.out.println(path.toString() + " already exists.");
+            logger.log(Level.FINE, "{0} already exists.", path.toString());
             return null;
         }
         // check if hash and filesize already exist in database
@@ -99,7 +107,7 @@ public class JobBean
         {
             Photograph alreadyPhoto = (Photograph) list.get(0);
             String result = "File with filename " + relativePath.toString() + ":" + filename.toString() + " with hash " + computeHash + " already exists with id " + alreadyPhoto.getId() + ".";
-            System.out.println(result);
+            logger.fine(result);
             return result;
         }
         // JDK7: lots of nio.Path calls
@@ -122,11 +130,23 @@ public class JobBean
         if (taken != null && taken.before(new Date(0l)))
         {
             photo.setTaken(null);
-            System.out.println("processPhoto cannot determine date/time! " + photo.getFilename() + " " + photo.getFilesize() + " " + photo.getHashstring() + " " + taken);
+            if (logger.isLoggable(Level.FINE))
+            {
+                logger.log(Level.FINE, "processPhoto cannot determine date/time! {0} {1} {2} {3}", new Object[]
+                {
+                    photo.getFilename(), photo.getFilesize(), photo.getHashstring(), taken
+                });
+            }
 
         } else
         {
-            System.out.println("processPhoto " + photo.getFilename() + " " + photo.getFilesize() + " " + photo.getHashstring() + " " + photo.getTaken());
+            if (logger.isLoggable(Level.FINE))
+            {
+                logger.log(Level.FINE, "processPhoto {0} {1} {2} {3}", new Object[]
+                {
+                    photo.getFilename(), photo.getFilesize(), photo.getHashstring(), photo.getTaken()
+                });
+            }
         }
         em.persist(photo);
         return null;
@@ -134,16 +154,18 @@ public class JobBean
 
     /**
      * Checks a directory stored in "location" for new photographs or films.
+     *
      * @param location the location that *may* have new photographs.
      * @return String containing an error message, or null upon success.
      * @throws IOException when a problem occurred with accessing the file, or
      * the file system
-     * @throws NoSuchAlgorithmException if unable to create a hash using the algorithm.
+     * @throws NoSuchAlgorithmException if unable to create a hash using the
+     * algorithm.
      * @throws ImageProcessingException when unable to verify the image.
      */
     public String checkDirectory(Location location) throws IOException, NoSuchAlgorithmException, ImageProcessingException, MetadataException
     {
-        System.out.println("checkDirectory start");
+        logger.entering(this.getClass().getName(), "checkDirectory");
         String errorMessage = null;
         try
         {
@@ -176,21 +198,23 @@ public class JobBean
                 errorMessage = violation.toString();
             }
         }
-        System.out.println("errorMessage " + errorMessage);
-        System.out.println("checkDirectory end");
+        logger.log(Level.FINE, "errorMessage {0}", errorMessage);
+        logger.exiting(this.getClass().getName(), "checkDirectory=");
         return errorMessage;
     }
 
     /**
-     * Imports photographs/films matching a certain mask (location) into an existing
-     * gallery.
+     * Imports photographs/films matching a certain mask (location) into an
+     * existing gallery.
+     *
      * @param found the gallery to import photographs into
-     * @param location the location that should match, can use SQL wildcards like %
+     * @param location the location that should match, can use SQL wildcards
+     * like %
      * @return a String, error message or null if successful.
      */
     public String importPhotographs(Gallery found, String location)
     {
-        System.out.println("importPhotographs start");
+        logger.entering(this.getClass().getName(), "importPhotographs");
         try
         {
             // get all photographs that match the mask
@@ -200,14 +224,14 @@ public class JobBean
             List list = query.getResultList();
             if (list == null || list.isEmpty())
             {
-                System.out.println("importPhotographs end");
+                logger.exiting(this.getClass().getName(), "importPhotographs");
                 return "No photographs match " + location + ".";
             }
             int i = 0;
             for (Object r : list)
             {
                 Photograph photo = (Photograph) r;
-                System.out.println("importPhotographs " + photo);
+                logger.log(Level.FINE, "importPhotographs {0}", photo);
                 GalleryPhotograph gphoto = new GalleryPhotograph();
                 gphoto.setGallery(found);
                 gphoto.setName(photo.getFilename());
@@ -215,18 +239,18 @@ public class JobBean
                 gphoto.setSortorder(BigInteger.valueOf(i++));
                 em.persist(gphoto);
             }
-            System.out.println("importPhotographs end");
+            logger.exiting(this.getClass().getName(), "importPhotographs");
             return null;
         } catch (ConstraintViolationException e)
         {
             for (ConstraintViolation<?> violation : e.getConstraintViolations())
             {
-                System.out.println(violation);
-                System.out.println("importPhotographs end");
+                logger.fine(violation.toString());
+                logger.exiting(this.getClass().getName(), "importPhotographs");
                 return violation.toString();
             }
         }
-        System.out.println("importPhotographs end");
+        logger.exiting(this.getClass().getName(), "importPhotographs");
         return "We shouldn't even be here!";
 
     }

@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -51,6 +52,7 @@ import javax.ws.rs.core.Response.Status;
 @Path("/galleries")
 public class GalleryBean extends AbstractBean<Gallery>
 {
+    private static final Logger logger = Logger.getLogger(GalleryBean.class.getName());
 
     @EJB
     private JobBean jobBean;
@@ -109,7 +111,7 @@ public class GalleryBean extends AbstractBean<Gallery>
         {
             for (ConstraintViolation<?> violation : e.getConstraintViolations())
             {
-                System.out.println(violation);
+                logger.fine(violation.toString());
             }
         }
     }
@@ -155,7 +157,7 @@ public class GalleryBean extends AbstractBean<Gallery>
         {
             for (ConstraintViolation<?> violation : e.getConstraintViolations())
             {
-                System.out.println(violation);
+                logger.fine(violation.toString());
             }
         }
     }
@@ -315,8 +317,8 @@ public class GalleryBean extends AbstractBean<Gallery>
         {
             for (ConstraintViolation<?> violation : e.getConstraintViolations())
             {
-                System.out.println(violation);
-                System.out.println("importPhotographs end");
+                logger.fine(violation.toString());
+                logger.exiting(this.getClass().getName(),"issues");
                 return violation.toString();
             }
         }

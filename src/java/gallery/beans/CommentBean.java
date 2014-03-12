@@ -20,6 +20,7 @@ import gallery.database.entities.Comment;
 import gallery.database.entities.GalleryPhotograph;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -38,14 +39,18 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response.Status;
 
 /**
- * Comment Enterprise Java Bean, maps to a Comment Hibernate Entity.
- * Also a REST service mapping to /YourPersonalPhotographOrganiser/resources/comments.
+ * Comment Enterprise Java Bean, maps to a Comment Hibernate Entity. Also a REST
+ * service mapping to /YourPersonalPhotographOrganiser/resources/comments.
+ *
  * @author maartenl
  */
 @Stateless
 @Path("/comments")
 public class CommentBean extends AbstractBean<Comment>
 {
+
+    private static final Logger logger = Logger.getLogger(CommentBean.class.getName());
+
     @PersistenceContext(unitName = "YourPersonalPhotographOrganiserPU")
     private EntityManager em;
 
@@ -64,16 +69,18 @@ public class CommentBean extends AbstractBean<Comment>
     }
 
     /**
-     * Creates a comment. POST to /YourPersonalPhotographOrganiser/resources/comments.
-     * Will accept both application/xml as well as application/json.
+     * Creates a comment. POST to
+     * /YourPersonalPhotographOrganiser/resources/comments. Will accept both
+     * application/xml as well as application/json.
+     *
      * @param entity comment
      */
     @POST
     @Override
     @Consumes(
-    {
-        "application/xml", "application/json"
-    })
+            {
+                "application/xml", "application/json"
+            })
     public void create(Comment entity)
     {
         GalleryPhotograph photo = galleryphotographBean.find(entity.getGalleryphotograph().getId());
@@ -84,16 +91,14 @@ public class CommentBean extends AbstractBean<Comment>
         newComment.setSubmitted(new Date());
         newComment.setGalleryphotograph(photo);
         photo.getCommentCollection().add(newComment);
-        System.out.println(newComment);
         try
         {
-        super.create(newComment);
-        }
-        catch (ConstraintViolationException e)
+            super.create(newComment);
+        } catch (ConstraintViolationException e)
         {
             for (ConstraintViolation<?> violation : e.getConstraintViolations())
             {
-                System.out.println(violation);
+                logger.fine(violation.toString());
             }
 
         }
@@ -101,23 +106,27 @@ public class CommentBean extends AbstractBean<Comment>
     }
 
     /**
-     * Updates a Comment. PUT to /YourPersonalPhotographOrganiser/resources/comments.
-     * Will accept both application/xml as well as application/json.
+     * Updates a Comment. PUT to
+     * /YourPersonalPhotographOrganiser/resources/comments. Will accept both
+     * application/xml as well as application/json.
+     *
      * @param entity Comment
      */
     @PUT
     @Override
     @Consumes(
-    {
-        "application/xml", "application/json"
-    })
+            {
+                "application/xml", "application/json"
+            })
     public void edit(Comment entity)
     {
         super.edit(entity);
     }
 
     /**
-     * Removes a comment. DELETE to /YourPersonalPhotographOrganiser/resources/comments/{id}.
+     * Removes a comment. DELETE to
+     * /YourPersonalPhotographOrganiser/resources/comments/{id}.
+     *
      * @param id unique identifier for the comment, present in the url.
      */
     @DELETE
@@ -128,19 +137,22 @@ public class CommentBean extends AbstractBean<Comment>
     }
 
     /**
-     * Retrieves a Comment. GET to /YourPersonalPhotographOrganiser/resources/comments/{id}.
-     * Can produce both application/xml as well as application/json when asked.
+     * Retrieves a Comment. GET to
+     * /YourPersonalPhotographOrganiser/resources/comments/{id}. Can produce
+     * both application/xml as well as application/json when asked.
+     *
      * @param id unique identifier for the comment, present in the url.
      * @return Comment entity
-     * @throws WebApplicationException with status {@link Status#NOT_FOUND} if comment with that id does not exist (any more).
+     * @throws WebApplicationException with status {@link Status#NOT_FOUND} if
+     * comment with that id does not exist (any more).
      */
     @Override
     @GET
     @Path("{id}")
     @Produces(
-    {
-        "application/xml", "application/json"
-    })
+            {
+                "application/xml", "application/json"
+            })
     public Comment find(@PathParam("id") Long id)
     {
         Comment comment = super.find(id);
@@ -154,9 +166,9 @@ public class CommentBean extends AbstractBean<Comment>
     @GET
     @Override
     @Produces(
-    {
-        "application/xml", "application/json"
-    })
+            {
+                "application/xml", "application/json"
+            })
     public List<Comment> findAll()
     {
         return super.findAll();
@@ -165,23 +177,23 @@ public class CommentBean extends AbstractBean<Comment>
     @GET
     @Path("{from}/{to}")
     @Produces(
-    {
-        "application/xml", "application/json"
-    })
+            {
+                "application/xml", "application/json"
+            })
     public List<Comment> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to)
     {
         return super.findRange(new int[]
-                {
-                    from, to
-                });
+        {
+            from, to
+        });
     }
 
     @GET
     @Path("count")
     @Produces(
-    {
-        "application/xml", "application/json"
-    })
+            {
+                "application/xml", "application/json"
+            })
     public String countREST()
     {
         return String.valueOf(super.count());

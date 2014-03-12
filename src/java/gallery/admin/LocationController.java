@@ -8,6 +8,7 @@ import gallery.beans.LocationBean;
 
 import java.io.Serializable;
 import java.util.ResourceBundle;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
@@ -23,6 +24,8 @@ import javax.faces.model.SelectItem;
 @SessionScoped
 public class LocationController implements Serializable
 {
+
+    private static final Logger logger = Logger.getLogger(LocationController.class.getName());
 
     private Location current;
     private DataModel items = null;
@@ -294,13 +297,15 @@ public class LocationController implements Serializable
 
     public String refresh()
     {
-        System.out.println("refresh");
+        logger.entering(this.getClass().getName(), "refresh");
+        logger.exiting(this.getClass().getName(), "refresh");
         return null;
     }
 
     public String verify()
     {
-        System.out.println("verify");
+        logger.entering(this.getClass().getName(), "verify");
+        logger.exiting(this.getClass().getName(), "verify");
         return null;
     }
 

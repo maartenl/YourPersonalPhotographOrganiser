@@ -39,6 +39,7 @@ import javax.servlet.ServletOutputStream;
  */
 public class FileOperations
 {
+    private static final Logger logger = Logger.getLogger(FileOperations.class.getName());
 
     /**
      * Reads from inputStream and dumps it to the outputStream. Does not close input nor outputstream.
@@ -65,7 +66,7 @@ public class FileOperations
 
     /**
      * Writes an image to the outputStream that has been scaled appropriately and angled.
-     * @param photo original photograph, can only process images of type <ul><li>JPEG</li><li>TIFF</li><li>Camera Raw (NEF/CRW/CR2/...) </li></ul>
+     * @param file  original photograph, can only process images of type <ul><li>JPEG</li><li>TIFF</li><li>Camera Raw (NEF/CRW/CR2/...) </li></ul>
      * @param outputStream the outputstream to write the image to
      * @param size the size of the image, can be "thumb", "medium" or the default.
      * @throws IOException thrown when the file cannot be access in some way.
@@ -76,7 +77,7 @@ public class FileOperations
         Logger.getLogger(FileOperations.class.getName()).log(Level.FINE, "outputImage {0} {1} {2}", params);
         if (!ImageOperations.isImage(file.getCanonicalPath()))
         {
-            System.out.println("outputImage not an image!");
+            logger.fine("outputImage not an image!");
             return;
         }
         BufferedImage image = null;

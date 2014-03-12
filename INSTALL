@@ -39,6 +39,7 @@ Steps
     serverName: localhost
     user: photographer
     user: photographer
+    Try to *PING* the database from the administration console.
 10. Setup the jdbc resource, the war assumes it is called "jdbc/YourPersonalPhotographOrganiser".
     For instance with the following settings:
     JNDI Name: jdbc/YourPersonalPhotographOrganiser (this is the same name as in the persistence.xml)
@@ -50,13 +51,16 @@ Steps
 
 Surf in your webbrowser to http://localhost.localdomain:8080/YourPersonalPhotographOrganiser/
 
-Or surf for administation to http://localhost.localdomain:8080/YourPersonalPhotographOrganiser/faces/admin/index.xhtml
-
 Logging
 -------
 
-Add the following entries to glassfish3/glassfish/domains/domain1/config/logging.properties:
+Add logging entries to 
+glassfish-4.0/glassfish/domains/domain1/config/logging.properties.
 
+If you wish to see all logging, try:
+gallery.level=FINEST
+
+For specifics, try the following as an example:
 gallery.images.ImageOperations.level=FINEST
 gallery.servlets.FileOperations.level=FINEST
 gallery.servlets.ImageServlet.level=FINEST
