@@ -120,6 +120,7 @@ public class LocationBean extends AbstractBean<Location>
     {
         "application/xml", "application/json"
     })
+    @Override
     public Location find(@PathParam("id") Long id)
     {
         Location location = super.find(id);
