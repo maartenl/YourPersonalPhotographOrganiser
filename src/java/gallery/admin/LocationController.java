@@ -1,16 +1,14 @@
 package gallery.admin;
 
 import gallery.admin.util.GalleryException;
-import gallery.database.entities.Location;
 import gallery.admin.util.JsfUtil;
 import gallery.admin.util.PaginationHelper;
 import gallery.beans.LocationBean;
-
+import gallery.database.entities.Location;
 import java.io.Serializable;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -19,6 +17,7 @@ import javax.faces.convert.FacesConverter;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
+import javax.inject.Named;
 
 @Named("locationController")
 @SessionScoped
@@ -297,7 +296,9 @@ public class LocationController implements Serializable
 
     public String verify()
     {
-        logger.entering(this.getClass().getName(), "verify");
+        current = (Location) getItems().getRowData();
+        logger.entering(this.getClass().getName(), "verify " + current);
+        logger.entering(this.getClass().getName(), "verify " + current.getId());
         getFacade().verify(current.getId());
         logger.exiting(this.getClass().getName(), "verify");
         return null;
@@ -305,6 +306,7 @@ public class LocationController implements Serializable
 
     public String discover()
     {
+        current = (Location) getItems().getRowData();
         logger.entering(this.getClass().getName(), "discover");
         getFacade().discover(current.getId());
         logger.exiting(this.getClass().getName(), "discover");

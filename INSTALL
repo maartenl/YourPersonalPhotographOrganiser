@@ -26,6 +26,9 @@ Steps
     (requires glassfish restart)  
 7. Start Glassfish glassfish-4.0/bin/asadmin start-domain domain1
 8. Go to http://localhost:4848 en log in with user admin/password you just supplied
+
+Setting up Database Connection:
+
 9. Setup the jdbc connection pool to the database created.
     For instance with the following settings:
     Poolname: YourPersonalPhotographOrganiser
@@ -44,6 +47,13 @@ Steps
     For instance with the following settings:
     JNDI Name: jdbc/YourPersonalPhotographOrganiser (this is the same name as in the persistence.xml)
     Select the poolname of the pool you created in the previous step.
+
+Setting up Messaging queues:
+
+11. Setup the Destination Resource (found under "JMS Resources")
+    Create a new one with the JNDI name "jms/VerificationQueue".
+    It's a "javax.jms.Queue" (Resource Type).
+
 11. deploy the war to glassfish
 12. deploy the fancybox stuff to ~GlassFish_Server/glassfish/domains/domain1/docroot (assuming defaults here)
 13. Check the database, it should show some tables

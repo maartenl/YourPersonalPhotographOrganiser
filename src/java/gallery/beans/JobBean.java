@@ -37,8 +37,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ejb.Stateless;
+import javax.annotation.Resource;
+import javax.ejb.Asynchronous;
 import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+import javax.jms.JMSConnectionFactory;
+import javax.jms.JMSContext;
+import javax.jms.Queue;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -46,7 +52,11 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 
 /**
- * Enterprise Java Bean that executes jobs monstly on gallery level.
+ * Enterprise Java Bean that executes jobs mostly on gallery level. The
+ * ("batch") job is (in most cases) not actually a batch job but produces a
+ * series of JMS messages. In other words, this stateless session bean is a
+ * Producer of JMS Messages.
+ *
  *
  * @author maartenl
  */
@@ -56,6 +66,13 @@ public class JobBean
 {
 
     private static final Logger logger = Logger.getLogger(JobBean.class.getName());
+
+    @Resource(mappedName = "jms/VerificationQueue")
+    private Queue verificationQueue;
+
+    @Inject
+    @JMSConnectionFactory("java:comp/DefaultJMSConnectionFactory")
+    private JMSContext context;
 
     @PersistenceContext(unitName = "YourPersonalPhotographOrganiserPU")
     private EntityManager em;
@@ -154,16 +171,21 @@ public class JobBean
 
     /**
      * Checks a directory stored in "location" for new photographs or films.
+     * Will start walking the directory tree.
+     * <p>
+     * This is an asynchronous business method, meaning return is immediately
+     * controlled whilst the method does its thing in parallel.</p>
      *
      * @param location the location that *may* have new photographs.
-     * @return String containing an error message, or null upon success.
      * @throws IOException when a problem occurred with accessing the file, or
      * the file system
      * @throws NoSuchAlgorithmException if unable to create a hash using the
      * algorithm.
      * @throws ImageProcessingException when unable to verify the image.
+     * @throws com.drew.metadata.MetadataException
      */
-    public String checkDirectory(Location location) throws IOException, NoSuchAlgorithmException, ImageProcessingException, MetadataException
+    @Asynchronous
+    public void checkDirectory(Location location) throws IOException, NoSuchAlgorithmException, ImageProcessingException, MetadataException
     {
         logger.entering(this.getClass().getName(), "checkDirectory");
         String errorMessage = null;
@@ -200,7 +222,7 @@ public class JobBean
         }
         logger.log(Level.FINE, "errorMessage {0}", errorMessage);
         logger.exiting(this.getClass().getName(), "checkDirectory=");
-        return errorMessage;
+        return;
     }
 
     /**
@@ -255,10 +277,24 @@ public class JobBean
 
     }
 
-    public String verifyPhotographs(Location location)
+    /**
+     * Verifies existing Photographs upon a Location. Do they exist on the hard
+     * drive as well, do the hashes correspond? Will put error messages in the
+     * log, for each Photograph so they can be fixed later by the user.
+     * <p>
+     * This is an asynchronous business method, meaning control is immediately
+     * returned whilst the method does its thing in parallel.</p>
+     *
+     * @param location the location of which the photographs need to be checked
+     */
+    @Asynchronous
+    public void verifyPhotographs(Location location)
     {
         logger.entering(this.getClass().getName(), "verifyPhotographs");
+        String messageData = "10";
+        context.createProducer().send(verificationQueue, messageData);
         logger.exiting(this.getClass().getName(), "verifyPhotographs");
-        return null;
+        return;
     }
+
 }

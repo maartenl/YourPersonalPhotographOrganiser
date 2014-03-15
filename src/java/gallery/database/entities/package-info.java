@@ -70,8 +70,9 @@
  * }
  * class Log {
  *    -BigInteger id
- *    -Date jobdate
- *    -String joblog
+ *    -Timestamp creation_date
+ *    -String message
+ *    -Lob description
  * }
  * @enduml
  */

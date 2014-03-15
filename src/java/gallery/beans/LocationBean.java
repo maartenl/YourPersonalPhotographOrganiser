@@ -48,6 +48,7 @@ import javax.ws.rs.core.Response.Status;
 @Path("/locations")
 public class LocationBean extends AbstractBean<Location>
 {
+
     private static final Logger logger = Logger.getLogger(LocationBean.class.getName());
 
     @EJB
@@ -147,18 +148,16 @@ public class LocationBean extends AbstractBean<Location>
      * Checks a directory stored in "location" for new photographs or films.
      *
      * @param id a Long representing the id of the Location entity.
-     * @return String containing an error message, or null upon success.
      * @see JobBean#checkDirectory(gallery.database.entities.Location)
      */
     @GET
     @Path("{id}/discover")
-    public String discover(@PathParam("id") Long id)
+    public void discover(@PathParam("id") Long id)
     {
         Location location = find(id);
-        String result = "";
         try
         {
-            result = jobBean.checkDirectory(location);
+            jobBean.checkDirectory(location);
 
         } catch (IOException | NoSuchAlgorithmException | ImageProcessingException | MetadataException ex)
         {
@@ -168,7 +167,6 @@ public class LocationBean extends AbstractBean<Location>
                 throw new WebApplicationException(Status.INTERNAL_SERVER_ERROR);
             }
         }
-        return result;
     }
 
     @GET
@@ -209,15 +207,12 @@ public class LocationBean extends AbstractBean<Location>
      * contents of the file. Basically walks the directory tree.
      *
      * @param id a Long representing the id of the Location entity.
-     * @return String containing an error message, or null upon success.
      * @see JobBean#processPhoto(gallery.database.entities.Location,
      * java.nio.file.Path) checkDirectory(gallery.database.entities.Location)
      */
-    public String verify(Long id)
+    public void verify(Long id)
     {
         Location location = find(id);
-        String result = "";
-        result = jobBean.verifyPhotographs(location);
-        return result;
+        jobBean.verifyPhotographs(location);
     }
 }
