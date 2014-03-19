@@ -35,16 +35,13 @@ import java.nio.file.Path;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.annotation.Resource;
-import javax.ejb.Asynchronous;
+import javax.batch.operations.JobOperator;
+import javax.batch.runtime.BatchRuntime;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
-import javax.inject.Inject;
-import javax.jms.JMSConnectionFactory;
-import javax.jms.JMSContext;
-import javax.jms.Queue;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -67,13 +64,6 @@ public class JobBean
 
     private static final Logger logger = Logger.getLogger(JobBean.class.getName());
 
-    @Resource(mappedName = "jms/VerificationQueue")
-    private Queue verificationQueue;
-
-    @Inject
-    @JMSConnectionFactory("java:comp/DefaultJMSConnectionFactory")
-    private JMSContext context;
-
     @PersistenceContext(unitName = "YourPersonalPhotographOrganiserPU")
     private EntityManager em;
 
@@ -83,8 +73,123 @@ public class JobBean
     }
 
     /**
+     * Checks a directory stored in "location" for new photographs or films.
+     * Will start walking the directory tree.
+     *
+     * @param location the location that *may* have new photographs.
+     * @throws IOException when a problem occurred with accessing the file, or
+     * the file system
+     */
+    public void checkDirectory(Location location) throws IOException
+    {
+        logger.entering(this.getClass().getName(), "checkDirectory");
+
+        JobOperator operator = BatchRuntime.getJobOperator();
+        Properties jobParameters = new Properties();
+        jobParameters.setProperty("location", location.getId() + "");
+        operator.start("ImportPhotographs", jobParameters);
+
+        String errorMessage = null;
+        try
+        {
+            // JDK7: Path class and walking the filetree.
+            Path startingDir = FileSystems.getDefault().getPath(location.getFilepath());
+            PhotographVisitor pf = new PhotographVisitor();
+            Files.walkFileTree(startingDir, pf);
+            List<Path> result = pf.getFileList();
+
+            int i = 0;
+            for (Path path : result)
+            {                //do stuff with path
+            }
+
+        } catch (ConstraintViolationException e)
+        {
+            for (ConstraintViolation<?> violation : e.getConstraintViolations())
+            {
+                errorMessage = violation.toString();
+            }
+        }
+        logger.log(Level.FINE, "errorMessage {0}", errorMessage);
+        logger.exiting(this.getClass().getName(), "checkDirectory=");
+    }
+
+    /**
+     * Imports photographs/films matching a certain mask (location) into an
+     * existing gallery.
+     *
+     * @param found the gallery to import photographs into
+     * @param location the location that should match, can use SQL wildcards
+     * like %
+     * @return a String, error message or null if successful.
+     */
+    public String importPhotographs(Gallery found, String location)
+    {
+        logger.entering(this.getClass().getName(), "importPhotographs");
+        try
+        {
+            // get all photographs that match the mask
+            Query query = em.createNamedQuery("Photograph.findByLocation");
+            query.setParameter("mask", location);
+            query.setParameter("gallery", found);
+            List list = query.getResultList();
+            if (list == null || list.isEmpty())
+            {
+                logger.exiting(this.getClass().getName(), "importPhotographs");
+                return "No photographs match " + location + ".";
+            }
+            int i = 0;
+            for (Object r : list)
+            {
+                Photograph photo = (Photograph) r;
+                logger.log(Level.FINE, "importPhotographs {0}", photo);
+                GalleryPhotograph gphoto = new GalleryPhotograph();
+                gphoto.setGallery(found);
+                gphoto.setName(photo.getFilename());
+                gphoto.setPhotograph(photo);
+                gphoto.setSortorder(BigInteger.valueOf(i++));
+                em.persist(gphoto);
+            }
+            logger.exiting(this.getClass().getName(), "importPhotographs");
+            return null;
+        } catch (ConstraintViolationException e)
+        {
+            for (ConstraintViolation<?> violation : e.getConstraintViolations())
+            {
+                logger.fine(violation.toString());
+                logger.exiting(this.getClass().getName(), "importPhotographs");
+                return violation.toString();
+            }
+        }
+        logger.exiting(this.getClass().getName(), "importPhotographs");
+        return "We shouldn't even be here!";
+
+    }
+
+    /**
+     * Verifies existing Photographs upon a Location. Do they exist on the hard
+     * drive as well, do the hashes correspond? Will put error messages in the
+     * log, for each Photograph so they can be fixed later by the user.
+     *
+     * @param location the location of which the photographs need to be checked
+     */
+    public void verifyPhotographs(Location location)
+    {
+        logger.entering(this.getClass().getName(), "verifyPhotographs");
+        JobOperator operator = BatchRuntime.getJobOperator();
+        Properties jobParameters = new Properties();
+        jobParameters.setProperty("location", location.getId() + "");
+        operator.start("VerifyPhotographs", jobParameters); // maps to VerifyPhotographs.xml
+        logger.exiting(this.getClass().getName(), "verifyPhotographs");
+    }
+
+    /**
      * @param location
      * @param path
+     * @throws NoSuchAlgorithmException if unable to create a hash using the
+     * algorithm.
+     * @throws ImageProcessingException when unable to verify the image.
+     * @throws com.drew.metadata.MetadataException
      * @return
      */
     private String processPhoto(Location location, Path path) throws NoSuchAlgorithmException, IOException, ImageProcessingException, MetadataException
@@ -168,133 +273,4 @@ public class JobBean
         em.persist(photo);
         return null;
     }
-
-    /**
-     * Checks a directory stored in "location" for new photographs or films.
-     * Will start walking the directory tree.
-     * <p>
-     * This is an asynchronous business method, meaning return is immediately
-     * controlled whilst the method does its thing in parallel.</p>
-     *
-     * @param location the location that *may* have new photographs.
-     * @throws IOException when a problem occurred with accessing the file, or
-     * the file system
-     * @throws NoSuchAlgorithmException if unable to create a hash using the
-     * algorithm.
-     * @throws ImageProcessingException when unable to verify the image.
-     * @throws com.drew.metadata.MetadataException
-     */
-    @Asynchronous
-    public void checkDirectory(Location location) throws IOException, NoSuchAlgorithmException, ImageProcessingException, MetadataException
-    {
-        logger.entering(this.getClass().getName(), "checkDirectory");
-        String errorMessage = null;
-        try
-        {
-            // JDK7: Path class and walking the filetree.
-            Path startingDir = FileSystems.getDefault().getPath(location.getFilepath());
-            PhotographVisitor pf = new PhotographVisitor();
-            Files.walkFileTree(startingDir, pf);
-            List<Path> result = pf.getFileList();
-
-            int size = result.size();
-            int i = 0;
-            for (Path path : result)
-            {
-                errorMessage = processPhoto(location, path);
-                if (errorMessage != null)
-                {
-                    break;
-                }
-                i++;
-                if (i % 1000 == 999)
-                {
-                    em.flush();
-                }
-            }
-
-        } catch (ConstraintViolationException e)
-        {
-            for (ConstraintViolation<?> violation : e.getConstraintViolations())
-            {
-                errorMessage = violation.toString();
-            }
-        }
-        logger.log(Level.FINE, "errorMessage {0}", errorMessage);
-        logger.exiting(this.getClass().getName(), "checkDirectory=");
-        return;
-    }
-
-    /**
-     * Imports photographs/films matching a certain mask (location) into an
-     * existing gallery.
-     *
-     * @param found the gallery to import photographs into
-     * @param location the location that should match, can use SQL wildcards
-     * like %
-     * @return a String, error message or null if successful.
-     */
-    public String importPhotographs(Gallery found, String location)
-    {
-        logger.entering(this.getClass().getName(), "importPhotographs");
-        try
-        {
-            // get all photographs that match the mask
-            Query query = em.createNamedQuery("Photograph.findByLocation");
-            query.setParameter("mask", location);
-            query.setParameter("gallery", found);
-            List list = query.getResultList();
-            if (list == null || list.isEmpty())
-            {
-                logger.exiting(this.getClass().getName(), "importPhotographs");
-                return "No photographs match " + location + ".";
-            }
-            int i = 0;
-            for (Object r : list)
-            {
-                Photograph photo = (Photograph) r;
-                logger.log(Level.FINE, "importPhotographs {0}", photo);
-                GalleryPhotograph gphoto = new GalleryPhotograph();
-                gphoto.setGallery(found);
-                gphoto.setName(photo.getFilename());
-                gphoto.setPhotograph(photo);
-                gphoto.setSortorder(BigInteger.valueOf(i++));
-                em.persist(gphoto);
-            }
-            logger.exiting(this.getClass().getName(), "importPhotographs");
-            return null;
-        } catch (ConstraintViolationException e)
-        {
-            for (ConstraintViolation<?> violation : e.getConstraintViolations())
-            {
-                logger.fine(violation.toString());
-                logger.exiting(this.getClass().getName(), "importPhotographs");
-                return violation.toString();
-            }
-        }
-        logger.exiting(this.getClass().getName(), "importPhotographs");
-        return "We shouldn't even be here!";
-
-    }
-
-    /**
-     * Verifies existing Photographs upon a Location. Do they exist on the hard
-     * drive as well, do the hashes correspond? Will put error messages in the
-     * log, for each Photograph so they can be fixed later by the user.
-     * <p>
-     * This is an asynchronous business method, meaning control is immediately
-     * returned whilst the method does its thing in parallel.</p>
-     *
-     * @param location the location of which the photographs need to be checked
-     */
-    @Asynchronous
-    public void verifyPhotographs(Location location)
-    {
-        logger.entering(this.getClass().getName(), "verifyPhotographs");
-        String messageData = "10";
-        context.createProducer().send(verificationQueue, messageData);
-        logger.exiting(this.getClass().getName(), "verifyPhotographs");
-        return;
-    }
-
 }

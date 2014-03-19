@@ -30,14 +30,17 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * The photograph visitor. JDK7: derived from the JDK7 class containing
- * file tree visiting. Simply adds files found to a list.
+ * The photograph visitor. JDK7: derived from the JDK7 class containing file
+ * tree visiting. Simply adds files found to a list.
+ *
  * @author maartenl
  */
 public class PhotographVisitor implements FileVisitor<Path>
 {
 
-    private List<Path> fileList = new ArrayList<>();
+    private final Logger logger = Logger.getLogger(PhotographVisitor.class.getName());
+
+    private final List<Path> fileList = new ArrayList<>();
 
     public List<Path> getFileList()
     {
@@ -51,52 +54,52 @@ public class PhotographVisitor implements FileVisitor<Path>
     @Override
     public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException
     {
-        Logger.getLogger(PhotographVisitor.class.getName()).entering(PhotographVisitor.class.getName(), "preVisitDirectory", dir);
+        logger.entering(PhotographVisitor.class.getName(), "preVisitDirectory", dir);
         return FileVisitResult.CONTINUE;
     }
 
     @Override
     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException
     {
-        PathMatcher matcher =
-                FileSystems.getDefault().getPathMatcher("glob:**.highlight.*");
+        PathMatcher matcher
+                = FileSystems.getDefault().getPathMatcher("glob:**.highlight.*");
         if (matcher.matches(file))
         {
-            Logger.getLogger(PhotographVisitor.class.getName()).log(Level.FINEST, "visitFile ignored, contains highlight {0}", file);
+            logger.log(Level.FINEST, "visitFile ignored, contains highlight {0}", file);
             return FileVisitResult.CONTINUE;
         }
-        matcher =
-                FileSystems.getDefault().getPathMatcher("glob:**.thumb.*");
+        matcher
+                = FileSystems.getDefault().getPathMatcher("glob:**.thumb.*");
         if (matcher.matches(file))
         {
-            Logger.getLogger(PhotographVisitor.class.getName()).log(Level.FINEST, "visitFile ignored, contains thumb {0}", file);
+            logger.log(Level.FINEST, "visitFile ignored, contains thumb {0}", file);
             return FileVisitResult.CONTINUE;
         }
-        matcher =
-                FileSystems.getDefault().getPathMatcher("glob:**.sized.*");
+        matcher
+                = FileSystems.getDefault().getPathMatcher("glob:**.sized.*");
         if (matcher.matches(file))
         {
-            Logger.getLogger(PhotographVisitor.class.getName()).log(Level.FINEST, "visitFile ignored, contains sized {0}", file);
+            logger.log(Level.FINEST, "visitFile ignored, contains sized {0}", file);
             return FileVisitResult.CONTINUE;
         }
-        matcher =
-                FileSystems.getDefault().getPathMatcher("glob:**.{jpg,jpeg,gif,png,bmp,tiff,avi,JPG,JPEG,GIF,PNG,BMP,TIFF,AVI}");
+        matcher
+                = FileSystems.getDefault().getPathMatcher("glob:**.{jpg,jpeg,gif,png,bmp,tiff,avi,JPG,JPEG,GIF,PNG,BMP,TIFF,AVI}");
         if (!matcher.matches(file))
         {
-            Logger.getLogger(PhotographVisitor.class.getName()).log(Level.FINEST, "visitFile ignored, not an image {0}", file);
+            logger.log(Level.FINEST, "visitFile ignored, not an image {0}", file);
             return FileVisitResult.CONTINUE;
         }
         if (!attrs.isRegularFile())
         {
-            Logger.getLogger(PhotographVisitor.class.getName()).log(Level.FINEST, "visitFile ignored, not a regular file {0}", file);
+            logger.log(Level.FINEST, "visitFile ignored, not a regular file {0}", file);
             return FileVisitResult.CONTINUE;
         }
         if (attrs.size() == 0)
         {
-            Logger.getLogger(PhotographVisitor.class.getName()).log(Level.FINEST, "visitFile ignored, size is 0 {0}", file);
+            logger.log(Level.FINEST, "visitFile ignored, size is 0 {0}", file);
             return FileVisitResult.CONTINUE;
         }
-        Logger.getLogger(PhotographVisitor.class.getName()).log(Level.FINEST, "visitFile file found", file);
+        logger.log(Level.FINEST, "visitFile file found", file);
         fileList.add(file);
         return FileVisitResult.CONTINUE;
     }
@@ -104,14 +107,14 @@ public class PhotographVisitor implements FileVisitor<Path>
     @Override
     public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException
     {
-        Logger.getLogger(PhotographVisitor.class.getName()).entering(PhotographVisitor.class.getName(), "visitFileFailed", file);
+        logger.entering(PhotographVisitor.class.getName(), "visitFileFailed", file);
         return FileVisitResult.CONTINUE;
     }
 
     @Override
     public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException
     {
-        Logger.getLogger(PhotographVisitor.class.getName()).entering(PhotographVisitor.class.getName(), "postVisitDirectory", dir);
+        logger.entering(PhotographVisitor.class.getName(), "postVisitDirectory", dir);
         return FileVisitResult.CONTINUE;
     }
 }

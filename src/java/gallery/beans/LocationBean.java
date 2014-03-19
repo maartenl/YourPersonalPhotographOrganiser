@@ -16,12 +16,10 @@
  */
 package gallery.beans;
 
-import com.drew.imaging.ImageProcessingException;
-import com.drew.metadata.MetadataException;
 import gallery.database.entities.Location;
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -158,14 +156,9 @@ public class LocationBean extends AbstractBean<Location>
         try
         {
             jobBean.checkDirectory(location);
-
-        } catch (IOException | NoSuchAlgorithmException | ImageProcessingException | MetadataException ex)
+        } catch (IOException ex)
         {
-            logger.throwing(this.getClass().getName(), "discover", ex);
-            if (location == null)
-            {
-                throw new WebApplicationException(Status.INTERNAL_SERVER_ERROR);
-            }
+            Logger.getLogger(LocationBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
