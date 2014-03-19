@@ -49,12 +49,17 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 
 /**
- * Enterprise Java Bean that executes jobs mostly on gallery level. The
- * ("batch") job is (in most cases) not actually a batch job but produces a
- * series of JMS messages. In other words, this stateless session bean is a
- * Producer of JMS Messages.
- *
- *
+ * Enterprise Java Bean that starts jobs mostly on location level.
+ * <p>
+ * <img src="../../images/JobBean.png"/></p>
+ * @startuml
+ * JobBean -> BatchRuntime: getJobOperator()
+ * JobBean <- BatchRuntime: operator
+ * create Properties
+ * JobBean -> Properties: new
+ * JobBean -> Properties: setProperty()
+ * JobBean -> JobOperator: start
+ * @enduml
  * @author maartenl
  */
 @Stateless

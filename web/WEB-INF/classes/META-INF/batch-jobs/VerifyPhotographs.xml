@@ -21,10 +21,13 @@
         <listener ref="verifyPhotographListener"/>
     </listeners>
     <step id="MainStep" start-limit="50" allow-start-if-complete="false" >
+        <listeners>
+            <listener ref="verifyPhotographListener"/>
+        </listeners>
         <chunk checkpoint-policy="item" item-count="4" time-limit="0" skip-limit="0" retry-limit="1">
             <reader ref="verifyPhotographReader"/>
             <processor ref="verifyPhotographProcessor"/>
             <writer ref="verifyPhotographWriter"/>
-        </chunk>
+        </chunk> 
     </step>
 </job>

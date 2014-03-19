@@ -19,31 +19,60 @@
  * Provides the batch artifacts for the job VerifyPhotographs.</p>
  * <p>
  * <img src="../../../images/package-info-verify.png"/></p>
+ * <p>
+ * In the picture above, it shows that the item-count is set to three, even
+ * though
+ * in the code it is 1. It serves as a good example of the behaviour,
+ * better then when item-count of 1 would be diagrammed.</p>
+ * <p>
+ * <img src="../../../images/package-info-hierarchy.png"/></p>
  *
  * @startuml package-info-verify.png
- * participant Alice
+ * participant JavaBatch
  * participant VerifyPhotographListener
  * participant verifyPhotographReader
  * participant verifyPhotographWriter
  * participant verifyPhotographProcessor
- * Alice -> VerifyPhotographListener: beforeJob
- * Alice -> verifyPhotographReader: open
- * Alice -> verifyPhotographWriter: open
- * Alice -> verifyPhotographReader: readItem
- * Alice -> verifyPhotographProcessor: processItem
- * Alice -> verifyPhotographReader: readItem
- * Alice -> verifyPhotographProcessor: processItem
- * Alice -> verifyPhotographReader: readItem
- * Alice -> verifyPhotographProcessor: processItem
- * Alice -> verifyPhotographReader: readItem
- * Alice -> verifyPhotographProcessor: processItem
- * Alice -> verifyPhotographWriter: writeItems
- * Alice -> verifyPhotographWriter: checkpointInfo
- * Alice -> verifyPhotographWriter: ...
- * Alice -> verifyPhotographReader: close
- * Alice -> verifyPhotographWriter: close
- * Alice -> VerifyPhotographListener: afterJob
+ *
+ * JavaBatch -> VerifyPhotographListener: beforeJob
+ * JavaBatch -> VerifyPhotographListener: beforeStep
+ * JavaBatch -> verifyPhotographReader: open
+ * JavaBatch -> verifyPhotographWriter: open
+ * JavaBatch -> verifyPhotographReader: readItem
+ * JavaBatch <-- verifyPhotographReader: item
+ * JavaBatch -> verifyPhotographProcessor: processItem(item)
+ * JavaBatch <- verifyPhotographProcessor: processed item
+ * JavaBatch -> verifyPhotographReader: readItem
+ * JavaBatch <-- verifyPhotographReader: item
+ * JavaBatch -> verifyPhotographProcessor: processItem(item)
+ * JavaBatch <-- verifyPhotographProcessor: processed item
+ * JavaBatch -> verifyPhotographReader: readItem
+ * JavaBatch <-- verifyPhotographReader: item
+ * JavaBatch -> verifyPhotographProcessor: processItem(item)
+ * JavaBatch <-- verifyPhotographProcessor: processed item
+ * JavaBatch -> verifyPhotographWriter: writeItems(processed items)
+ * JavaBatch -> verifyPhotographWriter: checkpointInfo
+ * JavaBatch -> verifyPhotographWriter: ...
+ * JavaBatch -> verifyPhotographReader: close
+ * JavaBatch -> verifyPhotographWriter: close
+ * JavaBatch -> VerifyPhotographListener: afterStep
+ * JavaBatch -> VerifyPhotographListener: afterJob
  *
  * @enduml
+ *
+ * @startuml package-info-hierarchy.png
+ * interface javax.batch.api.listener.JobListener
+ * interface javax.batch.api.listener.StepListener
+ * interface javax.batch.api.chunk.ItemProcessor
+ * interface javax.batch.api.chunk.ItemReader
+ * interface javax.batch.api.chunk.ItemWriter
+ * javax.batch.api.listener.JobListener <|-- gallery.jobs.verify.Listener
+ * javax.batch.api.listener.StepListener <|-- gallery.jobs.verify.Listener
+ * javax.batch.api.chunk.ItemProcessor <|-- gallery.jobs.verify.Processor
+ * javax.batch.api.chunk.ItemReader <|-- gallery.jobs.verify.Reader
+ * javax.batch.api.chunk.ItemWriter <|-- gallery.jobs.verify.Writer
+ *
+ * @enduml
+ *
  */
 package gallery.jobs.verify;
