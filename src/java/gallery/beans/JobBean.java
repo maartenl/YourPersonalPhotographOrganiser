@@ -25,12 +25,10 @@ import gallery.database.entities.Photograph;
 import gallery.enums.ImageAngle;
 import gallery.images.ImageOperations;
 import gallery.servlets.FileOperations;
-import gallery.servlets.PhotographVisitor;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.file.FileSystems;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
@@ -92,30 +90,30 @@ public class JobBean
         JobOperator operator = BatchRuntime.getJobOperator();
         Properties jobParameters = new Properties();
         jobParameters.setProperty("location", location.getId() + "");
-        operator.start("ImportPhotographs", jobParameters);
-
-        String errorMessage = null;
-        try
-        {
-            // JDK7: Path class and walking the filetree.
-            Path startingDir = FileSystems.getDefault().getPath(location.getFilepath());
-            PhotographVisitor pf = new PhotographVisitor();
-            Files.walkFileTree(startingDir, pf);
-            List<Path> result = pf.getFileList();
-
-            int i = 0;
-            for (Path path : result)
-            {                //do stuff with path
-            }
-
-        } catch (ConstraintViolationException e)
-        {
-            for (ConstraintViolation<?> violation : e.getConstraintViolations())
-            {
-                errorMessage = violation.toString();
-            }
-        }
-        logger.log(Level.FINE, "errorMessage {0}", errorMessage);
+        operator.start("AddPhotographs", jobParameters);
+//
+//        String errorMessage = null;
+//        try
+//        {
+//            // JDK7: Path class and walking the filetree.
+//            Path startingDir = FileSystems.getDefault().getPath(location.getFilepath());
+//            PhotographVisitor pf = new PhotographVisitor();
+//            Files.walkFileTree(startingDir, pf);
+//            List<Path> result = pf.getFileList();
+//
+//            int i = 0;
+//            for (Path path : result)
+//            {                //do stuff with path
+//            }
+//
+//        } catch (ConstraintViolationException e)
+//        {
+//            for (ConstraintViolation<?> violation : e.getConstraintViolations())
+//            {
+//                errorMessage = violation.toString();
+//            }
+//        }
+//        logger.log(Level.FINE, "errorMessage {0}", errorMessage);
         logger.exiting(this.getClass().getName(), "checkDirectory=");
     }
 

@@ -16,7 +16,7 @@
  */
 /**
  * <p>
- * Provides the batch artifacts for the job VerifyPhotographs.</p>
+ * Provides the batch artifacts for the job verifyPhotographs.</p>
  * <p>
  * <img src="../../../images/package-info-verify.png"/></p>
  * <p>
@@ -29,13 +29,13 @@
  *
  * @startuml package-info-verify.png
  * participant JavaBatch
- * participant VerifyPhotographListener
+ * participant verifyPhotographListener
  * participant verifyPhotographReader
  * participant verifyPhotographWriter
  * participant verifyPhotographProcessor
  *
- * JavaBatch -> VerifyPhotographListener: beforeJob
- * JavaBatch -> VerifyPhotographListener: beforeStep
+ * JavaBatch -> verifyPhotographListener: beforeJob
+ * JavaBatch -> verifyPhotographListener: beforeStep
  * JavaBatch -> verifyPhotographReader: open
  * JavaBatch -> verifyPhotographWriter: open
  * JavaBatch -> verifyPhotographReader: readItem
@@ -55,8 +55,8 @@
  * JavaBatch -> verifyPhotographWriter: ...
  * JavaBatch -> verifyPhotographReader: close
  * JavaBatch -> verifyPhotographWriter: close
- * JavaBatch -> VerifyPhotographListener: afterStep
- * JavaBatch -> VerifyPhotographListener: afterJob
+ * JavaBatch -> verifyPhotographListener: afterStep
+ * JavaBatch -> verifyPhotographListener: afterJob
  *
  * @enduml
  *
