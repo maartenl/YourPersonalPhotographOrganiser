@@ -16,9 +16,13 @@
  */
 package gallery.jobs.verify;
 
-import java.io.Serializable;
+import gallery.beans.LogBean;
+import gallery.database.entities.Photograph;
 import java.util.List;
-import javax.batch.api.chunk.ItemWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.batch.api.chunk.AbstractItemWriter;
+import javax.ejb.EJB;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
 
@@ -28,42 +32,28 @@ import javax.inject.Named;
  */
 @Named("verifyPhotographWriter")
 @ApplicationScoped
-public class Writer implements ItemWriter
+public class Writer extends AbstractItemWriter
 {
 
-    @Override
-    public void open(Serializable checkpoint) throws Exception
-    {
-        if (checkpoint == null)
-        {
-            System.out.println("verifyPhotographWriter open start");
-        } else
-        {
-            System.out.println("verifyPhotographWriter open restart");
-        }
-    }
+    private static final Logger logger = Logger.getLogger(Writer.class.getName());
 
-    @Override
-    public void close() throws Exception
-    {
-        System.out.println("verifyPhotographWriter close");
-    }
+    @EJB
+    private LogBean logBean;
 
     @Override
     public void writeItems(List<Object> items) throws Exception
     {
-        System.out.println("verifyPhotographWriter writeItems " + items);
+        logger.entering(this.getClass().getName(), "verifyPhotographWriter writeItems {0}", items);
         for (Object i : items)
         {
-            System.out.println("verifyPhotographWriter writeItems " + i);
+            Photograph photograph = (Photograph) i;
+            logBean.createLog("verifyPhotograph", "Photograph " + photograph.getId() + ": File " + photograph.getFullPath() + " is okay.", null);
+            logger.log(Level.FINEST, "Photograph {0}: File {1} is okay.", new Object[]
+            {
+                photograph.getId(), photograph.getFullPath()
+            });
         }
-    }
-
-    @Override
-    public Serializable checkpointInfo() throws Exception
-    {
-        System.out.println("verifyPhotographWriter checkpointInfo ");
-        return null;
+        logger.exiting(this.getClass().getName(), "verifyPhotographWriter writeItems");
     }
 
 }

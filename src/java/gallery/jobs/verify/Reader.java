@@ -16,10 +16,26 @@
  */
 package gallery.jobs.verify;
 
+import gallery.beans.LocationBean;
+import gallery.database.entities.Location;
+import gallery.database.entities.Photograph;
 import java.io.Serializable;
-import javax.batch.api.chunk.ItemReader;
+import java.util.List;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.batch.api.chunk.AbstractItemReader;
+import javax.batch.operations.JobSecurityException;
+import javax.batch.operations.NoSuchJobExecutionException;
+import javax.batch.runtime.BatchRuntime;
+import javax.batch.runtime.context.JobContext;
+import javax.ejb.EJB;
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -27,49 +43,88 @@ import javax.inject.Named;
  */
 @Named("verifyPhotographReader")
 @ApplicationScoped
-public class Reader implements ItemReader
+public class Reader extends AbstractItemReader
 {
 
-    private String[] stuff;
+    private static final Logger logger = Logger.getLogger(Reader.class.getName());
+
+    /**
+     * Identification numbers of the photographs to check.
+     */
+    private List<Photograph> ids;
 
     private int index = 0;
 
-    private String checkpoint = null;
+    @EJB
+    private LocationBean locationBean;
+
+    @Inject
+    private JobContext jobContext;
+
+    @PersistenceContext(unitName = "YourPersonalPhotographOrganiserPU")
+    private EntityManager em;
+
+    private Location getLocation() throws JobSecurityException, NumberFormatException, RuntimeException, NoSuchJobExecutionException
+    {
+        Properties jobParameters = BatchRuntime.getJobOperator().getParameters(jobContext.getExecutionId());
+        Long locationId = Long.parseLong((String) jobParameters.get("location"));
+        if (locationId == null)
+        {
+            throw new RuntimeException("Location id not provided..");
+        }
+        logger.log(Level.FINEST, "location id={0}", locationId);
+        Location location = locationBean.find(locationId);
+        if (location == null)
+        {
+            throw new RuntimeException("Location with id " + locationId + " not found.");
+        }
+        logger.log(Level.FINEST, "location={0}", location.getFilepath());
+        return location;
+    }
 
     @Override
     public void open(Serializable checkpoint) throws Exception
     {
+        logger.entering(this.getClass().getName(), "open");
         if (checkpoint == null)
         {
-            System.out.println("verifyPhotographReader open start");
+            logger.finest("verifyPhotographReader open start");
         } else
         {
-            System.out.println("verifyPhotographReader open restart");
+            logger.finest("verifyPhotographReader open restart");
         }
-        stuff = new String[]
-        {
-            "Maarten", "Jasper", "Jeanne", "Rini", "Frank", "Francien", "Erik", "Marieke", "Freek", "Ralf", null
-        };
+        Location location = getLocation();
+
+        // check if photo already exists in database
+        Query query = em.createNamedQuery("Photograph.getPhotographsByLocation");
+        query.setParameter("location", location);
+        List<Photograph> list = query.getResultList();
+        ids = list;
     }
 
     @Override
     public void close() throws Exception
     {
-        System.out.println("verifyPhotographReader close");
+        logger.finest("verifyPhotographReader close");
     }
 
     @Override
     public Object readItem() throws Exception
     {
-        System.out.println("verifyPhotographReader readItem");
-        checkpoint = stuff[index++];
-        return checkpoint;
-    }
-
-    @Override
-    public Serializable checkpointInfo() throws Exception
-    {
-        return checkpoint;
+        logger.entering(this.getClass().getName(), "readItem");
+        if (ids == null || ids.isEmpty())
+        {
+            throw new RuntimeException("No photographs found.");
+        }
+        if (index >= ids.size())
+        {
+            return null;
+        }
+        if (index < 0)
+        {
+            throw new RuntimeException("Negative index.");
+        }
+        return ids.get(index++);
     }
 
 }

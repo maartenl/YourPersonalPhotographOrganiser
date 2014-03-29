@@ -18,7 +18,6 @@ package gallery.database.entities;
 
 import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.MetadataException;
-import gallery.beans.PhotographBean;
 import gallery.enums.ImageAngle;
 import gallery.images.ImageOperations;
 import java.io.File;
@@ -49,22 +48,24 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * An entity representing the file containing the image.
+ *
  * @author maartenl
  */
 @Entity
 @Table(name = "Photograph")
 @XmlRootElement
 @NamedQueries(
-{
-    @NamedQuery(name = "Photograph.findAll", query = "SELECT p FROM Photograph p"),
-    @NamedQuery(name = "Photograph.findByFilename", query = "SELECT p FROM Photograph p WHERE p.filename = :filename and p.relativepath = :relativepath"),
-    @NamedQuery(name = "Photograph.findByStats", query = "SELECT p FROM Photograph p WHERE p.hashstring = :hashstring and p.filesize = :filesize"),
-    @NamedQuery(name = "Photograph.findByLocation", query = "SELECT p FROM Photograph p "
-    + "WHERE concat(p.location.filepath, '/', p.relativepath, '/', p.filename) like :mask "
-    + "AND not exists (select gp from GalleryPhotograph gp where gp.gallery = :gallery and gp.photograph = p) "
-    + "order by p.taken, p.filename"),
-    @NamedQuery(name = "Photograph.findUnused", query = "SELECT p FROM Photograph p WHERE not exists (select gp from GalleryPhotograph gp where gp.photograph = p)")
-})
+        {
+            @NamedQuery(name = "Photograph.findAll", query = "SELECT p FROM Photograph p"),
+            @NamedQuery(name = "Photograph.findByFilename", query = "SELECT p FROM Photograph p WHERE p.filename = :filename and p.relativepath = :relativepath"),
+            @NamedQuery(name = "Photograph.findByStats", query = "SELECT p FROM Photograph p WHERE p.hashstring = :hashstring and p.filesize = :filesize"),
+            @NamedQuery(name = "Photograph.findByLocation", query = "SELECT p FROM Photograph p "
+                    + "WHERE concat(p.location.filepath, '/', p.relativepath, '/', p.filename) like :mask "
+                    + "AND not exists (select gp from GalleryPhotograph gp where gp.gallery = :gallery and gp.photograph = p) "
+                    + "order by p.taken, p.filename"),
+            @NamedQuery(name = "Photograph.findUnused", query = "SELECT p FROM Photograph p WHERE not exists (select gp from GalleryPhotograph gp where gp.photograph = p)"),
+            @NamedQuery(name = "Photograph.getPhotographsByLocation", query = "SELECT p FROM Photograph p WHERE p.location = :location")
+        })
 public class Photograph implements Serializable
 {
 
@@ -116,6 +117,7 @@ public class Photograph implements Serializable
 
     /**
      * Identification/Primary Key for Photographs.
+     *
      * @return
      */
     public Long getId()
@@ -125,6 +127,7 @@ public class Photograph implements Serializable
 
     /**
      * Sets the id of this Photograph.
+     *
      * @param id new primary key/unique number of this photograph
      */
     public void setId(Long id)
@@ -134,6 +137,7 @@ public class Photograph implements Serializable
 
     /**
      * The filename and extension of the photograph.
+     *
      * @return String containing the filename, for example "DSCN0034.JPG".
      */
     public String getFilename()
@@ -143,6 +147,7 @@ public class Photograph implements Serializable
 
     /**
      * Sets the appropriate filename of the picture.
+     *
      * @param filename String containing the filename without a path.
      */
     public void setFilename(String filename)
@@ -152,6 +157,7 @@ public class Photograph implements Serializable
 
     /**
      * The path to the filename, a relative path based from the Location
+     *
      * @see #getLocation()
      * @return String with the relative path, for example "vacation/2010".
      */
@@ -162,6 +168,7 @@ public class Photograph implements Serializable
 
     /**
      * Sets the relative path.
+     *
      * @param relativepath String, for example "vacation/2010"
      */
     public void setRelativepath(String relativepath)
@@ -174,6 +181,7 @@ public class Photograph implements Serializable
      * from the information contained in the picture and is usually stored
      * by the device that took the picture. Does not automatically retrieve
      * this from the picture. This is done when the picture is imported.
+     *
      * @return the Date, or null if not set.
      */
     public Date getTaken()
@@ -183,6 +191,7 @@ public class Photograph implements Serializable
 
     /**
      * Sets the date at which the picture was taken.
+     *
      * @param taken the new date when the picture was taken.
      */
     public void setTaken(Date taken)
@@ -192,6 +201,7 @@ public class Photograph implements Serializable
 
     /**
      * Indicates in what location the picture resides (amongst other pictures).
+     *
      * @return Location of the picture, contains an absolute path.
      */
     public Location getLocation()
@@ -201,6 +211,7 @@ public class Photograph implements Serializable
 
     /**
      * Sets the location.
+     *
      * @param location the new location of this photograph.
      */
     public void setLocation(Location location)
@@ -210,6 +221,7 @@ public class Photograph implements Serializable
 
     /**
      * Returns the tags associated with this picture.
+     *
      * @return a collection of tags.
      */
     @XmlTransient
@@ -220,7 +232,9 @@ public class Photograph implements Serializable
 
     /**
      * Provides a full absolute file path to this file.
-     * @return an absolute path to the file, for example "/home/mrbear/gallery/vacation/2012/DSCN00244.JPG".
+     *
+     * @return an absolute path to the file, for example
+     * "/home/mrbear/gallery/vacation/2012/DSCN00244.JPG".
      */
     @XmlTransient
     public String getFullPath()
@@ -230,6 +244,7 @@ public class Photograph implements Serializable
 
     /**
      * Sets the tags collection.
+     *
      * @param tagCollection a new tags collection.
      */
     public void setTagCollection(Collection<Tag> tagCollection)
@@ -239,6 +254,7 @@ public class Photograph implements Serializable
 
     /**
      * Returns the size of the file in bytes.
+     *
      * @return Long containing the filesize in bytes.
      */
     public Long getFilesize()
@@ -247,8 +263,10 @@ public class Photograph implements Serializable
     }
 
     /**
-     * Sets the filesize of the file in bytes. Only really used when creating a new
+     * Sets the filesize of the file in bytes. Only really used when creating a
+     * new
      * photograph.
+     *
      * @param filesize a new filesize.
      */
     public void setFilesize(Long filesize)
@@ -257,9 +275,12 @@ public class Photograph implements Serializable
     }
 
     /**
-     * Returns a hash string representing the file. This makes it easier to compare this file
-     * to other files, without having to do a byte-wise compare of file contents. Slight risk
+     * Returns a hash string representing the file. This makes it easier to
+     * compare this file
+     * to other files, without having to do a byte-wise compare of file
+     * contents. Slight risk
      * of double hashes, but we don't mind.
+     *
      * @return String containing a hash.
      */
     public String getHashstring()
@@ -269,6 +290,7 @@ public class Photograph implements Serializable
 
     /**
      * Sets the hashstring.
+     *
      * @param hashstring the new hash string.
      */
     public void setHashstring(String hashstring)
@@ -278,6 +300,7 @@ public class Photograph implements Serializable
 
     /**
      * Indicates if an angle has been stored in the entity.
+     *
      * @return true if no angle is stored.
      */
     public boolean hasNoAngle()
@@ -286,10 +309,13 @@ public class Photograph implements Serializable
     }
 
     /**
-     * Indicates the angle at which the picture was taken. This is, if possible, stored
+     * Indicates the angle at which the picture was taken. This is, if possible,
+     * stored
      * in the information contained in the picture and is usually stored
-     * by the device that took the picture. If not set for this picture, will attempt
+     * by the device that took the picture. If not set for this picture, will
+     * attempt
      * to retrieve it from the metadata.
+     *
      * @return an ImageAngle or null if unable to determine.
      */
     public ImageAngle getAngle() throws ImageProcessingException, IOException, MetadataException
@@ -312,6 +338,7 @@ public class Photograph implements Serializable
 
     /**
      * Sets the angle of the photograph.
+     *
      * @param angle the new angle, may be null.
      */
     public void setAngle(ImageAngle angle)

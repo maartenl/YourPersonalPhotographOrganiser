@@ -17,53 +17,10 @@
 /**
  * <p>
  * Provides the batch artifacts for the job verifyPhotographs.</p>
- * <p>
  * <img src="../../../images/package-info-verify.png"/></p>
- * <p>
- * In the picture above, it shows that the item-count is set to three, even
- * though
- * in the code it is 1. It serves as a good example of the behaviour,
- * better then when item-count of 1 would be diagrammed.</p>
- * <p>
- * <img src="../../../images/package-info-hierarchy.png"/></p>
+ *
  *
  * @startuml package-info-verify.png
- * participant JavaBatch
- * participant verifyPhotographListener
- * participant verifyPhotographReader
- * participant verifyPhotographWriter
- * participant verifyPhotographProcessor
- * participant Transaction
- *
- * JavaBatch -> verifyPhotographListener: beforeJob
- * JavaBatch -> verifyPhotographListener: beforeStep
- * JavaBatch -> verifyPhotographReader: open
- * JavaBatch -> verifyPhotographWriter: open
- * JavaBatch -> Transaction: begin
- * JavaBatch -> verifyPhotographReader: readItem
- * JavaBatch <-- verifyPhotographReader: item
- * JavaBatch -> verifyPhotographProcessor: processItem(item)
- * JavaBatch <- verifyPhotographProcessor: processed item
- * JavaBatch -> verifyPhotographReader: readItem
- * JavaBatch <-- verifyPhotographReader: item
- * JavaBatch -> verifyPhotographProcessor: processItem(item)
- * JavaBatch <-- verifyPhotographProcessor: processed item
- * JavaBatch -> verifyPhotographReader: readItem
- * JavaBatch <-- verifyPhotographReader: item
- * JavaBatch -> verifyPhotographProcessor: processItem(item)
- * JavaBatch <-- verifyPhotographProcessor: processed item
- * JavaBatch -> verifyPhotographWriter: writeItems(processed items)
- * JavaBatch -> Transaction: commit
- * JavaBatch -> verifyPhotographWriter: checkpointInfo
- * JavaBatch -> verifyPhotographWriter: ...
- * JavaBatch -> verifyPhotographReader: close
- * JavaBatch -> verifyPhotographWriter: close
- * JavaBatch -> verifyPhotographListener: afterStep
- * JavaBatch -> verifyPhotographListener: afterJob
- *
- * @enduml
- *
- * @startuml package-info-hierarchy.png
  * interface javax.batch.api.listener.JobListener
  * interface javax.batch.api.listener.StepListener
  * interface javax.batch.api.chunk.ItemProcessor

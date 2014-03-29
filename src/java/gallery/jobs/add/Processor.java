@@ -27,6 +27,8 @@ import gallery.images.ImageOperations;
 import gallery.servlets.FileOperations;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.security.NoSuchAlgorithmException;
@@ -49,7 +51,30 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 /**
+ * <p>
+ * Processes a new photograph, by retrieving its data and adding
+ * it to the database.</p><p>
+ * <img src="../../../images/Processor-add.png"/></p>
+ * @startuml Processor-add.png
+ * (*) --> "Initialisation"
  *
+ * if "check Photograph" then
+ * -->[not exists] "computeHash"
+ * if "check Hash" then
+ * -left-> [exists] "log: another\nPhotograph already\nhas that hash"
+ * --> (*)
+ * else
+ * -->[not exists] "getDateTime"
+ * --> getAngle
+ * -->store Photo
+ * --> (*)
+ * endif
+ * else
+ * ->[already exists] "log: Photograph\nalready in\ndatabase"
+ * --> (*)
+ * endif
+ *
+ * @enduml
  * @author maartenl
  */
 @Named("addPhotographProcessor")
@@ -107,7 +132,15 @@ public class Processor implements ItemProcessor
 
         } catch (ImageProcessingException | MetadataException | IOException | NoSuchAlgorithmException e)
         {
-            logBean.createLog("Unable to add photograph " + item + " to location " + location.getId() + ", exception " + e.getClass().getName() + " caught.", e.getMessage());
+            StringWriter stackTrace = new StringWriter();
+            PrintWriter printWriter = new PrintWriter(stackTrace);
+            e.printStackTrace(printWriter);
+            logBean.createLog("addPhotograph", "Unable to add photograph "
+                    + item
+                    + " to location "
+                    + location.getId()
+                    + ", exception " + e.getClass().getName() + " caught.",
+                    stackTrace.toString());
         }
         return null;
     }
@@ -144,6 +177,7 @@ public class Processor implements ItemProcessor
         if (list != null && !list.isEmpty())
         {
             logger.log(Level.FINE, "{0} already exists.", path.toString());
+            logBean.createLog("addPhotograph", "Photograph " + path + " already exists.", null);
             return null;
         }
         // check if hash and filesize already exist in database
@@ -159,6 +193,7 @@ public class Processor implements ItemProcessor
             Photograph alreadyPhoto = (Photograph) list.get(0);
             String result = "File with filename " + relativePath.toString() + ":" + filename.toString() + " with hash " + computeHash + " already exists with id " + alreadyPhoto.getId() + ".";
             logger.fine(result);
+            logBean.createLog("addPhotograph", result, null);
             return null;
         }
         // JDK7: lots of nio.Path calls
@@ -188,6 +223,7 @@ public class Processor implements ItemProcessor
                     photo.getFilename(), photo.getFilesize(), photo.getHashstring(), taken
                 });
             }
+            logBean.createLog("addPhotograph", "Cannot determine date/time of photograph " + path, null);
 
         } else
         {

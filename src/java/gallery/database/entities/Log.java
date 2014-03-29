@@ -16,10 +16,7 @@
  */
 package gallery.database.entities;
 
-import gallery.admin.util.GalleryException;
 import java.io.Serializable;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -38,7 +35,8 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Location where a number of files, which are pictures, reside.
+ * For storing log messages. In our case these are mostly concerned with the
+ * logging of Batch operations.
  *
  * @author maartenl
  */
@@ -60,6 +58,9 @@ public class Log implements Serializable
     @Column(name = "id")
     private Long id;
     @Size(max = 512)
+    @Column(name = "source")
+    private String source;
+    @Size(max = 512)
     @Column(name = "message")
     private String message;
     @Basic(optional = false)
@@ -71,6 +72,14 @@ public class Log implements Serializable
     @Size(max = 65535)
     @Column(name = "description")
     private String description;
+
+    public Log(String source, String message, String description)
+    {
+        this.creationDate = new Date();
+        this.source = source;
+        this.message = message;
+        this.description = description;
+    }
 
     public Log()
     {
@@ -159,6 +168,16 @@ public class Log implements Serializable
     public void setDescription(String description)
     {
         this.description = description;
+    }
+
+    public String getSource()
+    {
+        return source;
+    }
+
+    public void setSource(String source)
+    {
+        this.source = source;
     }
 
 }

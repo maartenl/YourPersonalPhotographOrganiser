@@ -16,6 +16,7 @@
  */
 package gallery.jobs.verify;
 
+import java.util.logging.Logger;
 import javax.batch.api.listener.JobListener;
 import javax.batch.api.listener.StepListener;
 import javax.enterprise.context.ApplicationScoped;
@@ -30,28 +31,30 @@ import javax.inject.Named;
 public class Listener implements JobListener, StepListener
 {
 
+    private static final Logger logger = Logger.getLogger(Listener.class.getName());
+
     @Override
     public void beforeJob() throws Exception
     {
-        System.out.println("VerifyPhotographListener beforeJob");
+        logger.entering(this.getClass().getName(), "verifyPhotographListener beforeJob");
     }
 
     @Override
     public void afterJob() throws Exception
     {
-        System.out.println("VerifyPhotographListener afterJob");
+        logger.entering(this.getClass().getName(), "verifyPhotographListener afterJob");
     }
 
     @Override
     public void beforeStep() throws Exception
     {
-        System.out.println("VerifyPhotographListener beforeStep");
+        logger.entering(this.getClass().getName(), "verifyPhotographListener beforeStep");
     }
 
     @Override
     public void afterStep() throws Exception
     {
-        System.out.println("VerifyPhotographListener afterStep");
+        logger.entering(this.getClass().getName(), "verifyPhotographListener afterStep");
     }
 
 }

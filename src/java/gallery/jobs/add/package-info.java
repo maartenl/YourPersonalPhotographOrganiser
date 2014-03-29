@@ -19,51 +19,8 @@
  * Provides the batch artifacts for the job addPhotographs.</p>
  * <p>
  * <img src="../../../images/package-info-add.png"/></p>
- * <p>
- * In the picture above, it shows that the item-count is set to three, even
- * though
- * in the code it is 1. It serves as a good example of the behaviour,
- * better then when item-count of 1 would be diagrammed.</p>
- * <p>
- * <img src="../../../images/package-info-add-hierarchy.png"/></p>
  *
  * @startuml package-info-add.png
- * participant JavaBatch
- * participant addPhotographListener
- * participant addPhotographReader
- * participant addPhotographWriter
- * participant addPhotographProcessor
- * participant Transaction
- *
- * JavaBatch -> addPhotographListener: beforeJob
- * JavaBatch -> addPhotographListener: beforeStep
- * JavaBatch -> addPhotographReader: open
- * JavaBatch -> addPhotographWriter: open
- * JavaBatch -> Transaction: begin
- * JavaBatch -> addPhotographReader: readItem
- * JavaBatch <-- addPhotographReader: item
- * JavaBatch -> addPhotographProcessor: processItem(item)
- * JavaBatch <- addPhotographProcessor: processed item
- * JavaBatch -> addPhotographReader: readItem
- * JavaBatch <-- addPhotographReader: item
- * JavaBatch -> addPhotographProcessor: processItem(item)
- * JavaBatch <-- addPhotographProcessor: processed item
- * JavaBatch -> addPhotographReader: readItem
- * JavaBatch <-- addPhotographReader: item
- * JavaBatch -> addPhotographProcessor: processItem(item)
- * JavaBatch <-- addPhotographProcessor: processed item
- * JavaBatch -> addPhotographWriter: writeItems(processed items)
- * JavaBatch -> Transaction: commit
- * JavaBatch -> addPhotographWriter: checkpointInfo
- * JavaBatch -> addPhotographWriter: ...
- * JavaBatch -> addPhotographReader: close
- * JavaBatch -> addPhotographWriter: close
- * JavaBatch -> addPhotographListener: afterStep
- * JavaBatch -> addPhotographListener: afterJob
- *
- * @enduml
- *
- * @startuml package-info-add-hierarchy.png
  * interface javax.batch.api.listener.JobListener
  * interface javax.batch.api.listener.StepListener
  * interface javax.batch.api.chunk.ItemProcessor

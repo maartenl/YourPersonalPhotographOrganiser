@@ -14,10 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 /**
- * <p>Provides the database Entities used by an ORM, in our case, Hibernate.</p>
- * <p><img src="../../../images/package-info.png"/></p>
+ * <p>
+ * Provides the database Entities used by an ORM.</p>
+ * <p>
+ * <img src="../../../images/package-info.png"/></p>
  *
  * @startuml
  * Gallery "1" *-- "many" GalleryPhotograph : contains
@@ -27,52 +28,53 @@
  * GalleryPhotograph "1" *-- "many" Comment : contains
  * Photograph "1" *-- "many" Tag : contains
  * class Gallery {
- *    -BigInteger id
- *    -String name
- *    -String description
- *    -Date creation_date
- *    -BigInteger parent_id
- *    -BigInteger highlight
- *    -int sortorder
+ * -BigInteger id
+ * -String name
+ * -String description
+ * -Date creation_date
+ * -BigInteger parent_id
+ * -BigInteger highlight
+ * -int sortorder
  * }
  * class GalleryPhotograph {
- *    -BigInteger id
- *    -String name
- *    -String description
- *    -BigInteger gallery_id
- *    -BigInteger photograph_id
- *    -int sortorder
+ * -BigInteger id
+ * -String name
+ * -String description
+ * -BigInteger gallery_id
+ * -BigInteger photograph_id
+ * -int sortorder
  * }
  * class Location {
- *    -BigInteger id
- *    -String filepath
+ * -BigInteger id
+ * -String filepath
  * }
  * class Comment {
- *    -BigInteger id
- *    -BigInteger galleryphotograph_id
- *    -String author
- *    -Date submitted
- *    -String comment
+ * -BigInteger id
+ * -BigInteger galleryphotograph_id
+ * -String author
+ * -Date submitted
+ * -String comment
  * }
  * class Tag {
- *    -String tagname
- *    -BigInteger photograph_id
+ * -String tagname
+ * -BigInteger photograph_id
  * }
  * class Photograph {
- *    -BigInteger id
- *    -BigInteger location_id
- *    -String filename
- *    -String relativepath
- *    -Date taken
- *    -String hashstring
- *    -BigInteger filesize
- *    -int angle
+ * -BigInteger id
+ * -BigInteger location_id
+ * -String filename
+ * -String relativepath
+ * -Date taken
+ * -String hashstring
+ * -BigInteger filesize
+ * -int angle
  * }
  * class Log {
- *    -BigInteger id
- *    -Timestamp creation_date
- *    -String message
- *    -Lob description
+ * -BigInteger id
+ * -Timestamp creation_date
+ * -String source
+ * -String message
+ * -Lob description
  * }
  * @enduml
  */
