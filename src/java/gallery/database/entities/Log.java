@@ -21,6 +21,8 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -51,6 +53,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Log implements Serializable
 {
 
+    public enum LogLevel
+    {
+
+        INFO, WARNING, ERROR
+    }
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -72,13 +80,17 @@ public class Log implements Serializable
     @Size(max = 65535)
     @Column(name = "description")
     private String description;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "loglevel", nullable = false, updatable = false)
+    private LogLevel logLevel;
 
-    public Log(String source, String message, String description)
+    public Log(String source, String message, String description, LogLevel logLevel)
     {
         this.creationDate = new Date();
         this.source = source;
         this.message = message;
         this.description = description;
+        this.logLevel = logLevel;
     }
 
     public Log()
@@ -180,4 +192,19 @@ public class Log implements Serializable
         this.source = source;
     }
 
+    /**
+     * @return the logLevel
+     */
+    public LogLevel getLogLevel()
+    {
+        return logLevel;
+    }
+
+    /**
+     * @param logLevel the logLevel to set
+     */
+    public void setLogLevel(LogLevel logLevel)
+    {
+        this.logLevel = logLevel;
+    }
 }

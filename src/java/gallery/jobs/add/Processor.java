@@ -21,6 +21,7 @@ import com.drew.metadata.MetadataException;
 import gallery.beans.LocationBean;
 import gallery.beans.LogBean;
 import gallery.database.entities.Location;
+import gallery.database.entities.Log.LogLevel;
 import gallery.database.entities.Photograph;
 import gallery.enums.ImageAngle;
 import gallery.images.ImageOperations;
@@ -140,7 +141,7 @@ public class Processor implements ItemProcessor
                     + " to location "
                     + location.getId()
                     + ", exception " + e.getClass().getName() + " caught.",
-                    stackTrace.toString());
+                    stackTrace.toString(), LogLevel.ERROR);
         }
         return null;
     }
@@ -177,7 +178,7 @@ public class Processor implements ItemProcessor
         if (list != null && !list.isEmpty())
         {
             logger.log(Level.FINE, "{0} already exists.", path.toString());
-            logBean.createLog("addPhotograph", "Photograph " + path + " already exists.", null);
+            logBean.createLog("addPhotograph", "Photograph " + path + " already exists.", null, LogLevel.WARNING);
             return null;
         }
         // check if hash and filesize already exist in database
@@ -193,7 +194,7 @@ public class Processor implements ItemProcessor
             Photograph alreadyPhoto = (Photograph) list.get(0);
             String result = "File with filename " + relativePath.toString() + ":" + filename.toString() + " with hash " + computeHash + " already exists with id " + alreadyPhoto.getId() + ".";
             logger.fine(result);
-            logBean.createLog("addPhotograph", result, null);
+            logBean.createLog("addPhotograph", result, null, LogLevel.WARNING);
             return null;
         }
         // JDK7: lots of nio.Path calls
@@ -223,7 +224,7 @@ public class Processor implements ItemProcessor
                     photo.getFilename(), photo.getFilesize(), photo.getHashstring(), taken
                 });
             }
-            logBean.createLog("addPhotograph", "Cannot determine date/time of photograph " + path, null);
+            logBean.createLog("addPhotograph", "Cannot determine date/time of photograph " + path, null, LogLevel.WARNING);
 
         } else
         {

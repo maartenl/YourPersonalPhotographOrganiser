@@ -17,6 +17,7 @@
 package gallery.jobs.verify;
 
 import gallery.beans.LogBean;
+import gallery.database.entities.Log.LogLevel;
 import gallery.database.entities.Photograph;
 import java.util.List;
 import java.util.logging.Level;
@@ -47,7 +48,7 @@ public class Writer extends AbstractItemWriter
         for (Object i : items)
         {
             Photograph photograph = (Photograph) i;
-            logBean.createLog("verifyPhotograph", "Photograph " + photograph.getId() + ": File " + photograph.getFullPath() + " is okay.", null);
+            logBean.createLog("verifyPhotograph", "Photograph " + photograph.getId() + ": File " + photograph.getFullPath() + " is okay.", null, LogLevel.INFO);
             logger.log(Level.FINEST, "Photograph {0}: File {1} is okay.", new Object[]
             {
                 photograph.getId(), photograph.getFullPath()

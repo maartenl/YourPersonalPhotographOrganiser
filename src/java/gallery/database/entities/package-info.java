@@ -73,6 +73,7 @@
  * -BigInteger id
  * -Timestamp creation_date
  * -String source
+ * -LogLevel logLevel
  * -String message
  * -Lob description
  * }

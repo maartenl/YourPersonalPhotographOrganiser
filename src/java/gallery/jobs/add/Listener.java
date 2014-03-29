@@ -36,25 +36,25 @@ public class Listener implements JobListener, StepListener
     @Override
     public void beforeJob() throws Exception
     {
-        logger.entering(this.getClass().getName(), "addPhotographListener beforeJob");
+        logger.info("Job Started: addPhotograph");
     }
 
     @Override
     public void afterJob() throws Exception
     {
-        logger.entering(this.getClass().getName(), "addPhotographListener afterJob");
+        logger.info("Job Ended: addPhotograph");
     }
 
     @Override
     public void beforeStep() throws Exception
     {
-        logger.entering(this.getClass().getName(), "addPhotographListener beforeStep");
+        logger.info("Step Started: addPhotograph");
     }
 
     @Override
     public void afterStep() throws Exception
     {
-        logger.entering(this.getClass().getName(), "addPhotographListener afterStep");
+        logger.info("Step Ended: addPhotograph");
     }
 
 }

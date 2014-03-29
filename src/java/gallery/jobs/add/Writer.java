@@ -16,7 +16,9 @@
  */
 package gallery.jobs.add;
 
+import gallery.beans.LogBean;
 import gallery.beans.PhotographBean;
+import gallery.database.entities.Log;
 import gallery.database.entities.Photograph;
 import java.io.Serializable;
 import java.util.List;
@@ -40,6 +42,9 @@ public class Writer extends AbstractItemWriter
 
     @EJB
     private PhotographBean photographBean;
+
+    @EJB
+    private LogBean logBean;
 
     @Override
     public void open(Serializable checkpoint) throws Exception
@@ -68,6 +73,7 @@ public class Writer extends AbstractItemWriter
             logger.log(Level.FINEST, "addPhotographWriter writeItem {0}", i);
             Photograph photograph = (Photograph) i;
             photographBean.create(photograph);
+            logBean.createLog("verifyPhotograph", "Photograph " + photograph.getId() + " with " + photograph.getFullPath() + " created.", null, Log.LogLevel.INFO);
         }
         logger.exiting(this.getClass().getName(), "writeItems");
     }

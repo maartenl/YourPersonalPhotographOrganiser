@@ -17,6 +17,7 @@
 package gallery.jobs.verify;
 
 import gallery.beans.LogBean;
+import gallery.database.entities.Log.LogLevel;
 import gallery.database.entities.Photograph;
 import gallery.servlets.FileOperations;
 import java.nio.file.FileSystems;
@@ -74,19 +75,19 @@ public class Processor implements ItemProcessor
         // verify that the file exists
         if (!path.toFile().exists())
         {
-            logBean.createLog("verifyPhotograph", "Photograph " + photograph.getId() + ": File " + path + " does not exist.", null);
+            logBean.createLog("verifyPhotograph", "Photograph " + photograph.getId() + ": File " + path + " does not exist.", null, LogLevel.WARNING);
             return null;
         }
         // verify if file is a file
         if (!path.toFile().isFile())
         {
-            logBean.createLog("verifyPhotograph", "Photograph " + photograph.getId() + ": File " + path + " is not a file.", null);
+            logBean.createLog("verifyPhotograph", "Photograph " + photograph.getId() + ": File " + path + " is not a file.", null, LogLevel.WARNING);
             return null;
         }
         // verify if file is readable
         if (!path.toFile().canRead())
         {
-            logBean.createLog("verifyPhotograph", "Photograph " + photograph.getId() + ": File " + path + " cannot be read.", null);
+            logBean.createLog("verifyPhotograph", "Photograph " + photograph.getId() + ": File " + path + " cannot be read.", null, LogLevel.WARNING);
             return null;
         }
         // verify the same file fileSize
@@ -94,7 +95,7 @@ public class Processor implements ItemProcessor
         final Long databaseSize = photograph.getFilesize();
         if (!fileSize.equals(databaseSize))
         {
-            logBean.createLog("verifyPhotograph", "Photograph " + photograph.getId() + ": File " + path + " wrong size.", "File has size " + fileSize + ", but we were expecting a size of " + databaseSize);
+            logBean.createLog("verifyPhotograph", "Photograph " + photograph.getId() + ": File " + path + " wrong size.", "File has size " + fileSize + ", but we were expecting a size of " + databaseSize, LogLevel.WARNING);
             return null;
         }
         // verify the hash
@@ -102,7 +103,7 @@ public class Processor implements ItemProcessor
         final String databaseHash = photograph.getHashstring();
         if (!fileHash.equals(databaseHash))
         {
-            logBean.createLog("verifyPhotograph", "Photograph " + photograph.getId() + ": File " + path + " wrong hash.", "File has hash " + fileHash + ", but we were expecting the hash " + databaseHash);
+            logBean.createLog("verifyPhotograph", "Photograph " + photograph.getId() + ": File " + path + " wrong hash.", "File has hash " + fileHash + ", but we were expecting the hash " + databaseHash, LogLevel.WARNING);
             return null;
         }
 

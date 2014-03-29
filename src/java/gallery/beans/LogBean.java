@@ -17,6 +17,7 @@
 package gallery.beans;
 
 import gallery.database.entities.Log;
+import gallery.database.entities.Log.LogLevel;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -45,9 +46,9 @@ public class LogBean extends AbstractBean<Log>
         super(Log.class);
     }
 
-    public void createLog(String source, String message, String description)
+    public void createLog(String source, String message, String description, LogLevel logLevel)
     {
-        Log log = new Log(source, message, description);
+        Log log = new Log(source, message, description, logLevel);
         create(log);
     }
 }
