@@ -16,7 +16,7 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  
 -->
-<job id="VerifyPhotographs" xmlns="http://xmlns.jcp.org/xml/ns/javaee" version="1.0" restartable="true">
+<job id="VerifyPhotographs" xmlns="http://xmlns.jcp.org/xml/ns/javaee" version="1.0" restartable="false">
     <listeners>
         <listener ref="verifyPhotographListener"/>
     </listeners>
