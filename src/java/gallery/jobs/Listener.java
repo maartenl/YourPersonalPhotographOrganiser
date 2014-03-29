@@ -14,47 +14,48 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package gallery.jobs.verify;
+package gallery.jobs;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.batch.api.listener.JobListener;
 import javax.batch.api.listener.StepListener;
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Named;
 
 /**
  *
  * @author maartenl
  */
-@Named("verifyPhotographListener")
 @ApplicationScoped
-public class Listener implements JobListener, StepListener
+public abstract class Listener implements JobListener, StepListener
 {
 
     private static final Logger logger = Logger.getLogger(Listener.class.getName());
 
+    protected abstract String getName();
+
     @Override
     public void beforeJob() throws Exception
     {
-        logger.info("Job Started: verifyPhotograph");
+        logger.log(Level.INFO, "Job Started: {0}", getName());
     }
 
     @Override
     public void afterJob() throws Exception
     {
-        logger.info("Job Ended: verifyPhotograph");
+        logger.log(Level.INFO, "Job Ended: {0}", getName());
     }
 
     @Override
     public void beforeStep() throws Exception
     {
-        logger.info("Step Started: verifyPhotograph");
+        logger.log(Level.INFO, "Step Started: {0}", getName());
     }
 
     @Override
     public void afterStep() throws Exception
     {
-        logger.info("Step Ended: verifyPhotograph");
+        logger.log(Level.INFO, "Step Ended: {0}", getName());
     }
 
 }
