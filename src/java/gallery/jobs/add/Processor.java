@@ -16,9 +16,37 @@
  */
 package gallery.jobs.add;
 
+import com.drew.imaging.ImageProcessingException;
+import com.drew.metadata.MetadataException;
+import gallery.beans.LocationBean;
+import gallery.beans.LogBean;
+import gallery.database.entities.Location;
+import gallery.database.entities.Photograph;
+import gallery.enums.ImageAngle;
+import gallery.images.ImageOperations;
+import gallery.servlets.FileOperations;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
+import java.security.NoSuchAlgorithmException;
+import java.util.Date;
+import java.util.List;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.batch.api.chunk.ItemProcessor;
+import javax.batch.operations.JobSecurityException;
+import javax.batch.operations.NoSuchJobExecutionException;
+import javax.batch.runtime.BatchRuntime;
+import javax.batch.runtime.context.JobContext;
+import javax.ejb.EJB;
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -29,16 +57,148 @@ import javax.inject.Named;
 public class Processor implements ItemProcessor
 {
 
+    private static final Logger logger = Logger.getLogger(Processor.class.getName());
+
+    @EJB
+    private LocationBean locationBean;
+
+    @EJB
+    private LogBean logBean;
+
+    @Inject
+    private JobContext jobContext;
+
+    @PersistenceContext(unitName = "YourPersonalPhotographOrganiserPU")
+    private EntityManager em;
+
+    private Location getLocation() throws JobSecurityException, NumberFormatException, RuntimeException, NoSuchJobExecutionException
+    {
+        Properties jobParameters = BatchRuntime.getJobOperator().getParameters(jobContext.getExecutionId());
+        Long locationId = Long.parseLong((String) jobParameters.get("location"));
+        if (locationId == null)
+        {
+            throw new RuntimeException("Location id not provided..");
+        }
+        logger.log(Level.FINEST, "location id={0}", locationId);
+        Location location = locationBean.find(locationId);
+        if (location == null)
+        {
+            throw new RuntimeException("Location with id " + locationId + " not found.");
+        }
+        logger.log(Level.FINEST, "location={0}", location.getFilepath());
+        return location;
+    }
+
     @Override
     public Object processItem(Object item) throws Exception
     {
-        System.out.println("addPhotographProcessor processItem " + item);
+        logger.entering(this.getClass().getName(), "addPhotographProcessor processItem " + item);
         // return null; > do not process item
         if (item == null)
         {
             return null;
         }
-        return item + " van Leunen";
+        Path path = (Path) item;
+        Location location = getLocation();
+        try
+        {
+            final Photograph photograph = processPhoto(location, path);
+            return photograph;
+
+        } catch (ImageProcessingException | MetadataException | IOException | NoSuchAlgorithmException e)
+        {
+            logBean.createLog("Unable to add photograph " + item + " to location " + location.getId() + ", exception " + e.getClass().getName() + " caught.", e.getMessage());
+        }
+        return null;
     }
 
+    /**
+     * @param location
+     * @param path
+     * @throws NoSuchAlgorithmException if unable to create a hash using the
+     * algorithm.
+     * @throws ImageProcessingException when unable to verify the image.
+     * @throws com.drew.metadata.MetadataException
+     * @return
+     */
+    private Photograph processPhoto(Location location, Path path) throws NoSuchAlgorithmException, IOException, ImageProcessingException, MetadataException
+    {
+        logger.entering(this.getClass().getName(), "processPhoto");
+        if (path == null)
+        {
+            throw new NullPointerException();
+        }
+        logger.log(Level.FINE, "processPhoto {0} {1}", new Object[]
+        {
+            location.getFilepath(), path.toString()
+        });
+        Path filename = path.getFileName();
+        Path locationPath = FileSystems.getDefault().getPath(location.getFilepath());
+        Path relativePath = locationPath.relativize(path).getParent();
+
+        // check if photo already exists in database
+        Query query = em.createNamedQuery("Photograph.findByFilename");
+        query.setParameter("filename", filename.toString());
+        query.setParameter("relativepath", relativePath.toString());
+        List list = query.getResultList();
+        if (list != null && !list.isEmpty())
+        {
+            logger.log(Level.FINE, "{0} already exists.", path.toString());
+            return null;
+        }
+        // check if hash and filesize already exist in database
+        File file = path.toFile();
+        String computeHash = FileOperations.computeHash(file);
+        Long size = file.length();
+        query = em.createNamedQuery("Photograph.findByStats");
+        query.setParameter("hashstring", computeHash);
+        query.setParameter("filesize", size);
+        list = query.getResultList();
+        if (list != null && !list.isEmpty())
+        {
+            Photograph alreadyPhoto = (Photograph) list.get(0);
+            String result = "File with filename " + relativePath.toString() + ":" + filename.toString() + " with hash " + computeHash + " already exists with id " + alreadyPhoto.getId() + ".";
+            logger.fine(result);
+            return null;
+        }
+        // JDK7: lots of nio.Path calls
+        Date taken = null;
+        ImageAngle angle = null;
+
+        if (ImageOperations.isImage(path))
+        {
+            taken = ImageOperations.getDateTimeTaken(file);
+            angle = ImageOperations.getAngle(file);
+        }
+        Photograph photo = new Photograph();
+        photo.setFilesize(size);
+        photo.setHashstring(computeHash);
+        photo.setLocation(location);
+        photo.setTaken(taken);
+        photo.setFilename(filename.toString());
+        photo.setAngle(angle);
+        photo.setRelativepath(relativePath.toString());
+        if (taken != null && taken.before(new Date(0l)))
+        {
+            photo.setTaken(null);
+            if (logger.isLoggable(Level.FINE))
+            {
+                logger.log(Level.FINE, "processPhoto cannot determine date/time! {0} {1} {2} {3}", new Object[]
+                {
+                    photo.getFilename(), photo.getFilesize(), photo.getHashstring(), taken
+                });
+            }
+
+        } else
+        {
+            if (logger.isLoggable(Level.FINE))
+            {
+                logger.log(Level.FINE, "processPhoto {0} {1} {2} {3}", new Object[]
+                {
+                    photo.getFilename(), photo.getFilesize(), photo.getHashstring(), photo.getTaken()
+                });
+            }
+        }
+        return photo;
+    }
 }

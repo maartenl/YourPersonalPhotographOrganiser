@@ -16,6 +16,7 @@
  */
 package gallery.jobs.add;
 
+import java.util.logging.Logger;
 import javax.batch.api.listener.JobListener;
 import javax.batch.api.listener.StepListener;
 import javax.enterprise.context.ApplicationScoped;
@@ -30,28 +31,30 @@ import javax.inject.Named;
 public class Listener implements JobListener, StepListener
 {
 
+    private static final Logger logger = Logger.getLogger(Listener.class.getName());
+
     @Override
     public void beforeJob() throws Exception
     {
-        System.out.println("addPhotographListener beforeJob");
+        logger.entering(this.getClass().getName(), "addPhotographListener beforeJob");
     }
 
     @Override
     public void afterJob() throws Exception
     {
-        System.out.println("addPhotographListener afterJob");
+        logger.entering(this.getClass().getName(), "addPhotographListener afterJob");
     }
 
     @Override
     public void beforeStep() throws Exception
     {
-        System.out.println("addPhotographListener beforeStep");
+        logger.entering(this.getClass().getName(), "addPhotographListener beforeStep");
     }
 
     @Override
     public void afterStep() throws Exception
     {
-        System.out.println("addPhotographListener afterStep");
+        logger.entering(this.getClass().getName(), "addPhotographListener afterStep");
     }
 
 }

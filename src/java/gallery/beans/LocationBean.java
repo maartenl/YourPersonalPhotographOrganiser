@@ -146,7 +146,7 @@ public class LocationBean extends AbstractBean<Location>
      * Checks a directory stored in "location" for new photographs or films.
      *
      * @param id a Long representing the id of the Location entity.
-     * @see JobBean#checkDirectory(gallery.database.entities.Location)
+     * @see JobBean#addPhotographs(gallery.database.entities.Location)
      */
     @GET
     @Path("{id}/discover")
@@ -155,7 +155,7 @@ public class LocationBean extends AbstractBean<Location>
         Location location = find(id);
         try
         {
-            jobBean.checkDirectory(location);
+            jobBean.addPhotographs(location);
         } catch (IOException ex)
         {
             Logger.getLogger(LocationBean.class.getName()).log(Level.SEVERE, null, ex);
@@ -200,8 +200,7 @@ public class LocationBean extends AbstractBean<Location>
      * contents of the file. Basically walks the directory tree.
      *
      * @param id a Long representing the id of the Location entity.
-     * @see JobBean#processPhoto(gallery.database.entities.Location,
-     * java.nio.file.Path) checkDirectory(gallery.database.entities.Location)
+     * @see JobBean#addPhotographs(gallery.database.entities.Location)
      */
     public void verify(Long id)
     {

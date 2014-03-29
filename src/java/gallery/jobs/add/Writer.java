@@ -16,9 +16,14 @@
  */
 package gallery.jobs.add;
 
+import gallery.beans.PhotographBean;
+import gallery.database.entities.Photograph;
 import java.io.Serializable;
 import java.util.List;
-import javax.batch.api.chunk.ItemWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.batch.api.chunk.AbstractItemWriter;
+import javax.ejb.EJB;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
 
@@ -28,42 +33,43 @@ import javax.inject.Named;
  */
 @Named("addPhotographWriter")
 @ApplicationScoped
-public class Writer implements ItemWriter
+public class Writer extends AbstractItemWriter
 {
+
+    private static final Logger logger = Logger.getLogger(Processor.class.getName());
+
+    @EJB
+    private PhotographBean photographBean;
 
     @Override
     public void open(Serializable checkpoint) throws Exception
     {
         if (checkpoint == null)
         {
-            System.out.println("addPhotographWriter open start");
+            logger.finest("addPhotographWriter open start");
         } else
         {
-            System.out.println("addPhotographWriter open restart");
+            logger.finest("addPhotographWriter open restart");
         }
     }
 
     @Override
     public void close() throws Exception
     {
-        System.out.println("addPhotographWriter close");
+        logger.finest("addPhotographWriter close");
     }
 
     @Override
     public void writeItems(List<Object> items) throws Exception
     {
-        System.out.println("addPhotographWriter writeItems " + items);
+        logger.entering(this.getClass().getName(), "writeItems " + items);
         for (Object i : items)
         {
-            System.out.println("addPhotographWriter writeItems " + i);
+            logger.log(Level.FINEST, "addPhotographWriter writeItem {0}", i);
+            Photograph photograph = (Photograph) i;
+            photographBean.create(photograph);
         }
-    }
-
-    @Override
-    public Serializable checkpointInfo() throws Exception
-    {
-        System.out.println("addPhotographWriter checkpointInfo ");
-        return null;
+        logger.exiting(this.getClass().getName(), "writeItems");
     }
 
 }

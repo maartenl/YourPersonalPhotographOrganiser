@@ -16,22 +16,12 @@
  */
 package gallery.beans;
 
-import com.drew.imaging.ImageProcessingException;
-import com.drew.metadata.MetadataException;
 import gallery.database.entities.Gallery;
 import gallery.database.entities.GalleryPhotograph;
 import gallery.database.entities.Location;
 import gallery.database.entities.Photograph;
-import gallery.enums.ImageAngle;
-import gallery.images.ImageOperations;
-import gallery.servlets.FileOperations;
-import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
-import java.security.NoSuchAlgorithmException;
-import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -83,38 +73,16 @@ public class JobBean
      * @throws IOException when a problem occurred with accessing the file, or
      * the file system
      */
-    public void checkDirectory(Location location) throws IOException
+    public void addPhotographs(Location location) throws IOException
     {
-        logger.entering(this.getClass().getName(), "checkDirectory");
+        logger.entering(this.getClass().getName(), "addPhotographs");
 
         JobOperator operator = BatchRuntime.getJobOperator();
         Properties jobParameters = new Properties();
         jobParameters.setProperty("location", location.getId() + "");
         operator.start("AddPhotographs", jobParameters);
-//
-//        String errorMessage = null;
-//        try
-//        {
-//            // JDK7: Path class and walking the filetree.
-//            Path startingDir = FileSystems.getDefault().getPath(location.getFilepath());
-//            PhotographVisitor pf = new PhotographVisitor();
-//            Files.walkFileTree(startingDir, pf);
-//            List<Path> result = pf.getFileList();
-//
-//            int i = 0;
-//            for (Path path : result)
-//            {                //do stuff with path
-//            }
-//
-//        } catch (ConstraintViolationException e)
-//        {
-//            for (ConstraintViolation<?> violation : e.getConstraintViolations())
-//            {
-//                errorMessage = violation.toString();
-//            }
-//        }
-//        logger.log(Level.FINE, "errorMessage {0}", errorMessage);
-        logger.exiting(this.getClass().getName(), "checkDirectory=");
+
+        logger.exiting(this.getClass().getName(), "addPhotographs");
     }
 
     /**
@@ -186,94 +154,4 @@ public class JobBean
         logger.exiting(this.getClass().getName(), "verifyPhotographs");
     }
 
-    /**
-     * @param location
-     * @param path
-     * @throws NoSuchAlgorithmException if unable to create a hash using the
-     * algorithm.
-     * @throws ImageProcessingException when unable to verify the image.
-     * @throws com.drew.metadata.MetadataException
-     * @return
-     */
-    private String processPhoto(Location location, Path path) throws NoSuchAlgorithmException, IOException, ImageProcessingException, MetadataException
-    {
-        logger.entering(this.getClass().getName(), "processPhoto");
-        if (path == null)
-        {
-            throw new NullPointerException();
-        }
-        logger.log(Level.FINE, "processPhoto {0} {1}", new Object[]
-        {
-            location.getFilepath(), path.toString()
-        });
-        Path filename = path.getFileName();
-        Path locationPath = FileSystems.getDefault().getPath(location.getFilepath());
-        Path relativePath = locationPath.relativize(path).getParent();
-
-        // check if photo already exists in database
-        Query query = em.createNamedQuery("Photograph.findByFilename");
-        query.setParameter("filename", filename.toString());
-        query.setParameter("relativepath", relativePath.toString());
-        List list = query.getResultList();
-        if (list != null && !list.isEmpty())
-        {
-            logger.log(Level.FINE, "{0} already exists.", path.toString());
-            return null;
-        }
-        // check if hash and filesize already exist in database
-        File file = path.toFile();
-        String computeHash = FileOperations.computeHash(file);
-        Long size = file.length();
-        query = em.createNamedQuery("Photograph.findByStats");
-        query.setParameter("hashstring", computeHash);
-        query.setParameter("filesize", size);
-        list = query.getResultList();
-        if (list != null && !list.isEmpty())
-        {
-            Photograph alreadyPhoto = (Photograph) list.get(0);
-            String result = "File with filename " + relativePath.toString() + ":" + filename.toString() + " with hash " + computeHash + " already exists with id " + alreadyPhoto.getId() + ".";
-            logger.fine(result);
-            return result;
-        }
-        // JDK7: lots of nio.Path calls
-        Date taken = null;
-        ImageAngle angle = null;
-
-        if (ImageOperations.isImage(path))
-        {
-            taken = ImageOperations.getDateTimeTaken(file);
-            angle = ImageOperations.getAngle(file);
-        }
-        Photograph photo = new Photograph();
-        photo.setFilesize(size);
-        photo.setHashstring(computeHash);
-        photo.setLocation(location);
-        photo.setTaken(taken);
-        photo.setFilename(filename.toString());
-        photo.setAngle(angle);
-        photo.setRelativepath(relativePath.toString());
-        if (taken != null && taken.before(new Date(0l)))
-        {
-            photo.setTaken(null);
-            if (logger.isLoggable(Level.FINE))
-            {
-                logger.log(Level.FINE, "processPhoto cannot determine date/time! {0} {1} {2} {3}", new Object[]
-                {
-                    photo.getFilename(), photo.getFilesize(), photo.getHashstring(), taken
-                });
-            }
-
-        } else
-        {
-            if (logger.isLoggable(Level.FINE))
-            {
-                logger.log(Level.FINE, "processPhoto {0} {1} {2} {3}", new Object[]
-                {
-                    photo.getFilename(), photo.getFilesize(), photo.getHashstring(), photo.getTaken()
-                });
-            }
-        }
-        em.persist(photo);
-        return null;
-    }
 }

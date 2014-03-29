@@ -33,11 +33,13 @@
  * participant addPhotographReader
  * participant addPhotographWriter
  * participant addPhotographProcessor
+ * participant Transaction
  *
  * JavaBatch -> addPhotographListener: beforeJob
  * JavaBatch -> addPhotographListener: beforeStep
  * JavaBatch -> addPhotographReader: open
  * JavaBatch -> addPhotographWriter: open
+ * JavaBatch -> Transaction: begin
  * JavaBatch -> addPhotographReader: readItem
  * JavaBatch <-- addPhotographReader: item
  * JavaBatch -> addPhotographProcessor: processItem(item)
@@ -51,6 +53,7 @@
  * JavaBatch -> addPhotographProcessor: processItem(item)
  * JavaBatch <-- addPhotographProcessor: processed item
  * JavaBatch -> addPhotographWriter: writeItems(processed items)
+ * JavaBatch -> Transaction: commit
  * JavaBatch -> addPhotographWriter: checkpointInfo
  * JavaBatch -> addPhotographWriter: ...
  * JavaBatch -> addPhotographReader: close
