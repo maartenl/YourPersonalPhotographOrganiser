@@ -18,9 +18,15 @@ package gallery.beans;
 
 import gallery.database.entities.Log;
 import gallery.database.entities.Log.LogLevel;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.ParameterExpression;
+import javax.persistence.criteria.Root;
 
 /**
  * Log Enterprise Java Bean, maps to a Log Hibernate Entity. Not exposed
@@ -31,6 +37,8 @@ import javax.persistence.PersistenceContext;
 @Stateless
 public class LogBean extends AbstractBean<Log>
 {
+
+    private static final Logger logger = Logger.getLogger(LogBean.class.getName());
 
     @PersistenceContext(unitName = "YourPersonalPhotographOrganiserPU")
     private EntityManager em;
@@ -50,5 +58,30 @@ public class LogBean extends AbstractBean<Log>
     {
         Log log = new Log(source, message, description, logLevel);
         create(log);
+    }
+
+    public List findRange(int[] range, LogLevel logLevel)
+    {
+        logger.log(Level.INFO, "range={0}logLevel={1}", new Object[]
+        {
+            range, logLevel
+        });
+        final CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+
+        javax.persistence.criteria.CriteriaQuery cq = cb.createQuery();
+        final Root<Log> root = cq.from(Log.class);
+        if (logLevel == null)
+        {
+            cq.select(root);
+
+        } else
+        {
+            ParameterExpression<LogLevel> p = cb.parameter(LogLevel.class);
+            cq.select(root).where(cb.equal(root.get("logLevel"), logLevel));
+        }
+        javax.persistence.Query q = getEntityManager().createQuery(cq);
+        q.setMaxResults(range[1] - range[0]);
+        q.setFirstResult(range[0]);
+        return q.getResultList();
     }
 }

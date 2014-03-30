@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ViewLogTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputText value="#{bundle.ViewLogLabel_id}"/>
+                    <h:outputText value="#{logController.selected.id}" title="#{bundle.ViewLogTitle_id}"/>
+                    <h:outputText value="#{bundle.ViewLogLabel_source}"/>
+                    <h:outputText value="#{logController.selected.source}" title="#{bundle.ViewLogTitle_source}"/>
+                    <h:outputText value="#{bundle.ViewLogLabel_creationDate}"/>
+                    <h:outputText value="#{logController.selected.creationDate}" title="#{bundle.ViewLogTitle_creationDate}">
+                        <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                    </h:outputText>
+                    <h:outputText value="#{bundle.ViewLogLabel_logLevel}"/>
+                    <h:outputText value="#{logController.selected.logLevel}" title="#{bundle.ViewLogTitle_logLevel}"/>
+                    <h:outputText value="#{bundle.ViewLogLabel_message}"/>
+                    <h:outputText value="#{logController.selected.message}" title="#{bundle.ViewLogTitle_message}"/>
+                    <h:outputText value="#{bundle.ViewLogLabel_description}"/>
+                    <h:outputText id="description" value="#{logController.selected.description}" title="#{bundle.ViewLogTitle_description}"/>
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{logController.prepareList}" value="#{bundle.ViewLogShowAllLink}"/>
+                <br />
+                <h:link outcome="/admin/index" value="#{bundle.ViewLogIndexLink}"/>
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>
