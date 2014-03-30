@@ -19,7 +19,6 @@ package gallery.beans;
 import gallery.database.entities.Log;
 import gallery.database.entities.Log.LogLevel;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -62,7 +61,7 @@ public class LogBean extends AbstractBean<Log>
 
     public List findRange(int[] range, LogLevel logLevel)
     {
-        logger.log(Level.INFO, "range={0}logLevel={1}", new Object[]
+        logger.entering(this.getClass().getName(), "findRange range={0}, logLevel={1}", new Object[]
         {
             range, logLevel
         });
@@ -83,5 +82,25 @@ public class LogBean extends AbstractBean<Log>
         q.setMaxResults(range[1] - range[0]);
         q.setFirstResult(range[0]);
         return q.getResultList();
+    }
+
+    public int count(LogLevel logLevel)
+    {
+        logger.entering(this.getClass().getName(), "count logLevel={0}", logLevel);
+        final CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+
+        javax.persistence.criteria.CriteriaQuery cq = cb.createQuery();
+        final Root<Log> root = cq.from(Log.class);
+        if (logLevel == null)
+        {
+            cq.select(cb.count(root));
+
+        } else
+        {
+            ParameterExpression<LogLevel> p = cb.parameter(LogLevel.class);
+            cq.select(cb.count(root)).where(cb.equal(root.get("logLevel"), logLevel));
+        }
+        javax.persistence.Query q = getEntityManager().createQuery(cq);
+        return ((Long) q.getSingleResult()).intValue();
     }
 }

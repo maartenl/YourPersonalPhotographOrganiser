@@ -63,7 +63,7 @@ public class LogController implements Serializable
                 @Override
                 public int getItemsCount()
                 {
-                    return getFacade().count();
+                    return getFacade().count(getDisplayLevel());
                 }
 
                 @Override
