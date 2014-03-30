@@ -16,7 +16,7 @@
             <h:form>
                 <h:panelGrid columns="2">
                     <h:outputLabel value="#{bundle.EditPhotographLabel_id}" for="id" />
-                    <h:inputText id="id" value="#{photographController.selected.id}" title="#{bundle.EditPhotographTitle_id}" required="true" requiredMessage="#{bundle.EditPhotographRequiredMessage_id}"/>
+                    <h:outputText id="id" value="#{photographController.selected.id}" title="#{bundle.EditPhotographTitle_id}"/>
                     <h:outputLabel value="#{bundle.EditPhotographLabel_filename}" for="filename" />
                     <h:inputText id="filename" value="#{photographController.selected.filename}" title="#{bundle.EditPhotographTitle_filename}" />
                     <h:outputLabel value="#{bundle.EditPhotographLabel_relativepath}" for="relativepath" />
@@ -32,9 +32,9 @@
                     <h:outputLabel value="#{bundle.EditPhotographLabel_fullPath}" for="fullPath" />
                     <h:inputText id="fullPath" value="#{photographController.selected.fullPath}" title="#{bundle.EditPhotographTitle_fullPath}" />
                     <h:outputLabel value="#{bundle.EditPhotographLabel_filesize}" for="filesize" />
-                    <h:inputText id="filesize" value="#{photographController.selected.filesize}" title="#{bundle.EditPhotographTitle_filesize}" required="true" requiredMessage="#{bundle.EditPhotographRequiredMessage_filesize}"/>
+                    <h:outputText id="filesize" value="#{photographController.selected.filesize}" title="#{bundle.EditPhotographTitle_filesize}"/>
                     <h:outputLabel value="#{bundle.EditPhotographLabel_hashstring}" for="hashstring" />
-                    <h:inputText id="hashstring" value="#{photographController.selected.hashstring}" title="#{bundle.EditPhotographTitle_hashstring}" required="true" requiredMessage="#{bundle.EditPhotographRequiredMessage_hashstring}"/>
+                    <h:outputText id="hashstring" value="#{photographController.selected.hashstring}" title="#{bundle.EditPhotographTitle_hashstring}"/>
                     <h:outputLabel value="#{bundle.EditPhotographLabel_angle}" for="angle" />
                     <h:inputText id="angle" value="#{photographController.selected.angle}" title="#{bundle.EditPhotographTitle_angle}" />
                 </h:panelGrid>

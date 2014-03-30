@@ -15,16 +15,10 @@
             </h:panelGroup>
             <h:form>
                 <h:panelGrid columns="2">
-                    <h:outputLabel value="#{bundle.CreateGalleryLabel_id}" for="id" />
-                    <h:inputText id="id" value="#{galleryController.selected.id}" title="#{bundle.CreateGalleryTitle_id}" required="true" requiredMessage="#{bundle.CreateGalleryRequiredMessage_id}"/>
                     <h:outputLabel value="#{bundle.CreateGalleryLabel_name}" for="name" />
                     <h:inputText id="name" value="#{galleryController.selected.name}" title="#{bundle.CreateGalleryTitle_name}" />
                     <h:outputLabel value="#{bundle.CreateGalleryLabel_description}" for="description" />
                     <h:inputTextarea rows="4" cols="30" id="description" value="#{galleryController.selected.description}" title="#{bundle.CreateGalleryTitle_description}" />
-                    <h:outputLabel value="#{bundle.CreateGalleryLabel_creationDate}" for="creationDate" />
-                    <h:inputText id="creationDate" value="#{galleryController.selected.creationDate}" title="#{bundle.CreateGalleryTitle_creationDate}" required="true" requiredMessage="#{bundle.CreateGalleryRequiredMessage_creationDate}">
-                        <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
-                    </h:inputText>
                     <h:outputLabel value="#{bundle.CreateGalleryLabel_sortorder}" for="sortorder" />
                     <h:inputText id="sortorder" value="#{galleryController.selected.sortorder}" title="#{bundle.CreateGalleryTitle_sortorder}" required="true" requiredMessage="#{bundle.CreateGalleryRequiredMessage_sortorder}"/>
                     <h:outputLabel value="#{bundle.CreateGalleryLabel_highlight}" for="highlight" />

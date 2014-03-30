@@ -16,15 +16,15 @@
             <h:form>
                 <h:panelGrid columns="2">
                     <h:outputLabel value="#{bundle.EditGalleryLabel_id}" for="id" />
-                    <h:inputText id="id" value="#{galleryController.selected.id}" title="#{bundle.EditGalleryTitle_id}" required="true" requiredMessage="#{bundle.EditGalleryRequiredMessage_id}"/>
+                    <h:outputText id="id" value="#{galleryController.selected.id}" title="#{bundle.EditGalleryTitle_id}" />
                     <h:outputLabel value="#{bundle.EditGalleryLabel_name}" for="name" />
                     <h:inputText id="name" value="#{galleryController.selected.name}" title="#{bundle.EditGalleryTitle_name}" />
                     <h:outputLabel value="#{bundle.EditGalleryLabel_description}" for="description" />
                     <h:inputTextarea rows="4" cols="30" id="description" value="#{galleryController.selected.description}" title="#{bundle.EditGalleryTitle_description}" />
                     <h:outputLabel value="#{bundle.EditGalleryLabel_creationDate}" for="creationDate" />
-                    <h:inputText id="creationDate" value="#{galleryController.selected.creationDate}" title="#{bundle.EditGalleryTitle_creationDate}" required="true" requiredMessage="#{bundle.EditGalleryRequiredMessage_creationDate}">
+                    <h:outputText id="creationDate" value="#{galleryController.selected.creationDate}" title="#{bundle.EditGalleryTitle_creationDate}" >
                         <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
-                    </h:inputText>
+                    </h:outputText>
                     <h:outputLabel value="#{bundle.EditGalleryLabel_sortorder}" for="sortorder" />
                     <h:inputText id="sortorder" value="#{galleryController.selected.sortorder}" title="#{bundle.EditGalleryTitle_sortorder}" required="true" requiredMessage="#{bundle.EditGalleryRequiredMessage_sortorder}"/>
                     <h:outputLabel value="#{bundle.EditGalleryLabel_highlight}" for="highlight" />

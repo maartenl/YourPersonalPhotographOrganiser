@@ -13,8 +13,10 @@
             <h:panelGroup id="messagePanel" layout="block">
                 <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
             </h:panelGroup>
-            <h:form>
+            <h:form>                
                 <h:panelGrid columns="2">
+                    <h:outputText value="#{bundle.ViewPhotographLabel_image}"/>
+                    <h:graphicImage url="/#{photographController.imageurl}" title="#{photographController.selected.filename}"></h:graphicImage>
                     <h:outputText value="#{bundle.ViewPhotographLabel_id}"/>
                     <h:outputText value="#{photographController.selected.id}" title="#{bundle.ViewPhotographTitle_id}"/>
                     <h:outputText value="#{bundle.ViewPhotographLabel_filename}"/>

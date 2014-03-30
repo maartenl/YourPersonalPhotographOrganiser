@@ -67,23 +67,23 @@ JEE 7
 USE
 ---
 
-Go to url http://micemouse:8080/YourPersonalPhotographOrganiser/ to get started
+Go to url http://localhost:8080/YourPersonalPhotographOrganiser/ to get started
 Parameters:
 id=id/number of gallery, 0 being the default if nothing is provided.
 
 Go to url
-http://micemouse:8080/YourPersonalPhotographOrganiser/photo.jsp to get started
+http://localhost:8080/YourPersonalPhotographOrganiser/photo.jsp to get started
 Parameters:
 id=id/number of Photograph
 
 BigImageServlet:
-http://micemouse:8080/YourPersonalPhotographOrganiser/ImageServlet
+http://localhost:8080/YourPersonalPhotographOrganiser/ImageServlet
 Parameters:
 id=id/number of Photograph
 size=thumb/medium/large/default
 
 TestServlet
-http://micemouse:8080/YourPersonalPhotographOrganiser/TestServlet
+http://localhost:8080/YourPersonalPhotographOrganiser/TestServlet
 
 HTTP operations:
 GET - read
@@ -95,23 +95,23 @@ REST SERVICES
 -------------
 
 Gallery
-http://micemouse:8080/YourPersonalPhotographOrganiser/resources/galleries
-http://micemouse:8080/YourPersonalPhotographOrganiser/resources/galleries/{id}
-http://micemouse:8080/YourPersonalPhotographOrganiser/resources/galleries/{id}/photographs
-http://micemouse:8080/YourPersonalPhotographOrganiser/resources/galleries/{id}/galleries
+http://localhost:8080/YourPersonalPhotographOrganiser/resources/galleries
+http://localhost:8080/YourPersonalPhotographOrganiser/resources/galleries/{id}
+http://localhost:8080/YourPersonalPhotographOrganiser/resources/galleries/{id}/photographs
+http://localhost:8080/YourPersonalPhotographOrganiser/resources/galleries/{id}/galleries
 
 
-http://micemouse:8080/YourPersonalPhotographOrganiser/resources/galleryphotographs
-http://micemouse:8080/YourPersonalPhotographOrganiser/resources/galleryphotographs/{id}/comments
-http://micemouse:8080/YourPersonalPhotographOrganiser/resources/photographs
+http://localhost:8080/YourPersonalPhotographOrganiser/resources/galleryphotographs
+http://localhost:8080/YourPersonalPhotographOrganiser/resources/galleryphotographs/{id}/comments
+http://localhost:8080/YourPersonalPhotographOrganiser/resources/photographs
 
 Location
-http://micemouse:8080/YourPersonalPhotographOrganiser/resources/locations
-http://micemouse:8080/YourPersonalPhotographOrganiser/resources/locations/{id}
+http://localhost:8080/YourPersonalPhotographOrganiser/resources/locations
+http://localhost:8080/YourPersonalPhotographOrganiser/resources/locations/{id}
 starts to discover extra pictures, or pictures that have been removed.
-http://micemouse:8080/YourPersonalPhotographOrganiser/resources/locations/{id}/discover
+http://localhost:8080/YourPersonalPhotographOrganiser/resources/locations/{id}/discover
 
-http://micemouse:8080/YourPersonalPhotographOrganiser/resources/comments
+http://localhost:8080/YourPersonalPhotographOrganiser/resources/comments
 
 Epected result would look a little like so:
 Status Code: 200 OK

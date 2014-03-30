@@ -16,7 +16,7 @@
             <h:form>
                 <h:panelGrid columns="2">
                     <h:outputLabel value="#{bundle.EditGalleryPhotographLabel_id}" for="id" />
-                    <h:inputText id="id" value="#{galleryPhotographController.selected.id}" title="#{bundle.EditGalleryPhotographTitle_id}" required="true" requiredMessage="#{bundle.EditGalleryPhotographRequiredMessage_id}"/>
+                    <h:outputText id="id" value="#{galleryPhotographController.selected.id}" title="#{bundle.EditGalleryPhotographTitle_id}" />
                     <h:outputLabel value="#{bundle.EditGalleryPhotographLabel_name}" for="name" />
                     <h:inputText id="name" value="#{galleryPhotographController.selected.name}" title="#{bundle.EditGalleryPhotographTitle_name}" />
                     <h:outputLabel value="#{bundle.EditGalleryPhotographLabel_description}" for="description" />

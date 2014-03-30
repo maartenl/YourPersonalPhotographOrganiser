@@ -1,14 +1,12 @@
 package gallery.admin;
 
-import gallery.database.entities.Photograph;
 import gallery.admin.util.JsfUtil;
 import gallery.admin.util.PaginationHelper;
 import gallery.beans.PhotographBean;
-
+import gallery.database.entities.Photograph;
 import java.io.Serializable;
 import java.util.ResourceBundle;
 import javax.ejb.EJB;
-import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -17,6 +15,7 @@ import javax.faces.convert.FacesConverter;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
+import javax.inject.Named;
 
 @Named("photographController")
 @SessionScoped
@@ -285,6 +284,15 @@ public class PhotographController implements Serializable
             }
         }
 
+    }
+
+    public String getImageurl()
+    {
+        if (getSelected() == null)
+        {
+            return null;
+        }
+        return "ImageServlet?id=" + getSelected().getId() + "&size=medium";
     }
 
 }

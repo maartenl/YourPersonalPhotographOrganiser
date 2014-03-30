@@ -37,27 +37,26 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * A collection of references to Photographs and other galleries.
+ *
  * @author maartenl
  */
 @Entity
 @Table(name = "Gallery")
 @XmlRootElement
 @NamedQueries(
-{
-    @NamedQuery(name = "Gallery.findAll", query = "SELECT g FROM Gallery g"),
-    @NamedQuery(name = "Gallery.findRoot", query = "SELECT g FROM Gallery g WHERE g.parent is null"),
-    @NamedQuery(name = "Gallery.findById", query = "SELECT g FROM Gallery g WHERE g.id = :id"),
-    @NamedQuery(name = "Gallery.findByName", query = "SELECT g FROM Gallery g WHERE g.name = :name"),
-    @NamedQuery(name = "Gallery.findByCreationDate", query = "SELECT g FROM Gallery g WHERE g.creationDate = :creationDate"),
-    @NamedQuery(name = "Gallery.findBySortorder", query = "SELECT g FROM Gallery g WHERE g.sortorder = :sortorder")
-})
+        {
+            @NamedQuery(name = "Gallery.findAll", query = "SELECT g FROM Gallery g"),
+            @NamedQuery(name = "Gallery.findRoot", query = "SELECT g FROM Gallery g WHERE g.parent is null"),
+            @NamedQuery(name = "Gallery.findById", query = "SELECT g FROM Gallery g WHERE g.id = :id"),
+            @NamedQuery(name = "Gallery.findByName", query = "SELECT g FROM Gallery g WHERE g.name = :name"),
+            @NamedQuery(name = "Gallery.findByCreationDate", query = "SELECT g FROM Gallery g WHERE g.creationDate = :creationDate"),
+            @NamedQuery(name = "Gallery.findBySortorder", query = "SELECT g FROM Gallery g WHERE g.sortorder = :sortorder")
+        })
 public class Gallery implements Serializable
 {
 
@@ -88,7 +87,7 @@ public class Gallery implements Serializable
     @JoinColumn(name = "highlight", referencedColumnName = "id")
     @ManyToOne
     private Photograph highlight;
-        @OneToMany(mappedBy = "parent")
+    @OneToMany(mappedBy = "parent")
     private Collection<Gallery> galleryCollection;
     @JoinColumn(name = "parent_id", referencedColumnName = "id")
     @ManyToOne
@@ -96,6 +95,7 @@ public class Gallery implements Serializable
 
     public Gallery()
     {
+        creationDate = new Date();
     }
 
     public Gallery(Long id)
@@ -112,6 +112,7 @@ public class Gallery implements Serializable
 
     /**
      * Gets the unique identifier/primary key.
+     *
      * @return Long containing the identifier.
      */
     public Long getId()
@@ -121,6 +122,7 @@ public class Gallery implements Serializable
 
     /**
      * Sets the unique identifier/primary key.
+     *
      * @param id Long containing the (new) identifier.
      */
     public void setId(Long id)
@@ -130,6 +132,7 @@ public class Gallery implements Serializable
 
     /**
      * Name of the gallery
+     *
      * @return String containing the name
      */
     public String getName()
@@ -139,6 +142,7 @@ public class Gallery implements Serializable
 
     /**
      * Sets the name of the gallery.
+     *
      * @param name the new name.
      */
     public void setName(String name)
@@ -148,6 +152,7 @@ public class Gallery implements Serializable
 
     /**
      * Description of the gallery
+     *
      * @return String containing the description.
      */
     public String getDescription()
@@ -157,6 +162,7 @@ public class Gallery implements Serializable
 
     /**
      * Sets the description of the gallery
+     *
      * @param description String with the new description.
      */
     public void setDescription(String description)
@@ -166,6 +172,7 @@ public class Gallery implements Serializable
 
     /**
      * Creation date of the gallery.
+     *
      * @return the date of creation, default the current date.
      */
     public Date getCreationDate()
@@ -175,6 +182,7 @@ public class Gallery implements Serializable
 
     /**
      * Sets the creation date of the gallery.
+     *
      * @param creationDate the (new) creation date
      */
     public void setCreationDate(Date creationDate)
@@ -185,6 +193,7 @@ public class Gallery implements Serializable
     /**
      * Sort order, indicates the order in which the galleries should be displayed,
      * where 0 is the first gallery, 1 is the next, etc.
+     *
      * @return the sort order, 0..infinity
      */
     public int getSortorder()
@@ -194,6 +203,7 @@ public class Gallery implements Serializable
 
     /**
      * Sets the sort order.
+     *
      * @param sortorder the sort order, 0..infinity.
      */
     public void setSortorder(int sortorder)
@@ -203,6 +213,7 @@ public class Gallery implements Serializable
 
     /**
      * Photographs contained in this gallery.
+     *
      * @return Collection of photographs contained in the gallery.
      */
     @XmlTransient
@@ -213,6 +224,7 @@ public class Gallery implements Serializable
 
     /**
      * Sets the photographs in the gallery.
+     *
      * @param galleryPhotographCollection the new collection of photographs
      * contained in this gallery.
      */
@@ -223,6 +235,7 @@ public class Gallery implements Serializable
 
     /**
      * The photograph providing a visual cue about what this gallery is about.
+     *
      * @return the Photograph resembling the gallery
      */
     public Photograph getHighlight()
@@ -232,6 +245,7 @@ public class Gallery implements Serializable
 
     /**
      * Sets the photograph to use as visual identifier for this gallery
+     *
      * @param highlight the Photograph resembling the gallery
      */
     public void setHighlight(Photograph highlight)
@@ -241,6 +255,7 @@ public class Gallery implements Serializable
 
     /**
      * All the galleries contained in this gallery.
+     *
      * @return Collection of all galleries contained.
      */
     @XmlTransient
@@ -251,6 +266,7 @@ public class Gallery implements Serializable
 
     /**
      * Sets the collection of all galleries contained in this gallery.
+     *
      * @param galleryCollection the new collection of galleries.
      */
     public void setGalleryCollection(Collection<Gallery> galleryCollection)
@@ -260,6 +276,7 @@ public class Gallery implements Serializable
 
     /**
      * Provides the gallery of which this one is a child.
+     *
      * @return parent gallery
      */
     public Gallery getParent()
@@ -269,6 +286,7 @@ public class Gallery implements Serializable
 
     /**
      * Sets the parent of this gallery
+     *
      * @param parent new parent gallery.
      */
     public void setParent(Gallery parent)
