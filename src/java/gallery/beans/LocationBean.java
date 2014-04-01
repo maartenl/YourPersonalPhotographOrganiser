@@ -144,6 +144,7 @@ public class LocationBean extends AbstractBean<Location>
 
     /**
      * Checks a directory stored in "location" for new photographs or films.
+     * Starts a batch job, returns "204 No Content".
      *
      * @param id a Long representing the id of the Location entity.
      * @see JobBean#addPhotographs(gallery.database.entities.Location)
@@ -198,6 +199,7 @@ public class LocationBean extends AbstractBean<Location>
     /**
      * Checks all the Photographs in a Location, based on their hash map and the
      * contents of the file. Basically walks the directory tree.
+     * Starts a batch job, returns "204 No Content".
      *
      * @param id a Long representing the id of the Location entity.
      * @see JobBean#addPhotographs(gallery.database.entities.Location)

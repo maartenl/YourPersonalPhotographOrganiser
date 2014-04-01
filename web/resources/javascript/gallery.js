@@ -65,3 +65,25 @@ yppo.galleries.getGalleries = function(id, callBack)
             "json"); // endget
     // url [, data] [, success(data, textStatus, jqXHR)] [, dataType] )
 }
+
+/**
+ * Returns all galleries, in the form of an array of galleries.
+ * @param callBack function called when completed.
+ * @returns array of galleries
+ */
+yppo.galleries.getAllGalleries = function(callBack)
+{
+    log.debug("getAllGalleries");
+    var url = '/YourPersonalPhotographOrganiser/resources/galleries';
+    $.get(url,
+            function(data) {
+                log.debug(data);
+                if (data === null)
+                {
+                    return;
+                }
+                callBack(data);
+            }, // end function(data)
+            "json"); // endget
+    // url [, data] [, success(data, textStatus, jqXHR)] [, dataType] )
+}

@@ -46,12 +46,14 @@ import javax.ws.rs.core.Response.Status;
 /**
  * Gallery Enterprise Java Bean, maps to a Gallery Hibernate Entity.
  * Also a REST service mapping to /YourPersonalPhotographOrganiser/resources/galleries.
+ *
  * @author maartenl
  */
 @Stateless
 @Path("/galleries")
 public class GalleryBean extends AbstractBean<Gallery>
 {
+
     private static final Logger logger = Logger.getLogger(GalleryBean.class.getName());
 
     @EJB
@@ -77,14 +79,15 @@ public class GalleryBean extends AbstractBean<Gallery>
     /**
      * Creates an empty Gallery. POST to /YourPersonalPhotographOrganiser/resources/galleries.
      * Will accept both application/xml as well as application/json.
+     *
      * @param entity Gallery
      */
     @POST
     @Override
     @Consumes(
-    {
-        "application/xml", "application/json"
-    })
+            {
+                "application/xml", "application/json"
+            })
     public void create(Gallery entity)
     {
         entity.setCreationDate(new Date());
@@ -119,14 +122,15 @@ public class GalleryBean extends AbstractBean<Gallery>
     /**
      * Updates a Gallery. PUT to /YourPersonalPhotographOrganiser/resources/galleries.
      * Will accept both application/xml as well as application/json.
+     *
      * @param entity Gallery
      */
     @PUT
     @Override
     @Consumes(
-    {
-        "application/xml", "application/json"
-    })
+            {
+                "application/xml", "application/json"
+            })
     public void edit(Gallery entity)
     {
         try
@@ -164,6 +168,7 @@ public class GalleryBean extends AbstractBean<Gallery>
 
     /**
      * Removes a Gallery. DELETE to /YourPersonalPhotographOrganiser/resources/galleries/{id}.
+     *
      * @param id unique identifier for the gallery, present in the url.
      */
     @DELETE
@@ -176,6 +181,7 @@ public class GalleryBean extends AbstractBean<Gallery>
     /**
      * Retrieves a Gallery. GET to /YourPersonalPhotographOrganiser/resources/galleries/{id}.
      * Can produce both application/xml as well as application/json when asked.
+     *
      * @param id unique identifier for the Gallery, present in the url.
      * @return Gallery entity
      * @throws WebApplicationException with status {@link Status#NOT_FOUND} if Gallery with that id does not exist (any more).
@@ -183,9 +189,9 @@ public class GalleryBean extends AbstractBean<Gallery>
     @GET
     @Path("{id}")
     @Produces(
-    {
-        "application/xml", "application/json"
-    })
+            {
+                "application/xml", "application/json"
+            })
     public Gallery find(@PathParam("id") Long id)
     {
         Gallery found = super.find(id);
@@ -199,9 +205,9 @@ public class GalleryBean extends AbstractBean<Gallery>
     @GET
     @Path("{id}/import")
     @Produces(
-    {
-        "application/xml", "application/json"
-    })
+            {
+                "application/xml", "application/json"
+            })
     public String importPhotographs(@PathParam("id") Long id, @QueryParam("location") String location)
     {
         Gallery found = find(id);
@@ -211,9 +217,9 @@ public class GalleryBean extends AbstractBean<Gallery>
     @GET
     @Path("{id}/photographs")
     @Produces(
-    {
-        "application/xml", "application/json"
-    })
+            {
+                "application/xml", "application/json"
+            })
     public Collection<GalleryPhotograph> getPhotographs(@PathParam("id") Long id)
     {
         Gallery gallery = find(id);
@@ -228,9 +234,9 @@ public class GalleryBean extends AbstractBean<Gallery>
     @GET
     @Path("{id}/galleries")
     @Produces(
-    {
-        "application/xml", "application/json"
-    })
+            {
+                "application/xml", "application/json"
+            })
     public Collection<Gallery> getGalleries(@PathParam("id") Long id)
     {
         Gallery gallery = find(id);
@@ -243,35 +249,36 @@ public class GalleryBean extends AbstractBean<Gallery>
     }
 
     /**
-     * Retrieves all galleries on toplevel (so without a parent). 
+     * Retrieves all galleries (with a parent, if they have one).
      * GET to /YourPersonalPhotographOrganiser/resources/galleries.
      * Can produce both application/xml as well as application/json when asked.
-     * @return List<Gallery> list of galleries
+     *
+     * @return List<Gallery> list of all galleries
      */
     @GET
     @Override
     @Produces(
-    {
-        "application/xml", "application/json"
-    })
+            {
+                "application/xml", "application/json"
+            })
     public List<Gallery> findAll()
     {
-        return getEntityManager().createNamedQuery("Gallery.findRoot").getResultList();
+        return super.findAll();
     }
 
     @GET
     @Path("{from}/{to}")
     @Produces(
-    {
-        "application/xml", "application/json"
-    })
+            {
+                "application/xml", "application/json"
+            })
     public List<Gallery> findRange(@PathParam("from") Integer from,
             @PathParam("to") Integer to)
     {
         return super.findRange(new int[]
-                {
-                    from, to
-                });
+        {
+            from, to
+        });
     }
 
     @GET
@@ -286,6 +293,7 @@ public class GalleryBean extends AbstractBean<Gallery>
      * Provides a plain text string indicating the current issues with the database.
      * This can be anything from photographs that are not used yet in galleries,
      * galleries that are still empty, etc, etc.
+     *
      * @return String containing some html-formatted simple stuff.
      */
     @GET
@@ -318,7 +326,7 @@ public class GalleryBean extends AbstractBean<Gallery>
             for (ConstraintViolation<?> violation : e.getConstraintViolations())
             {
                 logger.fine(violation.toString());
-                logger.exiting(this.getClass().getName(),"issues");
+                logger.exiting(this.getClass().getName(), "issues");
                 return violation.toString();
             }
         }

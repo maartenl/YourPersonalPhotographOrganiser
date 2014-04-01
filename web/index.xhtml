@@ -6,17 +6,26 @@
         <title>Your Personal Photograph Organiser</title>
         <h:outputStylesheet name="css/jsfcrud.css"/>       
         <h:outputScript library="javascript" name="jquery.min.js" target="head" />
-        <h:outputScript library="javascript" name="fancybox/jquery.fancybox-1.3.4.pack.js" target="head" />
-        <h:outputScript library="javascript" name="fancybox/jquery.mousewheel-3.0.4.pack.js" target="head" />
+        <h:outputScript library="javascript" name="jstree.min.js" target="head" />
+        <h:outputScript library="javascript" name="log4javascript.js"  target="head" />    
+        <h:outputScript library="javascript" name="init.js"  target="head" />    
         <h:outputScript library="javascript" name="gallery.js"  target="head" />    
+        <h:outputScript library="javascript" name="photograph.js"  target="head" />    
+        <h:outputScript library="javascript" name="userinterface.js"  target="head" />    
         <h:outputStylesheet library="css" name="yppo.css"/>
-        <h:outputStylesheet library="css" name="fancybox/jquery.fancybox-1.3.4.css"/>
+        <h:outputStylesheet name="css/jstree/style.min.css"/>
+
+        <!-- Add mousewheel plugin (this is optional) -->
+        <h:outputScript library="javascript" name="fancybox/jquery.mousewheel-3.0.6.pack.js" target="head" />
+
+        <!-- Add fancyBox -->
+        <h:outputScript library="javascript" name="fancybox/jquery.fancybox.pack.js?v=2.1.5" target="head" />
+        <!-- to do: add media="screen" and ?v=2.1.5-->
+        <h:outputStylesheet name="css/fancybox/jquery.fancybox.css" />
     </h:head>
-    <h:body>
+    <h:body onload="loadPage()">
         <h:form>
-            <h:link value="Your Personal Photograph Organiser"
-                    onclick="gotoGallery()"
-                    />
+            <h:outputText value="Your Personal Photograph Organiser"/>
             <div id="gallerydescription"></div>
             <div><span id="gallerystats"></span> photos</div>
 
@@ -40,7 +49,8 @@
             <h:commandButton value="Go"
                              onclick="go()"
                              type="button"/>         <hr/>        
-            <div id="pictureDiv"></div>
+            <div id="pictureDiv" style="float:right;"></div>
+            <div id="galleryDiv" style="float:left;"></div>
             <hr/>
         </h:form>
     </h:body>

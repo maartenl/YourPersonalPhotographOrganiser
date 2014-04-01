@@ -246,20 +246,32 @@ function loadPage()
 {
     yppo.galleries.getGallery(1, function(data) {
         YourPersonalPhotographOrganiserBag.gallery = data;
-        yppo.galleries.getGalleries(1, function(data) {
+        yppo.galleries.getAllGalleries(function(data) {
             YourPersonalPhotographOrganiserBag.galleries = data;
             var buffer = "";
+            // massage return value so jsTree can do something with it.
             for (var x in YourPersonalPhotographOrganiserBag.galleries)
             {
-                buffer += "<div><img src=\"/YourPersonalPhotographOrganiser/faces/javax.faces.resource/gallery-icon.png?ln=images\"/>" + data[x].name +"</div>";
+                var item = YourPersonalPhotographOrganiserBag.galleries[x];
+                if (item.hasOwnProperty(parent))
+                {
+                    item.parent = item.parent.id;
+                } else
+                {
+                    item.parent = "#";
+                }
+                item.text = item.name;
+                item.icon = "/YourPersonalPhotographOrganiser/faces/javax.faces.resource/24/gallery-icon.png?ln=images";
             }
             //$("#galleryDiv").html(buffer);
-            $(function () { $('#galleryDiv').jstree(); });
+            $('#galleryDiv').jstree({'core': {
+                    'data': YourPersonalPhotographOrganiserBag.galleries
+                }});
         });
         yppo.photographs.getPhotographs(1, function(data) {
             YourPersonalPhotographOrganiserBag.photographs = data;
             displayPhotos();
-        });        
+        });
         showGalleryInfo();
     });
 }
