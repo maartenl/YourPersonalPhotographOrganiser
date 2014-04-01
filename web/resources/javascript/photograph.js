@@ -17,42 +17,23 @@
 
 if (!yppo)
     var yppo = {}
-if (!yppo.galleries)
+if (!yppo.photographs)
 {
-    yppo.galleries =
+    yppo.photographs =
             {                
             }
 }
 
-
-yppo.galleries.getGallery = function(id, callBack)
-{
-    log.debug("getGallery");
-    var url = '/YourPersonalPhotographOrganiser/resources/galleries/' + id;
-    $.get(url,
-            function(data) {
-                log.debug(data);
-                if (data === null)
-                {
-                    return;
-                }                
-                callBack(data);
-            }, // end function(data)
-            "json"); // endget
-    // url [, data] [, success(data, textStatus, jqXHR)] [, dataType] )
-}
-
-
 /**
- * Returns the children of a gallery, in the form of an array of galleries.
+ * Returns the photographs of a gallery, in the form of an array of photographs.
  * @param Long id id of a gallery
  * @param callBack function called when completed.
- * @returns array of galleries
+ * @returns array of galleryPhotographs
  */
-yppo.galleries.getGalleries = function(id, callBack)
+yppo.photographs.getPhotographs = function(id, callBack)
 {
-    log.debug("getGalleries");
-    var url = '/YourPersonalPhotographOrganiser/resources/galleries/' + id + '/galleries';
+    log.debug("getPhotographs");
+    var url = '/YourPersonalPhotographOrganiser/resources/galleries/' + id + '/photographs';
     $.get(url,
             function(data) {
                 log.debug(data);

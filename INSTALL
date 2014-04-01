@@ -78,11 +78,3 @@ Don't forget to properly specify the data source in glassfish.
 The software is looking for a JDBC Resource named 
 "jdbc/YourPersonalPhotographOrganiser".
 
-References
-----------
-http://fancybox.net/support
-http://docs.jquery.com/Downloading_jQuery
-http://www.cssbuttongenerator.com/
-http://code.google.com/p/metadata-extractor/ (http://www.drewnoakes.com/code/exif/)
-http://icons-search.com/icons/movie.aspx
-http://findicons.com/icons/gallery.png
