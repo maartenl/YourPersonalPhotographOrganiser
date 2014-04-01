@@ -16,7 +16,7 @@
             <h:form>
                 <h:panelGrid columns="2">
                     <h:outputLabel value="#{bundle.EditLocationLabel_id}" for="id" />
-                    <h:outputText id="id" value="#{locationController.selected.id}" title="#{bundle.EditLocationTitle_id}" required="true" readonly="true" requiredMessage="#{bundle.EditLocationRequiredMessage_id}"/>
+                    <h:outputText id="id" value="#{locationController.selected.id}" title="#{bundle.EditLocationTitle_id}"/>
                     <h:outputLabel value="#{bundle.EditLocationLabel_filepath}" for="filepath" />
                     <h:inputText id="filepath" value="#{locationController.selected.filepath}" title="#{bundle.EditLocationTitle_filepath}" size="90"/>
                 </h:panelGrid>
