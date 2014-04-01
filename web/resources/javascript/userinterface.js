@@ -264,9 +264,27 @@ function loadPage()
                 item.icon = "/YourPersonalPhotographOrganiser/faces/javax.faces.resource/24/gallery-icon.png?ln=images";
             }
             //$("#galleryDiv").html(buffer);
-            $('#galleryDiv').jstree({'core': {
-                    'data': YourPersonalPhotographOrganiserBag.galleries
-                }});
+            $('#galleryDiv')
+                    // listen for event
+                    .on('changed.jstree', function(e, data) {
+                        var i, j;
+                        for (i = 0, j = data.selected.length; i < j; i++) {
+                            // data.selected[i] --> the id of the node
+                            // data.instance.get_node(data.selected[i]) --> the entire node
+                            // data.instance.get_node(data.selected[i]).original --> the original entry as provided by json
+                            YourPersonalPhotographOrganiserBag.gallery = data.instance.get_node(data.selected[i]).original;
+                            showGalleryInfo();
+                            yppo.photographs.getPhotographs(YourPersonalPhotographOrganiserBag.gallery.id, function(data) {
+                                YourPersonalPhotographOrganiserBag.photographs = data;
+                                displayPhotos();
+                            });
+                        }
+                    })
+                    // create the instance
+                    .jstree({'core': {
+                            "multiple": false,
+                            'data': YourPersonalPhotographOrganiserBag.galleries
+                        }});
         });
         yppo.photographs.getPhotographs(1, function(data) {
             YourPersonalPhotographOrganiserBag.photographs = data;
