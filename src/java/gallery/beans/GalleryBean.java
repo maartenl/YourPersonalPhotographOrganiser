@@ -222,12 +222,15 @@ public class GalleryBean extends AbstractBean<Gallery>
             })
     public Collection<GalleryPhotograph> getPhotographs(@PathParam("id") Long id)
     {
+        logger.entering(this.getClass().getName(), "getPhotographs");
         Gallery gallery = find(id);
         Collection<GalleryPhotograph> result = gallery.getGalleryPhotographCollection();
         if (result == null || result.isEmpty())
         {
+            logger.fine("getPhotographs emptyLIst");
             return Collections.emptyList();
         }
+        logger.exiting(this.getClass().getName(), "getPhotographs size=" + result.size());
         return result;
     }
 

@@ -28,7 +28,7 @@ import javax.persistence.EntityManager;
 public abstract class AbstractBean<T>
 {
 
-    private Class<T> entityClass;
+    private final Class<T> entityClass;
 
     /**
      * Constructor

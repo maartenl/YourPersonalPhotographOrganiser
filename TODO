@@ -5,3 +5,12 @@ TODO
 - implement JSF 2 for the administration side of things
 - implement JMS for jobs to do
 
+- configure logging for EclipseLink (See https://wiki.eclipse.org/EclipseLink/Examples/JPA/Logging)
+
+$.ajaxSetup({ cache: false }); => tis said that this causes jquery to skip
+caching for ALL ajax calls.
+
+Adding the following as "data" to be sent to the server in an ajax call in 
+jquery, for example $.get causes it to add _=456789 to the url, defeating
+caching (if you need to).
+            { "_": $.now() }, // defeat caching

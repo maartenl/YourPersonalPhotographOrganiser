@@ -24,7 +24,6 @@ if (!yppo.galleries)
             }
 }
 
-
 yppo.galleries.getGallery = function(id, callBack)
 {
     log.debug("getGallery");
