@@ -20,6 +20,7 @@ import gallery.database.entities.Gallery;
 import gallery.database.entities.GalleryPhotograph;
 import gallery.database.entities.Location;
 import gallery.database.entities.Photograph;
+import java.io.File;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -155,6 +156,13 @@ public class JobBean
         logger.exiting(this.getClass().getName(), "verifyPhotographs");
     }
 
+    /**
+     * Adds galleries and adds photographs to them, based on the information
+     * in the photographs at a certain location. Names of the galleries will be
+     * based on the path in the file structure.
+     *
+     * @param location all photographs at this location will be used.
+     */
     public void initGalleries(Location location)
     {
         logger.entering(this.getClass().getName(), "initGalleries");
@@ -175,9 +183,42 @@ public class JobBean
             logger.log(Level.INFO, "initGalleries path={0}.", path);
             Gallery gallery = new Gallery();
             gallery.setDescription(path);
-            gallery.setName(path);
+            String[] paths = path.split(File.separator);
+            gallery.setName(paths[paths.length - 1]);
             gallery.setSortorder(i++);
             galleries.add(gallery);
+        }
+        // build the tree
+        for (Gallery gallery : galleries)
+        {
+            for (Gallery lgallery : galleries)
+            {
+                if (lgallery != gallery)
+                {
+                    if (gallery.getParent() == null)
+                    {
+                        if (gallery.getDescription().startsWith(lgallery.getDescription()))
+                        {
+                            // lgallery="/photos"
+                            // gallery="/photos/volleybal"
+                            // gallery.getParent()=null
+                            gallery.setParent(lgallery);
+                        }
+                    } else
+                    {
+                        if (!lgallery.getDescription().equals(gallery.getParent().getDescription()))
+                        {
+                            if (lgallery.getDescription().startsWith(gallery.getParent().getDescription()))
+                            {
+                                // lgallery="/photos/volleybal"
+                                // gallery.="/photos/volleybal/tournament2013"
+                                // gallery.getParent()="/photos"
+                                gallery.setParent(lgallery);
+                            }
+                        }
+                    }
+                }
+            }
         }
         query = em.createNamedQuery("Photograph.getPhotographsByLocation");
         query.setParameter("location", location);
@@ -188,7 +229,7 @@ public class JobBean
             Gallery found = null;
             for (Gallery gallery : galleries)
             {
-                if (gallery.getName().equals(photograph.getRelativepath()))
+                if (gallery.getDescription().equals(photograph.getRelativepath()))
                 {
                     found = gallery;
                     break;

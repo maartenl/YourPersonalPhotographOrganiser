@@ -47,7 +47,7 @@ function pageUp()
 function pageDown()
 {
     var sizeme = (YourPersonalPhotographOrganiserBag.view === "multiple" ? 9 : 1);
-    if (YourPersonalPhotographOrganiserBag.index + sizeme >= YourPersonalPhotographOrganiserBag.photos.length)
+    if (YourPersonalPhotographOrganiserBag.index + sizeme >= YourPersonalPhotographOrganiserBag.photographs.length)
     {
         return;
     }
@@ -63,7 +63,7 @@ function beginning()
 
 function end()
 {
-    var lengthy = YourPersonalPhotographOrganiserBag.photos.length;
+    var lengthy = YourPersonalPhotographOrganiserBag.photographs.length;
     YourPersonalPhotographOrganiserBag.index = lengthy - 1;
     if (YourPersonalPhotographOrganiserBag.view === "multiple")
     {
@@ -213,6 +213,7 @@ function displayMultiplePhotos()
         }
         j++;
     }
+    log.debug("displayMultiplePhotos", buffer);
     $('#pictureDiv').html(buffer);
     doThisThing();
 }
@@ -253,12 +254,12 @@ function loadPage()
             for (var x in YourPersonalPhotographOrganiserBag.galleries)
             {
                 var item = YourPersonalPhotographOrganiserBag.galleries[x];
-                if (item.hasOwnProperty(parent))
-                {
-                    item.parent = item.parent.id;
-                } else
+                if (typeof (item.parent) === "undefined")
                 {
                     item.parent = "#";
+                } else
+                {
+                    item.parent = item.parent.id;
                 }
                 item.text = item.name;
                 item.icon = "/YourPersonalPhotographOrganiser/faces/javax.faces.resource/24/gallery-icon.png?ln=images";
@@ -282,7 +283,7 @@ function loadPage()
                     })
                     // create the instance
                     .jstree({'core': {
-                            "themes": {"stripes": true},
+                            "themes": { "stripes": true},
                             "plugins": ["wholerow"],
                             "multiple": false,
                             'data': YourPersonalPhotographOrganiserBag.galleries
