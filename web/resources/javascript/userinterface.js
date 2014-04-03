@@ -282,9 +282,16 @@ function loadPage()
                     })
                     // create the instance
                     .jstree({'core': {
+                            "themes": {"stripes": true},
+                            "plugins": ["wholerow"],
                             "multiple": false,
                             'data': YourPersonalPhotographOrganiserBag.galleries
                         }});
+            var documentwidth = $('#wrapper').width();
+            var sidewidth = $('#galleryDiv').width();
+            log.debug("create jstree documentwidth=" + documentwidth);
+            log.debug("create jstree sidewidth=" + sidewidth);
+            $('#pictureDiv').css("width", (documentwidth - sidewidth - 100) + "px");
         });
         yppo.photographs.getPhotographs(1, function(data) {
             YourPersonalPhotographOrganiserBag.photographs = data;

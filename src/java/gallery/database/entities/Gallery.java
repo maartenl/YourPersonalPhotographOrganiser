@@ -17,6 +17,7 @@
 package gallery.database.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -322,5 +323,14 @@ public class Gallery implements Serializable
     public String toString()
     {
         return "gallery.database.entities.Gallery[ id=" + id + " ]";
+    }
+
+    public void addGalleryPhotograph(GalleryPhotograph gphoto)
+    {
+        if (galleryPhotographCollection == null)
+        {
+            galleryPhotographCollection = new ArrayList<GalleryPhotograph>();
+        }
+        galleryPhotographCollection.add(gphoto);
     }
 }

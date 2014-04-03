@@ -17,9 +17,7 @@
 package gallery.beans;
 
 import gallery.database.entities.Location;
-import java.io.IOException;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -154,13 +152,7 @@ public class LocationBean extends AbstractBean<Location>
     public void discover(@PathParam("id") Long id)
     {
         Location location = find(id);
-        try
-        {
-            jobBean.addPhotographs(location);
-        } catch (IOException ex)
-        {
-            Logger.getLogger(LocationBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        jobBean.addPhotographs(location);
     }
 
     @GET
@@ -208,5 +200,19 @@ public class LocationBean extends AbstractBean<Location>
     {
         Location location = find(id);
         jobBean.verifyPhotographs(location);
+    }
+
+    /**
+     * Initializes GalleryPhotographs and Galleries based on the file
+     * structure.
+     *
+     * @see Gallery
+     * @see GalleryPhotograph
+     * @param id the id of the location.
+     */
+    public void init(Long id)
+    {
+        Location location = find(id);
+        jobBean.initGalleries(location);
     }
 }

@@ -313,4 +313,12 @@ public class LocationController implements Serializable
         return null;
     }
 
+    public String init()
+    {
+        current = (Location) getItems().getRowData();
+        logger.entering(this.getClass().getName(), "init");
+        getFacade().init(current.getId());
+        logger.exiting(this.getClass().getName(), "init");
+        return null;
+    }
 }

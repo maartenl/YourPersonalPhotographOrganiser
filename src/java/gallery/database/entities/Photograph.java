@@ -64,7 +64,9 @@ import javax.xml.bind.annotation.XmlTransient;
                     + "AND not exists (select gp from GalleryPhotograph gp where gp.gallery = :gallery and gp.photograph = p) "
                     + "order by p.taken, p.filename"),
             @NamedQuery(name = "Photograph.findUnused", query = "SELECT p FROM Photograph p WHERE not exists (select gp from GalleryPhotograph gp where gp.photograph = p)"),
-            @NamedQuery(name = "Photograph.getPhotographsByLocation", query = "SELECT p FROM Photograph p WHERE p.location = :location")
+            @NamedQuery(name = "Photograph.getPhotographsByLocation", query = "SELECT p FROM Photograph p WHERE p.location = :location"),
+            @NamedQuery(name = "Photograph.getPaths", query = "SELECT DISTINCT p.relativepath FROM Photograph p WHERE p.location = :location")
+
         })
 public class Photograph implements Serializable
 {

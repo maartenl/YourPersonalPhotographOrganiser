@@ -192,6 +192,7 @@ public class GalleryBean extends AbstractBean<Gallery>
             {
                 "application/xml", "application/json"
             })
+    @Override
     public Gallery find(@PathParam("id") Long id)
     {
         Gallery found = super.find(id);
