@@ -20,10 +20,12 @@ import gallery.database.entities.Gallery;
 import gallery.database.entities.GalleryPhotograph;
 import gallery.database.entities.Location;
 import gallery.database.entities.Photograph;
-import java.io.File;
 import java.math.BigInteger;
-import java.util.ArrayList;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -176,64 +178,25 @@ public class JobBean
             logger.exiting(this.getClass().getName(), "initGalleries");
             return;
         }
-        List<Gallery> galleries = new ArrayList<>();
+        // instantiate galleries
+        Map<String, Gallery> galleries = new HashMap<>();
         int i = 0;
         for (String path : list)
         {
-            logger.log(Level.INFO, "initGalleries path={0}.", path);
-            Gallery gallery = new Gallery();
-            gallery.setDescription(path);
-            String[] paths = path.split(File.separator);
-            gallery.setName(paths[paths.length - 1]);
-            gallery.setSortorder(i++);
-            galleries.add(gallery);
+            logger.log(Level.FINE, "initGalleries path={0}.", path);
+            storeGallery(path, galleries);
         }
-        // build the tree
-        for (Gallery gallery : galleries)
-        {
-            for (Gallery lgallery : galleries)
-            {
-                if (lgallery != gallery)
-                {
-                    if (gallery.getParent() == null)
-                    {
-                        if (gallery.getDescription().startsWith(lgallery.getDescription()))
-                        {
-                            // lgallery="/photos"
-                            // gallery="/photos/volleybal"
-                            // gallery.getParent()=null
-                            gallery.setParent(lgallery);
-                        }
-                    } else
-                    {
-                        if (!lgallery.getDescription().equals(gallery.getParent().getDescription()))
-                        {
-                            if (lgallery.getDescription().startsWith(gallery.getParent().getDescription()))
-                            {
-                                // lgallery="/photos/volleybal"
-                                // gallery.="/photos/volleybal/tournament2013"
-                                // gallery.getParent()="/photos"
-                                gallery.setParent(lgallery);
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        // add all photographs to each gallery as required
         query = em.createNamedQuery("Photograph.getPhotographsByLocation");
         query.setParameter("location", location);
         List<Photograph> photographs = query.getResultList();
         for (Photograph photograph : photographs)
         {
-            logger.log(Level.INFO, "initGalleries photograph={0}.", photograph.getId());
-            Gallery found = null;
-            for (Gallery gallery : galleries)
+            logger.log(Level.FINE, "initGalleries photograph={0}.", photograph.getId());
+            Gallery found = galleries.get(photograph.getRelativepath());
+            if (found == null)
             {
-                if (gallery.getDescription().equals(photograph.getRelativepath()))
-                {
-                    found = gallery;
-                    break;
-                }
+                throw new RuntimeException("Cannot find gallery with path " + photograph.getRelativepath());
             }
             GalleryPhotograph gphoto = new GalleryPhotograph();
             gphoto.setGallery(found);
@@ -241,12 +204,56 @@ public class JobBean
             gphoto.setPhotograph(photograph);
             found.addGalleryPhotograph(gphoto);
         }
-        for (Gallery gallery : galleries)
+        // persist all new galleries
+        for (String path : galleries.keySet())
         {
-            logger.log(Level.INFO, "initGalleries persist gallery {0}.", gallery);
+            Gallery gallery = galleries.get(path);
+            logger.log(Level.FINE, "initGalleries persist gallery {0}.", gallery);
             galleryBean.create(gallery);//em.persist(gallery);
         }
-        logger.exiting(this.getClass().getName(), "initGalleries");
+        // create gallery tree, the relations between nodes
+        for (String strpath : galleries.keySet())
+        {
+            Gallery gallery = galleries.get(strpath);
+            Path path = FileSystems.getDefault().getPath(strpath);
+            if (path.getParent() != null && galleries.containsKey(path.getParent().toString()))
+            {
+                final Gallery parent = galleries.get(path.getParent().toString());
+                gallery.setParent(parent);
+                logger.log(Level.FINE, "initGalleries set parent of gallery {0} to {1}.", new Object[]
+                {
+                    gallery.getDescription(), parent.getDescription()
+                });
+            }
+        }
+        logger.exiting(
+                this.getClass().getName(), "initGalleries");
+    }
+
+    /**
+     * Uses {@link Path} to store each node of the tree.
+     * Does not provide relations between nodes, until after
+     * persisting.
+     *
+     * @param strpath the string representation of the path
+     * @param galleries the hash map containing all galleries.
+     */
+    private void storeGallery(String strpath, Map<String, Gallery> galleries)
+    {
+        logger.entering(this.getClass().getName(), "storeGallery " + strpath);
+        Path path = FileSystems.getDefault().getPath(strpath);
+        Gallery gallery;
+        if (!galleries.containsKey(strpath))
+        {
+            gallery = new Gallery();
+            gallery.setDescription(strpath);
+            gallery.setName(path.getFileName().toString());
+            galleries.put(strpath, gallery);
+        }
+        if (path.getParent() != null)
+        {
+            storeGallery(path.getParent().toString(), galleries);
+        }
     }
 
 }
