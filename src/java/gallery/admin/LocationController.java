@@ -56,7 +56,7 @@ public class LocationController implements Serializable
     {
         if (pagination == null)
         {
-            pagination = new PaginationHelper(10)
+            pagination = new PaginationHelper()
             {
 
                 @Override

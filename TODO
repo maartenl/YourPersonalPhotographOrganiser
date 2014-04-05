@@ -14,3 +14,8 @@ Adding the following as "data" to be sent to the server in an ajax call in
 jquery, for example $.get causes it to add _=456789 to the url, defeating
 caching (if you need to).
             { "_": $.now() }, // defeat caching
+
+- Add the following to the persistence.xml to enable logging of SQL statements.
+
+      <property name="eclipselink.logging.logger" value="ServerLogger"/>
+      <property name="eclipselink.logging.level" value="FINE"/>

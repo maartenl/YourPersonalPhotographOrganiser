@@ -392,3 +392,14 @@ and that seems to solve the problem. But it remains quite strange.
 
 try this: find . -name "*error*"
 and then this: rm `find . -name "*error*"`
+
+7. EclipseLink, my JPA provider, has a Shared Object Cache, which works across 
+transaction boundaries. This caused me to see outdated/stale data.
+
+I've turned it off for now, until I find a better solution.
+
+8. Building a Gallery Tree didn't work. The nodes did not want to refer to 
+themselves. 
+
+Turns out, the first thing I had to do, was persist all those newfangled nodes,
+and then attach nodes to each other. Than it works like it should.

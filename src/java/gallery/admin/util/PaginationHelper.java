@@ -1,16 +1,22 @@
 package gallery.admin.util;
 
+import gallery.admin.GeneralController;
 import javax.faces.model.DataModel;
 
 public abstract class PaginationHelper
 {
 
-    private int pageSize;
+    private final int pageSize;
     private int page;
 
     public PaginationHelper(int pageSize)
     {
         this.pageSize = pageSize;
+    }
+
+    public PaginationHelper()
+    {
+        this.pageSize = GeneralController.getPageSize();
     }
 
     public abstract int getItemsCount();

@@ -1,14 +1,12 @@
 package gallery.admin;
 
-import gallery.database.entities.Comment;
 import gallery.admin.util.JsfUtil;
 import gallery.admin.util.PaginationHelper;
 import gallery.beans.CommentBean;
-
+import gallery.database.entities.Comment;
 import java.io.Serializable;
 import java.util.ResourceBundle;
 import javax.ejb.EJB;
-import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -17,6 +15,7 @@ import javax.faces.convert.FacesConverter;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
+import javax.inject.Named;
 
 @Named("commentController")
 @SessionScoped
@@ -53,7 +52,7 @@ public class CommentController implements Serializable
     {
         if (pagination == null)
         {
-            pagination = new PaginationHelper(10)
+            pagination = new PaginationHelper()
             {
 
                 @Override
