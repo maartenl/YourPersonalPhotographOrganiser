@@ -168,31 +168,61 @@ public class JobBean
     public void initGalleries(Location location)
     {
         logger.entering(this.getClass().getName(), "initGalleries");
-        // get all photographs that match the mask
-        Query query = em.createNamedQuery("Photograph.getPaths");
-        query.setParameter("location", location);
-        List<String> list = query.getResultList();
+        List<String> list = getPathsOfPhotographs(location);
         if (list == null || list.isEmpty())
         {
             logger.log(Level.WARNING, "No photographs match {0}.", location);
             logger.exiting(this.getClass().getName(), "initGalleries");
             return;
         }
-        // instantiate galleries
-        Map<String, Gallery> galleries = new HashMap<>();
-        int i = 0;
-        for (String path : list)
+        Map<String, Gallery> galleries = instantiateGalleries(list);
+        addAllPhotographsToGalleries(location, galleries);
+        persistGalleries(galleries);
+        buildGalleryTree(galleries);
+        logger.exiting(this.getClass().getName(), "initGalleries");
+    }
+
+    /**
+     * Create gallery tree, the relations between nodes is added.
+     *
+     * @param galleries map to process
+     */
+    private void buildGalleryTree(Map<String, Gallery> galleries)
+    {
+        for (String strpath : galleries.keySet())
         {
-            logger.log(Level.FINE, "initGalleries path={0}.", path);
-            storeGallery(path, galleries);
+            Gallery gallery = galleries.get(strpath);
+            Path path = FileSystems.getDefault().getPath(strpath);
+            if (path.getParent() != null && galleries.containsKey(path.getParent().toString()))
+            {
+                final Gallery parent = galleries.get(path.getParent().toString());
+                gallery.setParent(parent);
+                logger.log(Level.FINE, "buildGalleryTree set parent of gallery {0} to {1}.", new Object[]
+                {
+                    gallery.getDescription(), parent.getDescription()
+                });
+            }
         }
-        // add all photographs to each gallery as required
-        query = em.createNamedQuery("Photograph.getPhotographsByLocation");
+    }
+
+    private void persistGalleries(Map<String, Gallery> galleries)
+    {
+        for (String path : galleries.keySet())
+        {
+            Gallery gallery = galleries.get(path);
+            logger.log(Level.FINE, "persistGalleries persist gallery {0}.", gallery);
+            galleryBean.create(gallery);//em.persist(gallery);
+        }
+    }
+
+    private void addAllPhotographsToGalleries(Location location, Map<String, Gallery> galleries) throws RuntimeException
+    {
+        Query query = em.createNamedQuery("Photograph.getPhotographsByLocation");
         query.setParameter("location", location);
         List<Photograph> photographs = query.getResultList();
         for (Photograph photograph : photographs)
         {
-            logger.log(Level.FINE, "initGalleries photograph={0}.", photograph.getId());
+            logger.log(Level.FINE, "addAllPhotographsToGalleries photograph={0}.", photograph.getId());
             Gallery found = galleries.get(photograph.getRelativepath());
             if (found == null)
             {
@@ -204,30 +234,18 @@ public class JobBean
             gphoto.setPhotograph(photograph);
             found.addGalleryPhotograph(gphoto);
         }
-        // persist all new galleries
-        for (String path : galleries.keySet())
+    }
+
+    private Map<String, Gallery> instantiateGalleries(List<String> list)
+    {
+        Map<String, Gallery> galleries = new HashMap<>();
+        int i = 0;
+        for (String path : list)
         {
-            Gallery gallery = galleries.get(path);
-            logger.log(Level.FINE, "initGalleries persist gallery {0}.", gallery);
-            galleryBean.create(gallery);//em.persist(gallery);
+            logger.log(Level.FINE, "instantiateGalleries path={0}.", path);
+            storeGallery(path, galleries);
         }
-        // create gallery tree, the relations between nodes
-        for (String strpath : galleries.keySet())
-        {
-            Gallery gallery = galleries.get(strpath);
-            Path path = FileSystems.getDefault().getPath(strpath);
-            if (path.getParent() != null && galleries.containsKey(path.getParent().toString()))
-            {
-                final Gallery parent = galleries.get(path.getParent().toString());
-                gallery.setParent(parent);
-                logger.log(Level.FINE, "initGalleries set parent of gallery {0} to {1}.", new Object[]
-                {
-                    gallery.getDescription(), parent.getDescription()
-                });
-            }
-        }
-        logger.exiting(
-                this.getClass().getName(), "initGalleries");
+        return galleries;
     }
 
     /**
@@ -256,4 +274,18 @@ public class JobBean
         }
     }
 
+    /**
+     * Retrieves all the relative paths of the photographs, relative
+     * to the location.
+     *
+     * @param location The location to use/
+     * @return List of strings, containing relative paths. Can be empty.
+     */
+    private List<String> getPathsOfPhotographs(Location location)
+    {
+        Query query = em.createNamedQuery("Photograph.getPaths");
+        query.setParameter("location", location);
+        List<String> list = query.getResultList();
+        return list;
+    }
 }
