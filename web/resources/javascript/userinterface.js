@@ -131,20 +131,17 @@ function displaySinglePhotos()
     {
         imageSize = "big";
     }
-    buffer += "<a href=\"photo.jsp?id=" + photos[i].id + "\">" +
-            "<img src=\"/YourPersonalPhotographOrganiser/ImageServlet?id=" + photos[i].photograph.id + "&size=" + imageSize + "\" alt=\"\"/>";
-    buffer += '</a>' +
-            '<br/><div class=\"name\">' + (i + 1) + '. ' +
+    buffer += "<img onclick=\"displayPhotoStats(" + i + ");\" src=\"/YourPersonalPhotographOrganiser/ImageServlet?id=" + photos[i].photograph.id + "&size=" + imageSize + "\" alt=\"\"/>";
+    buffer += '<br/><div class=\"name\">' + (i + 1) + '. ' +
             photos[i].name
             + '</div><div class=\"description\">' + description + '</div><div class=\"comments\"></div></div>';
     $('#pictureDiv').html(buffer);
 
-    $.get('/YourPersonalPhotographOrganiser/resources/galleryphotographs/' + photos[i].id + '/comments',
+    yppo.comments.getComments(photos[i].id,
             function(data) {
                 log.debug(data);
                 if (data === null)
                 {
-                    alert("No comments found.");
                     return;
                 }
                 var buffer = "";
@@ -153,10 +150,7 @@ function displaySinglePhotos()
                     buffer += "<p>" + data[i].comment + "<p/><p>" + data[i].author + ", " + (new Date(data[i].submitted)) + "</p>";
                 }
                 $(".comments").html(buffer);
-            }, // end function(data)
-            "json"); // endget
-    // url [, data] [, success(data, textStatus, jqXHR)] [, dataType] )
-    return;
+            });
 }
 
 function displayMultiplePhotos()
@@ -205,11 +199,11 @@ function displayMultiplePhotos()
             {
                 isImage = " class=\"group\" rel=\"group1\"";
             }
-            buffer += '<div class="photograph ' + (j % 3 == 0 ? 'photographBegin ' : ' ') + (j % 3 == 2 ? 'photographEnd' : '') + '"><a ' + isImage + ' href=\"/YourPersonalPhotographOrganiser/ImageServlet?id=' + photos[i].photograph.id + '\">' +
+            buffer += '<div class="photograph ' + (j % 3 == 0 ? 'photographBegin ' : ' ') + (j % 3 === 2 ? 'photographEnd' : '') + '"><a ' + isImage + ' href=\"/YourPersonalPhotographOrganiser/ImageServlet?id=' + photos[i].photograph.id + '\">' +
                     '<img src=\"/YourPersonalPhotographOrganiser/ImageServlet?id=' + photos[i].photograph.id + '&size=medium\" alt=\"\"/>' +
-                    '</a><br/><div class=\"name\"><a href=\"photo.jsp?id=' + photos[i].id + '\">' + (i + 1) + '. ' +
+                    '</a><br/><div class=\"name\"><span onclick=\"displayPhotoStats('+i+');\">' + (i + 1) + '. ' +
                     photos[i].name
-                    + '</a></div></div>';
+                    + '</span></div></div>';
         }
         j++;
     }
@@ -228,6 +222,14 @@ function displayPhotos()
         return;
     }
     displayMultiplePhotos();
+}
+
+function displayPhotoStats(i)
+{
+    log.debug("displayMultiplePhotos");
+    var buffer = "";
+    var photo = YourPersonalPhotographOrganiserBag.photographs[i];
+    $('#pictureDiv').html(buffer);
 }
 
 function showGalleryInfo()
@@ -283,7 +285,7 @@ function loadPage()
                     })
                     // create the instance
                     .jstree({'core': {
-                            "themes": { "stripes": true},
+                            "themes": {"stripes": true},
                             "plugins": ["wholerow"],
                             "multiple": false,
                             'data': YourPersonalPhotographOrganiserBag.galleries

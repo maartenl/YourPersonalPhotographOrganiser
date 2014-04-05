@@ -20,7 +20,6 @@ import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.MetadataException;
 import gallery.database.entities.Comment;
 import gallery.database.entities.GalleryPhotograph;
-import gallery.enums.ImageAngle;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
@@ -43,6 +42,7 @@ import javax.ws.rs.core.Response.Status;
 /**
  * GalleryPhotograph Enterprise Java Bean, maps to a GalleryPhotograph Hibernate Entity.
  * Also a REST service mapping to /YourPersonalPhotographOrganiser/resources/galleryphotographs.
+ *
  * @author maartenl
  */
 @Stateless
@@ -70,14 +70,15 @@ public class GalleryPhotographBean extends AbstractBean<GalleryPhotograph>
     /**
      * Creates an GalleryPhotograph. POST to /YourPersonalPhotographOrganiser/resources/galleryphotographs.
      * Will accept both application/xml as well as application/json.
+     *
      * @param entity GalleryPhotograph
      */
     @POST
     @Override
     @Consumes(
-    {
-        "application/xml", "application/json"
-    })
+            {
+                "application/xml", "application/json"
+            })
     public void create(GalleryPhotograph entity)
     {
         super.create(entity);
@@ -86,14 +87,15 @@ public class GalleryPhotographBean extends AbstractBean<GalleryPhotograph>
     /**
      * Updates a GalleryPhotograph. PUT to /YourPersonalPhotographOrganiser/resources/galleryphotographs.
      * Will accept both application/xml as well as application/json.
+     *
      * @param entity GalleryPhotograph
      */
     @PUT
     @Override
     @Consumes(
-    {
-        "application/xml", "application/json"
-    })
+            {
+                "application/xml", "application/json"
+            })
     public void edit(GalleryPhotograph entity)
     {
         GalleryPhotograph photo = find(entity.getId());
@@ -123,6 +125,7 @@ public class GalleryPhotographBean extends AbstractBean<GalleryPhotograph>
 
     /**
      * Removes a GalleryPhotograph. DELETE to /YourPersonalPhotographOrganiser/resources/galleryphotographs/{id}.
+     *
      * @param id unique identifier for the GalleryPhotograph, present in the url.
      */
     @DELETE
@@ -132,12 +135,18 @@ public class GalleryPhotographBean extends AbstractBean<GalleryPhotograph>
         super.remove(find(id));
     }
 
+    /**
+     * Retrieves the comments regarding a specific GalleryPhotograph. GET to /YourPersonalPhotographOrganiser/resources/galleryphotographs/{id}/comments.
+     *
+     * @param id the id of the GalleryPhotograph
+     * @return a collection of comments.
+     */
     @GET
     @Path("{id}/comments")
     @Produces(
-    {
-        "application/xml", "application/json"
-    })
+            {
+                "application/xml", "application/json"
+            })
     public Collection<Comment> getComments(@PathParam("id") Long id)
     {
         GalleryPhotograph photo = find(id);
@@ -149,13 +158,14 @@ public class GalleryPhotographBean extends AbstractBean<GalleryPhotograph>
         if (result == null || result.isEmpty())
         {
             return Collections.emptyList();
-        }        
+        }
         return result;
     }
 
     /**
      * Retrieves a GalleryPhotograph. GET to /YourPersonalPhotographOrganiser/resources/galleryphotographs/{id}.
      * Can produce both application/xml as well as application/json when asked.
+     *
      * @param id unique identifier for the comment, present in the url.
      * @return GalleryPhotograph entity
      * @throws WebApplicationException with status {@link Status#NOT_FOUND} if GalleryPhotograph with that id does not exist (any more).
@@ -163,9 +173,9 @@ public class GalleryPhotographBean extends AbstractBean<GalleryPhotograph>
     @GET
     @Path("{id}")
     @Produces(
-    {
-        "application/xml", "application/json"
-    })
+            {
+                "application/xml", "application/json"
+            })
     public GalleryPhotograph find(@PathParam("id") Long id)
     {
         return super.find(id);
@@ -174,9 +184,9 @@ public class GalleryPhotographBean extends AbstractBean<GalleryPhotograph>
     @GET
     @Override
     @Produces(
-    {
-        "application/xml", "application/json"
-    })
+            {
+                "application/xml", "application/json"
+            })
     public List<GalleryPhotograph> findAll()
     {
         return super.findAll();
@@ -185,15 +195,15 @@ public class GalleryPhotographBean extends AbstractBean<GalleryPhotograph>
     @GET
     @Path("{from}/{to}")
     @Produces(
-    {
-        "application/xml", "application/json"
-    })
+            {
+                "application/xml", "application/json"
+            })
     public List<GalleryPhotograph> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to)
     {
         return super.findRange(new int[]
-                {
-                    from, to
-                });
+        {
+            from, to
+        });
     }
 
     @GET

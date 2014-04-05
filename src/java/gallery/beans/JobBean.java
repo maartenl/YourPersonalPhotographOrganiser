@@ -159,7 +159,7 @@ public class JobBean
     }
 
     /**
-     * Adds galleries and adds photographs to them, based on the information
+     * Creates galleries and adds photographs to them, based on the information
      * in the photographs at a certain location. Names of the galleries will be
      * based on the path in the file structure.
      *
