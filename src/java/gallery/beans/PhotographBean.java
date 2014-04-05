@@ -19,12 +19,14 @@ package gallery.beans;
 import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.MetadataException;
 import gallery.database.entities.Photograph;
+import gallery.database.entities.Tag;
 import gallery.enums.ImageAngle;
 import gallery.images.ImageOperations;
 import gallery.images.PhotoMetadata;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
@@ -46,6 +48,7 @@ import javax.ws.rs.core.Response.Status;
 /**
  * Photograph Enterprise Java Bean, maps to a Photograph Hibernate Entity.
  * Also a REST service mapping to /YourPersonalPhotographOrganiser/resources/photographs.
+ *
  * @author maartenl
  */
 @Stateless
@@ -70,14 +73,15 @@ public class PhotographBean extends AbstractBean<Photograph>
     /**
      * Creates an Photograph. POST to /YourPersonalPhotographOrganiser/resources/photographs.
      * Will accept both application/xml as well as application/json.
+     *
      * @param entity Photograph
      */
     @POST
     @Override
     @Consumes(
-    {
-        "application/xml", "application/json"
-    })
+            {
+                "application/xml", "application/json"
+            })
     public void create(Photograph entity)
     {
         super.create(entity);
@@ -86,14 +90,15 @@ public class PhotographBean extends AbstractBean<Photograph>
     /**
      * Updates a Photograph. PUT to /YourPersonalPhotographOrganiser/resources/photographs.
      * Will accept both application/xml as well as application/json.
+     *
      * @param entity Photograph
      */
     @PUT
     @Override
     @Consumes(
-    {
-        "application/xml", "application/json"
-    })
+            {
+                "application/xml", "application/json"
+            })
     public void edit(Photograph entity)
     {
         super.edit(entity);
@@ -101,6 +106,7 @@ public class PhotographBean extends AbstractBean<Photograph>
 
     /**
      * Removes a Photograph. DELETE to /YourPersonalPhotographOrganiser/resources/photographs/{id}.
+     *
      * @param id unique identifier for the Photograph, present in the url.
      */
     @DELETE
@@ -113,6 +119,7 @@ public class PhotographBean extends AbstractBean<Photograph>
     /**
      * Retrieves a Photograph. GET to /YourPersonalPhotographOrganiser/resources/photographs/{id}.
      * Can produce both application/xml as well as application/json when asked.
+     *
      * @param id unique identifier for the comment, present in the url.
      * @return Photograph entity
      * @throws WebApplicationException with status {@link Status#NOT_FOUND} if Photograph with that id does not exist (any more).
@@ -120,20 +127,41 @@ public class PhotographBean extends AbstractBean<Photograph>
     @GET
     @Path("{id}")
     @Produces(
-    {
-        "application/xml", "application/json"
-    })
+            {
+                "application/xml", "application/json"
+            })
+    @Override
     public Photograph find(@PathParam("id") Long id)
     {
         return super.find(id);
     }
 
+    /**
+     * Retrieves an array of Tags belonging to a photograph. GET to /YourPersonalPhotographOrganiser/resources/photographs/{id}/tags.
+     * Can produce both application/xml as well as application/json when asked.
+     *
+     * @param id unique identifier for the photograph, present in the url.
+     * @return array of Tags
+     * @throws WebApplicationException with status {@link Status#NOT_FOUND} if Photograph with that id does not exist (any more).
+     */
+    @GET
+    @Path("{id}/tags")
+    @Produces(
+            {
+                "application/xml", "application/json"
+            })
+    public Collection<Tag> getTags(@PathParam("id") Long id)
+    {
+        Photograph photograph = find(id);
+        return photograph.getTagCollection();
+    }
+
     @GET
     @Override
     @Produces(
-    {
-        "application/xml", "application/json"
-    })
+            {
+                "application/xml", "application/json"
+            })
     public List<Photograph> findAll()
     {
         return super.findAll();
@@ -142,15 +170,15 @@ public class PhotographBean extends AbstractBean<Photograph>
     @GET
     @Path("{from}/{to}")
     @Produces(
-    {
-        "application/xml", "application/json"
-    })
+            {
+                "application/xml", "application/json"
+            })
     public List<Photograph> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to)
     {
         return super.findRange(new int[]
-                {
-                    from, to
-                });
+        {
+            from, to
+        });
     }
 
     @GET
@@ -177,9 +205,9 @@ public class PhotographBean extends AbstractBean<Photograph>
     @GET
     @Path("{id}/metadata")
     @Produces(
-    {
-        "application/xml", "application/json"
-    })
+            {
+                "application/xml", "application/json"
+            })
     public List<PhotoMetadata> getMetadata(@PathParam("id") Long id)
     {
         Photograph photo = find(id);

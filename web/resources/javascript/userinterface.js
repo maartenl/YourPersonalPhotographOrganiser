@@ -134,7 +134,7 @@ function displaySinglePhotos()
     buffer += "<img onclick=\"displayPhotoStats(" + i + ");\" src=\"/YourPersonalPhotographOrganiser/ImageServlet?id=" + photos[i].photograph.id + "&size=" + imageSize + "\" alt=\"\"/>";
     buffer += '<br/><div class=\"name\">' + (i + 1) + '. ' +
             photos[i].name
-            + '</div><div class=\"description\">' + description + '</div><div class=\"comments\"></div></div>';
+            + '</div><div class=\"description\">' + description + '</div><div class=\"comments\"></div></div><div><span class=\"tags\"></span></div>';
     $('#pictureDiv').html(buffer);
 
     yppo.comments.getComments(photos[i].id,
@@ -150,6 +150,20 @@ function displaySinglePhotos()
                     buffer += "<p>" + data[i].comment + "<p/><p>" + data[i].author + ", " + (new Date(data[i].submitted)) + "</p>";
                 }
                 $(".comments").html(buffer);
+            });
+    yppo.tags.getTags(photos[i].photograph.id,
+            function(data) {
+                log.debug(data);
+                if (data === null)
+                {
+                    return;
+                }
+                var buffer = "";
+                for (i in data)
+                {
+                    buffer += data[i].tagPK.tagname + " ";
+                }
+                $(".tags").html(buffer);
             });
 }
 

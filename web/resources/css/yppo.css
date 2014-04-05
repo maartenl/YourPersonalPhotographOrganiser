@@ -150,3 +150,7 @@ hr {
     background-color: white;
     color:            black;
 }
+
+.tags {
+    font-style:italic;
+}
