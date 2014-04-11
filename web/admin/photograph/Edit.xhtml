@@ -15,6 +15,8 @@
             </h:panelGroup>
             <h:form>
                 <h:panelGrid columns="2">
+                    <h:outputText value="#{bundle.EditPhotographLabel_image}"/>
+                    <h:graphicImage url="/#{photographController.imageurl}" title="#{photographController.selected.filename}"></h:graphicImage>
                     <h:outputLabel value="#{bundle.EditPhotographLabel_id}" for="id" />
                     <h:outputText id="id" value="#{photographController.selected.id}" title="#{bundle.EditPhotographTitle_id}"/>
                     <h:outputLabel value="#{bundle.EditPhotographLabel_filename}" for="filename" />
@@ -30,18 +32,24 @@
                         <f:selectItems value="#{locationController.itemsAvailableSelectOne}"/>
                     </h:selectOneMenu>
                     <h:outputLabel value="#{bundle.EditPhotographLabel_fullPath}" for="fullPath" />
-                    <h:inputText id="fullPath" value="#{photographController.selected.fullPath}" title="#{bundle.EditPhotographTitle_fullPath}" />
+                    <h:outputText id="fullPath" value="#{photographController.selected.fullPath}" title="#{bundle.EditPhotographTitle_fullPath}" />
                     <h:outputLabel value="#{bundle.EditPhotographLabel_filesize}" for="filesize" />
                     <h:outputText id="filesize" value="#{photographController.selected.filesize}" title="#{bundle.EditPhotographTitle_filesize}"/>
                     <h:outputLabel value="#{bundle.EditPhotographLabel_hashstring}" for="hashstring" />
                     <h:outputText id="hashstring" value="#{photographController.selected.hashstring}" title="#{bundle.EditPhotographTitle_hashstring}"/>
                     <h:outputLabel value="#{bundle.EditPhotographLabel_angle}" for="angle" />
-                    <h:inputText id="angle" value="#{photographController.selected.angle}" title="#{bundle.EditPhotographTitle_angle}" />
+                    <h:selectOneMenu id="angle" value="#{photographController.selected.angle}" title="#{bundle.EditPhotographTitle_angle}" >
+                        <f:selectItems value="#{photographController.angles}" var="w" itemLabel="#{w.name}"/> 
+                    </h:selectOneMenu>
                 </h:panelGrid>
                 <h:commandLink action="#{photographController.update}" value="#{bundle.EditPhotographSaveLink}"/>
                 <br />
                 <br />
                 <h:link outcome="View" value="#{bundle.EditPhotographViewLink}"/>
+                <br />
+                <h:outputLabel value="#{bundle.EditPhotographLabel_goto}" for="goto" />
+                <h:inputText id="goto" value="#{photographController.gotoId}" title="#{bundle.EditPhotographTitle_goto}" />
+                <h:commandLink action="#{photographController.gotoPhotograph}" value="#{bundle.EditPhotographShowGoto}"/>
                 <br />
                 <h:commandLink action="#{photographController.prepareList}" value="#{bundle.EditPhotographShowAllLink}" immediate="true"/>
                 <br />

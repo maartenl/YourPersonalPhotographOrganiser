@@ -18,10 +18,12 @@ package gallery.enums;
 
 /**
  *
- * <p>Indicates the rotation required for a picture, to display it properly.
+ * <p>
+ * Indicates the rotation required for a picture, to display it properly.
  * Also indicates the angle at which the original pictures were taken,
  * if supported by the camera/mobile/device.</p>
  * <img src="../../images/ImageAngle.png"/>
+ *
  * @author maartenl
  *
  * @startuml
@@ -109,7 +111,7 @@ public enum ImageAngle
     private ImageAngle(Integer angle, String description)
     {
         this.angle = angle;
-                this.description = description;
+        this.description = description;
     }
 
     public String toString()
@@ -119,6 +121,7 @@ public enum ImageAngle
 
     /**
      * Retrieves the angle of the picture as stored in image information.
+     *
      * @return Integer indicating the angle.
      */
     public Integer getAngle()
@@ -129,6 +132,7 @@ public enum ImageAngle
     /**
      * Retrieves the enum corresponding to the image angle as stored
      * in the picture.
+     *
      * @return ImageAngle indicating the angle. Will return null
      * if angle not found.
      */
@@ -147,5 +151,9 @@ public enum ImageAngle
         }
         return null;
     }
-}
 
+    public String getName()
+    {
+        return name();
+    }
+}

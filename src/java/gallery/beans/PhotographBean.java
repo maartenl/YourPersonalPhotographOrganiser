@@ -224,10 +224,6 @@ public class PhotographBean extends AbstractBean<Photograph>
         try
         {
             List<PhotoMetadata> result = ImageOperations.getMetadata(jpegFile);
-            for (PhotoMetadata data : result)
-            {
-                logger.info(data.toString());
-            }
             return result;
         } catch (ImageProcessingException | IOException ex)
         {
@@ -235,7 +231,6 @@ public class PhotographBean extends AbstractBean<Photograph>
             throw new WebApplicationException(Status.INTERNAL_SERVER_ERROR);
 
         }
-
     }
 
     public ImageAngle getAngle(Long id) throws ImageProcessingException, IOException, MetadataException

@@ -4,8 +4,10 @@ import gallery.admin.util.JsfUtil;
 import gallery.admin.util.PaginationHelper;
 import gallery.beans.PhotographBean;
 import gallery.database.entities.Photograph;
+import gallery.enums.ImageAngle;
 import java.io.Serializable;
 import java.util.ResourceBundle;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.component.UIComponent;
@@ -22,12 +24,15 @@ import javax.inject.Named;
 public class PhotographController implements Serializable
 {
 
+    private static final Logger logger = Logger.getLogger(PhotographController.class.getName());
+
     private Photograph current;
     private DataModel items = null;
     @EJB
     private PhotographBean photographBean;
     private PaginationHelper pagination;
     private int selectedItemIndex;
+    private Long gotoId;
 
     public PhotographController()
     {
@@ -80,6 +85,12 @@ public class PhotographController implements Serializable
         return "List";
     }
 
+    public String gotoPhotograph()
+    {
+        current = getFacade().find(gotoId);
+        return null;
+    }
+
     public String prepareView()
     {
         current = (Photograph) getItems().getRowData();
@@ -121,7 +132,7 @@ public class PhotographController implements Serializable
         {
             getFacade().edit(current);
             JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/bundle").getString("PhotographUpdated"));
-            return "View";
+            return null;
         } catch (Exception e)
         {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/bundle").getString("PersistenceErrorOccured"));
@@ -237,6 +248,22 @@ public class PhotographController implements Serializable
         return photographBean.find(id);
     }
 
+    /**
+     * @return the gotoId
+     */
+    public Long getGotoId()
+    {
+        return gotoId;
+    }
+
+    /**
+     * @param gotoId the gotoId to set
+     */
+    public void setGotoId(Long gotoId)
+    {
+        this.gotoId = gotoId;
+    }
+
     @FacesConverter(forClass = Photograph.class)
     public static class PhotographControllerConverter implements Converter
     {
@@ -293,6 +320,11 @@ public class PhotographController implements Serializable
             return null;
         }
         return "ImageServlet?id=" + getSelected().getId() + "&size=medium";
+    }
+
+    public ImageAngle[] getAngles()
+    {
+        return ImageAngle.values();
     }
 
 }
