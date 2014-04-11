@@ -28,6 +28,7 @@ public class GalleryPhotographController implements Serializable
     private GalleryPhotographBean galleryPhotographBean;
     private PaginationHelper pagination;
     private int selectedItemIndex;
+    private Long gotoId;
 
     public GalleryPhotographController()
     {
@@ -80,6 +81,12 @@ public class GalleryPhotographController implements Serializable
         return "List";
     }
 
+    public String gotoPhotograph()
+    {
+        current = getFacade().find(gotoId);
+        return null;
+    }
+
     public String prepareView()
     {
         current = (GalleryPhotograph) getItems().getRowData();
@@ -121,7 +128,7 @@ public class GalleryPhotographController implements Serializable
         {
             getFacade().edit(current);
             JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/bundle").getString("GalleryPhotographUpdated"));
-            return "View";
+            return null;
         } catch (Exception e)
         {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/bundle").getString("PersistenceErrorOccured"));
@@ -235,6 +242,22 @@ public class GalleryPhotographController implements Serializable
     public GalleryPhotograph getGalleryPhotograph(java.lang.Long id)
     {
         return galleryPhotographBean.find(id);
+    }
+
+    /**
+     * @return the gotoId
+     */
+    public Long getGotoId()
+    {
+        return gotoId;
+    }
+
+    /**
+     * @param gotoId the gotoId to set
+     */
+    public void setGotoId(Long gotoId)
+    {
+        this.gotoId = gotoId;
     }
 
     @FacesConverter(forClass = GalleryPhotograph.class)

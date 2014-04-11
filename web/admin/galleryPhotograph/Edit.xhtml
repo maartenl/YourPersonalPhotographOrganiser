@@ -39,6 +39,10 @@
                 <br />
                 <h:link outcome="View" value="#{bundle.EditGalleryPhotographViewLink}"/>
                 <br />
+                <h:outputLabel value="#{bundle.EditGalleryPhotographLabel_goto}" for="goto" />
+                <h:inputText id="goto" value="#{galleryPhotographController.gotoId}" title="#{bundle.EditGalleryPhotographTitle_goto}" />
+                <h:commandLink action="#{galleryPhotographController.gotoPhotograph}" value="#{bundle.EditGalleryPhotographShowGoto}"/>
+                <br />
                 <h:commandLink action="#{galleryPhotographController.prepareList}" value="#{bundle.EditGalleryPhotographShowAllLink}" immediate="true"/>
                 <br />
                 <br />
