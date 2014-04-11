@@ -24,11 +24,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Data Object for returning information as JSON to the client.
+ *
  * @author maartenl
  */
 @XmlRootElement
 public class PhotoMetadata
 {
+
     /**
      * Name of the photo.
      */
@@ -49,4 +51,20 @@ public class PhotoMetadata
      * A list of all the metadata of the image.
      */
     public List<PhotoTag> tags = new ArrayList<>();
+
+    public PhotoMetadata()
+    {
+        // needs to be here for JSON-ification.
+    }
+
+    @Override
+    public String toString()
+    {
+        StringBuilder builder = new StringBuilder();
+        for (PhotoTag tag : tags)
+        {
+            builder.append(tag + ",");
+        }
+        return builder.toString();
+    }
 }

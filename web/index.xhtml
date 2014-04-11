@@ -27,7 +27,10 @@
     </h:head>
     <h:body onload="loadPage()">
         <h:form>
-            <h:outputText value="Your Personal Photograph Organiser"/>
+            <h1>           
+                <h:graphicImage library="images" name="48/gallery-icon.png"/>
+                <h:outputText value="Your Personal Photograph Organiser"/>
+            </h1>
             <div id="gallerydescription"></div>
             <div><span id="gallerystats"></span> photos</div>
 
@@ -53,9 +56,12 @@
             <h:commandButton value="Go"
                              onclick="go()"
                              type="button"/>         <hr/>  
-            <div id="wrapper" style="width: 100%">
-                <div id="galleryDiv" style="float:left;"></div>
-                <div id="pictureDiv" style="float: right;"></div></div>
+            <div id="wrapper" style="border:1px solid black; width: 100%">
+                <div style="border:1px solid black;float:left;">
+                    <div id="galleryDiv" style="border:1px solid black;"></div>
+                    <div id="photographDiv" style="border:1px solid black;"></div>
+                </div>
+                <div id="pictureDiv" style="border:1px solid black;float: right;"></div></div>
             <hr/>
         </h:form>
     </h:body>

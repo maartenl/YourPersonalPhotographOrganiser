@@ -301,6 +301,7 @@ public class LocationController implements Serializable
         logger.entering(this.getClass().getName(), "verify " + current.getId());
         getFacade().verify(current.getId());
         logger.exiting(this.getClass().getName(), "verify");
+        JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/bundle").getString("LocationVerifyJobStarted"));
         return null;
     }
 
@@ -310,6 +311,7 @@ public class LocationController implements Serializable
         logger.entering(this.getClass().getName(), "discover");
         getFacade().discover(current.getId());
         logger.exiting(this.getClass().getName(), "discover");
+        JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/bundle").getString("LocationDiscoverJobStarted"));
         return null;
     }
 
@@ -319,6 +321,7 @@ public class LocationController implements Serializable
         logger.entering(this.getClass().getName(), "init");
         getFacade().init(current.getId());
         logger.exiting(this.getClass().getName(), "init");
+        JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/bundle").getString("LocationInitStarted"));
         return null;
     }
 }

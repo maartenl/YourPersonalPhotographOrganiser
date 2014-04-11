@@ -16,14 +16,24 @@
  */
 package gallery.images;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * Single tag of metadata retrieved from an image.
+ *
  * @author maartenl
  */
+@XmlRootElement
 public class PhotoTag
 {
+
     private String name;
     private String value;
+
+    public PhotoTag()
+    {
+        // needs to be here for JSON-ification.
+    }
 
     public PhotoTag(String name, String value)
     {
@@ -33,6 +43,7 @@ public class PhotoTag
 
     /**
      * Name of the metadata property item.
+     *
      * @return the name
      */
     public String getName()
@@ -42,6 +53,7 @@ public class PhotoTag
 
     /**
      * Name of the metadata property item.
+     *
      * @param name the name to set
      */
     public void setName(String name)
@@ -51,6 +63,7 @@ public class PhotoTag
 
     /**
      * Value of the metadata property item.
+     *
      * @return the value
      */
     public String getValue()
@@ -60,10 +73,18 @@ public class PhotoTag
 
     /**
      * Value of the metadata property item.
+     *
      * @param value the value to set
      */
     public void setValue(String value)
     {
         this.value = value;
     }
+
+    @Override
+    public String toString()
+    {
+        return name + "=" + value;
+    }
+
 }

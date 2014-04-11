@@ -16,7 +16,7 @@
  */
 
 var YourPersonalPhotographOrganiserBag = {
-    debug: true, // debugging=false is debugging off
+    showMetadata: false,
     view: "multiple", // indicates that 9 pictures should be shown at once, single being only one picture.
     index: 0 // the offset on which photos are being watched.
 };
@@ -106,7 +106,7 @@ function displaySinglePhotos()
     if (description === null) {
         description = '';
     }
-    buffer += "<div class=\"photographCenter\">";
+    buffer += "<div id=\"metadataDiv\"></div><div class=\"photographCenter\">";
     if (photos[i].photograph === undefined) // is gallery!
     {
         // gallery found
@@ -131,8 +131,9 @@ function displaySinglePhotos()
     {
         imageSize = "big";
     }
-    buffer += "<img onclick=\"displayPhotoStats(" + i + ");\" src=\"/YourPersonalPhotographOrganiser/ImageServlet?id=" + photos[i].photograph.id + "&size=" + imageSize + "\" alt=\"\"/>";
-    buffer += '<br/><div class=\"name\">' + (i + 1) + '. ' +
+    buffer += "<a href=\"/YourPersonalPhotographOrganiser/ImageServlet?id=" + photos[i].photograph.id + "\" target=\"_blank\">";
+    buffer += "<img src=\"/YourPersonalPhotographOrganiser/ImageServlet?id=" + photos[i].photograph.id + "&size=" + imageSize + "\" alt=\"\"/>";
+    buffer += '</a><br/><div class=\"name\">' + (i + 1) + '. ' +
             photos[i].name
             + '</div><div class=\"description\">' + description + '</div><div class=\"comments\"></div></div><div><span class=\"tags\"></span></div>';
     $('#pictureDiv').html(buffer);
@@ -215,7 +216,7 @@ function displayMultiplePhotos()
             }
             buffer += '<div class="photograph ' + (j % 3 == 0 ? 'photographBegin ' : ' ') + (j % 3 === 2 ? 'photographEnd' : '') + '"><a ' + isImage + ' href=\"/YourPersonalPhotographOrganiser/ImageServlet?id=' + photos[i].photograph.id + '\">' +
                     '<img src=\"/YourPersonalPhotographOrganiser/ImageServlet?id=' + photos[i].photograph.id + '&size=medium\" alt=\"\"/>' +
-                    '</a><br/><div class=\"name\"><span onclick=\"displayPhotoStats('+i+');\">' + (i + 1) + '. ' +
+                    '</a><br/><div class=\"name\"><span onclick=\"displayPhotoStats(' + i + ');\">' + (i + 1) + '. ' +
                     photos[i].name
                     + '</span></div></div>';
         }
@@ -233,17 +234,77 @@ function displayPhotos()
     if (YourPersonalPhotographOrganiserBag.view !== "multiple")
     {
         displaySinglePhotos();
+        displayPhotoStats();
+        resizeScreen();
         return;
     }
     displayMultiplePhotos();
+    $('#photographDiv').html("");
+    resizeScreen();
+}
+
+function showMetadata()
+{
+    YourPersonalPhotographOrganiserBag.showMetadata = !YourPersonalPhotographOrganiserBag.showMetadata;
+    var showMetadata = YourPersonalPhotographOrganiserBag.showMetadata;
+    var i = YourPersonalPhotographOrganiserBag.index;
+    var photo = YourPersonalPhotographOrganiserBag.photographs[i];
+    if (showMetadata)
+    {
+        yppo.photographs.getMetadata(photo.photograph.id, function(data) {
+            log.debug(data);
+            var buffer = "<table><tr><th>name</th><th>value</th></tr>";
+            for (i in data)
+            {
+                var photometadata = data[i];
+                if (typeof (photometadata.name) !== "undefined")
+                {
+                    buffer += "<tr><td>name</td><td>" + photometadata.name + "</td></tr>";
+                }
+                if (typeof (photometadata.taken) !== "undefined")
+                {
+                    buffer += "<tr><td>taken</td><td>" + photometadata.taken + "</td></tr>";
+                }
+                if (typeof (photometadata.angle) !== "undefined")
+                {
+                    buffer += "<tr><td>angle</td><td>" + photometadata.angle + "</td></tr>";
+                }
+                buffer += "<tr><td></td><td></td></tr>";
+                for (j in photometadata.tags)
+                {
+                    var tag = photometadata.tags[j];
+                    buffer += "<tr><td>" + tag.name + "</td><td>" + tag.value + "</td></tr>";
+                }
+            }
+            buffer += "</table>";
+            $('#metadataDiv').html(buffer);
+        });
+    }
+    else
+    {
+        $('#metadataDiv').html("");
+    }
 }
 
 function displayPhotoStats(i)
 {
-    log.debug("displayMultiplePhotos");
-    var buffer = "";
+    log.debug("displayPhotoStats");
+    var buffer = "<hr/>";
+    var i = YourPersonalPhotographOrganiserBag.index;
     var photo = YourPersonalPhotographOrganiserBag.photographs[i];
-    $('#pictureDiv').html(buffer);
+    log.debug(photo);
+    buffer += "<b>Photograph</b>: " + i + "<br/>";
+    buffer += "<b>Id</b>: " + photo.id + "<br/>";
+    buffer += "<b>Sortorder:</b>: " + photo.sortorder + "<br/>";
+    buffer += "<hr/>";
+    buffer += "<b>File</b>: " + photo.photograph.id + "<br/>";
+    buffer += "<b>Name</b>: " + photo.photograph.filename + "<br/>";
+    buffer += "<b>Size</b>: " + photo.photograph.filesize + "<br/>";
+    buffer += "<b>Path</b>: " + photo.photograph.relativepath + "<br/>";
+    buffer += "<b>Angle</b>: " + photo.photograph.angle + "<br/>";
+    buffer += "<b>Taken</b>: " + photo.photograph.taken + "<br/>";
+    buffer += "<b><span onclick=\"showMetadata()\">Metadata</span</b>";
+    $('#photographDiv').html(buffer);
 }
 
 function showGalleryInfo()
@@ -257,6 +318,15 @@ function showGalleryInfo()
     }
     $("#galleryname").html(data.name);
     $("#gallerydescription").html(data.description);
+}
+
+function resizeScreen()
+{
+    var documentwidth = $('#wrapper').width();
+    var sidewidth = $('#galleryDiv').width();
+    log.debug("create jstree documentwidth=" + documentwidth);
+    log.debug("create jstree sidewidth=" + sidewidth);
+    $('#pictureDiv').css("width", (documentwidth - sidewidth - 100) + "px");
 }
 
 function loadPage()
@@ -299,16 +369,11 @@ function loadPage()
                     })
                     // create the instance
                     .jstree({'core': {
-                            "themes": {"stripes": true},
-                            "plugins": ["wholerow"],
+                            "themes": {"stripes": true, "dots": false},
+                            "plugins": ["wholerow", "search", "state"],
                             "multiple": false,
                             'data': YourPersonalPhotographOrganiserBag.galleries
                         }});
-            var documentwidth = $('#wrapper').width();
-            var sidewidth = $('#galleryDiv').width();
-            log.debug("create jstree documentwidth=" + documentwidth);
-            log.debug("create jstree sidewidth=" + sidewidth);
-            $('#pictureDiv').css("width", (documentwidth - sidewidth - 100) + "px");
         });
         yppo.photographs.getPhotographs(1, function(data) {
             YourPersonalPhotographOrganiserBag.photographs = data;

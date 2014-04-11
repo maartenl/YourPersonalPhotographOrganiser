@@ -46,3 +46,27 @@ yppo.photographs.getPhotographs = function(id, callBack)
             "json"); // endget
     // url [, data] [, success(data, textStatus, jqXHR)] [, dataType] )
 }
+
+/**
+ * Returns the metadata of a photograph.
+ * @param Long id id of a photograph
+ * @param callBack function called when completed.
+ * @returns extensive array of photograph metadata
+ */
+yppo.photographs.getMetadata = function(id, callBack)
+{
+    log.debug("getMetadata");
+    var url = '/YourPersonalPhotographOrganiser/resources/photographs/' + id + '/metadata';
+    $.get(url,
+            function(data) {
+                log.debug(data);
+                if (data === null)
+                {
+                    return;
+                }
+                callBack(data);
+            }, // end function(data)
+            "json"); // endget
+    // url [, data] [, success(data, textStatus, jqXHR)] [, dataType] )
+}
+

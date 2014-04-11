@@ -33,6 +33,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -84,11 +85,13 @@ public class Gallery implements Serializable
     @Column(name = "sortorder")
     private int sortorder;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "gallery")
+    @OrderBy("sortorder")
     private Collection<GalleryPhotograph> galleryPhotographCollection;
     @JoinColumn(name = "highlight", referencedColumnName = "id")
     @ManyToOne
     private Photograph highlight;
     @OneToMany(mappedBy = "parent")
+    @OrderBy("sortorder")
     private Collection<Gallery> galleryCollection;
     @JoinColumn(name = "parent_id", referencedColumnName = "id")
     @ManyToOne

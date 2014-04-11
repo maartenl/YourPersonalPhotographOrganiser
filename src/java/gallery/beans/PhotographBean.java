@@ -27,7 +27,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -55,6 +54,8 @@ import javax.ws.rs.core.Response.Status;
 @Path("/photographs")
 public class PhotographBean extends AbstractBean<Photograph>
 {
+
+    private static final Logger logger = Logger.getLogger(PhotographBean.class.getName());
 
     @PersistenceContext(unitName = "YourPersonalPhotographOrganiserPU")
     private EntityManager em;
@@ -211,18 +212,28 @@ public class PhotographBean extends AbstractBean<Photograph>
     public List<PhotoMetadata> getMetadata(@PathParam("id") Long id)
     {
         Photograph photo = find(id);
+        if (photo == null)
+        {
+            throw new WebApplicationException(Status.NOT_FOUND);
+        }
         if (!ImageOperations.isImage(photo.getFullPath()))
         {
-            return Collections.emptyList();
+            throw new WebApplicationException(Status.NO_CONTENT);
         }
         File jpegFile = getFile(id);
         try
         {
-            return ImageOperations.getMetadata(jpegFile);
-            // JDK 7 - Multicatch , woohoo!
+            List<PhotoMetadata> result = ImageOperations.getMetadata(jpegFile);
+            for (PhotoMetadata data : result)
+            {
+                logger.info(data.toString());
+            }
+            return result;
         } catch (ImageProcessingException | IOException ex)
         {
+            Logger.getLogger(PhotographBean.class.getName()).log(Level.SEVERE, null, ex);
             throw new WebApplicationException(Status.INTERNAL_SERVER_ERROR);
+
         }
 
     }
