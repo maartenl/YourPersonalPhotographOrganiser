@@ -38,7 +38,6 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response.Status;
 
@@ -202,13 +201,14 @@ public class GalleryBean extends AbstractBean<Gallery>
         return found;
     }
 
-    @GET
-    @Path("{id}/import")
-    @Produces(
-            {
-                "application/xml", "application/json"
-            })
-    public String importPhotographs(@PathParam("id") Long id, @QueryParam("location") String location)
+    /**
+     * Imports photographs into a gallery.
+     *
+     * @param id id of the gallery
+     * @param location location (in full) to check for photographs.
+     * @return
+     */
+    public String importPhotographs(Long id, String location)
     {
         Gallery found = find(id);
         return jobBean.importPhotographs(found, location);

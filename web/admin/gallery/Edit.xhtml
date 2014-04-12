@@ -41,6 +41,11 @@
                 <br />
                 <h:link outcome="View" value="#{bundle.EditGalleryViewLink}"/>
                 <br />
+                <h:outputLabel value="#{bundle.EditGalleryLabel_import}" for="import" />
+                <h:inputText id="import" value="#{galleryController.location}" title="#{bundle.EditGalleryTitlel_import}" />
+                <h:commandLink action="#{galleryController.importPhotographs}" value="#{bundle.EditGalleryImport}"/>
+                <br />
+                <br />
                 <h:commandLink action="#{galleryController.prepareList}" value="#{bundle.EditGalleryShowAllLink}" immediate="true"/>
                 <br />
                 <br />

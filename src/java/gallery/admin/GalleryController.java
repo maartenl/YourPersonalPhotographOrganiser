@@ -6,6 +6,8 @@ import gallery.beans.GalleryBean;
 import gallery.database.entities.Gallery;
 import java.io.Serializable;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.component.UIComponent;
@@ -22,12 +24,15 @@ import javax.inject.Named;
 public class GalleryController implements Serializable
 {
 
+    private static final Logger logger = Logger.getLogger(GalleryController.class.getName());
+
     private Gallery current;
     private DataModel items = null;
     @EJB
     private GalleryBean galleryBean;
     private PaginationHelper pagination;
     private int selectedItemIndex;
+    private String location;
 
     public GalleryController()
     {
@@ -222,6 +227,25 @@ public class GalleryController implements Serializable
         return "List";
     }
 
+    public String importPhotographs()
+    {
+        if (current == null)
+        {
+            return null;
+        }
+        logger.log(Level.FINEST, "importPhotographs {0} {1}", new Object[]
+        {
+            location, current.getName()
+        });
+        String message = getFacade().importPhotographs(current.getId(), location);
+        if (message != null)
+        {
+            logger.warning(message);
+        }
+        JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/bundle").getString("PhotographsImported"));
+        return null;
+    }
+
     public SelectItem[] getItemsAvailableSelectMany()
     {
         return JsfUtil.getSelectItems(galleryBean.findAll(), false);
@@ -235,6 +259,22 @@ public class GalleryController implements Serializable
     public Gallery getGallery(java.lang.Long id)
     {
         return galleryBean.find(id);
+    }
+
+    /**
+     * @return the location
+     */
+    public String getLocation()
+    {
+        return location;
+    }
+
+    /**
+     * @param location the location to set
+     */
+    public void setLocation(String location)
+    {
+        this.location = location;
     }
 
     @FacesConverter(forClass = Gallery.class)

@@ -20,6 +20,7 @@ import gallery.database.entities.Gallery;
 import gallery.database.entities.GalleryPhotograph;
 import gallery.database.entities.Location;
 import gallery.database.entities.Photograph;
+import java.io.File;
 import java.math.BigInteger;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
@@ -107,6 +108,7 @@ public class JobBean
             // get all photographs that match the mask
             Query query = em.createNamedQuery("Photograph.findByLocation");
             query.setParameter("mask", location);
+            query.setParameter("separator", File.separator);
             query.setParameter("gallery", found);
             List list = query.getResultList();
             if (list == null || list.isEmpty())

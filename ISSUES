@@ -353,11 +353,6 @@ Turns out that I had a @NotNull on the @Id which had an @Identity. Those
 three bite each other, namely, you have to enter null when you are adding a
 new entity, as the id gets determined by the database.
 
-3. Netbeans didn't recognise the new JDK 7 syntax.
-
-Jk7 doesn't work with jsp pages yet
-http://java.net/jira/browse/GLASSFISH-17429
-
 4. WARNING: A HTTP GET method, public gallery.database.entities.Photograph
 gallery.beans.PhotographBean.getMetadata(java.lang.Long), should not consume
 any entity.

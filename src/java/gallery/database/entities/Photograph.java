@@ -60,7 +60,7 @@ import javax.xml.bind.annotation.XmlTransient;
             @NamedQuery(name = "Photograph.findByFilename", query = "SELECT p FROM Photograph p WHERE p.filename = :filename and p.relativepath = :relativepath"),
             @NamedQuery(name = "Photograph.findByStats", query = "SELECT p FROM Photograph p WHERE p.hashstring = :hashstring and p.filesize = :filesize"),
             @NamedQuery(name = "Photograph.findByLocation", query = "SELECT p FROM Photograph p "
-                    + "WHERE concat(p.location.filepath, '/', p.relativepath, '/', p.filename) like :mask "
+                    + "WHERE concat(p.location.filepath, :separator, p.relativepath, :separator, p.filename) like :mask "
                     + "AND not exists (select gp from GalleryPhotograph gp where gp.gallery = :gallery and gp.photograph = p) "
                     + "order by p.taken, p.filename"),
             @NamedQuery(name = "Photograph.findUnused", query = "SELECT p FROM Photograph p WHERE not exists (select gp from GalleryPhotograph gp where gp.photograph = p)"),
