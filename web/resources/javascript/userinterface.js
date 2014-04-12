@@ -96,6 +96,40 @@ function go()
     displayPhotos();
 }
 
+function showCommentPopup()
+{
+    $('#modalPanelDiv').css({
+        "display": "block",
+        "height": "300px",
+        "width": "300px",
+        "position": "absolute",
+        "top": "100px",
+        "left": "100px",
+        "z-index": "1000",
+        "background": "white",
+        "border": "1px solid black",
+        "padding": "0px"
+    });
+}
+
+function hideCommentPopup()
+{
+    $('#modalPanelDiv').css("display", "none");
+}
+
+function submitComment()
+{
+    hideCommentPopup();
+    var photos = YourPersonalPhotographOrganiserBag.photographs;
+    var i = YourPersonalPhotographOrganiserBag.index;
+    var author = $('#author').val();
+    var comment = $('#comment').val();
+    yppo.comments.createComment(photos[i], author, comment, function()
+    {
+        alert("Comment stored.");
+    });
+}
+
 function displaySinglePhotos()
 {
     log.debug("displaySinglePhotos");
@@ -145,7 +179,7 @@ function displaySinglePhotos()
                 {
                     return;
                 }
-                var buffer = "";
+                var buffer = "<img onclick=\"showCommentPopup()\" src=\"/YourPersonalPhotographOrganiser/faces/javax.faces.resource/32/pen.png?ln=images\" title=\"Write comment\"/><br/>";
                 for (i in data)
                 {
                     buffer += "<p>" + data[i].comment + "<p/><p>" + data[i].author + ", " + (new Date(data[i].submitted)) + "</p>";
@@ -162,7 +196,7 @@ function displaySinglePhotos()
                 var buffer = "";
                 for (i in data)
                 {
-                    buffer += data[i].tagPK.tagname + " ";
+                    buffer += "<span>" + data[i].tagPK.tagname + "</span> ";
                 }
                 $(".tags").html(buffer);
             });
@@ -359,6 +393,7 @@ function loadPage()
                             showGalleryInfo();
                             yppo.photographs.getPhotographs(YourPersonalPhotographOrganiserBag.gallery.id, function(data) {
                                 YourPersonalPhotographOrganiserBag.photographs = data;
+                                YourPersonalPhotographOrganiserBag.index = 0;
                                 displayPhotos();
                             });
                         }

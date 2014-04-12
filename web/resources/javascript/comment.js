@@ -20,7 +20,7 @@ if (!yppo)
 if (!yppo.comments)
 {
     yppo.comments =
-            {                
+            {
             }
 }
 
@@ -45,4 +45,31 @@ yppo.comments.getComments = function(id, callBack)
             }, // end function(data)
             "json"); // endget
     // url [, data] [, success(data, textStatus, jqXHR)] [, dataType] )
+}
+
+/**
+ * Stores a new comment on a GalleryPhotograph.
+ * @param galleryphotograph to comment on
+ * @param String author the author of the comment
+ * @param String comment the comment, the thing it's all about.
+ * @param callBack function called when completed.
+ * @returns {undefined}
+ */
+yppo.comments.createComment = function(galleryphotograph, author, comment, callBack)
+{
+    var comment = {
+        author: author,
+        comment: comment,
+        galleryphotograph: galleryphotograph
+    };
+    $.ajax({
+        type: "POST",
+        url: "/YourPersonalPhotographOrganiser/resources/comments",
+        data: JSON.stringify(comment),
+        success: function()
+        {
+            callBack();
+        },
+        contentType: "application/json"
+    });
 }

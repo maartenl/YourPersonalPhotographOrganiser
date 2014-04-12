@@ -28,16 +28,14 @@
     <h:body onload="loadPage()">
         <h:form>
             <h1>
-                <h:outputLink target="/YourPersonalPhotographOrganiser">
-                    <h:graphicImage library="images" name="48/gallery-icon.png"/>
-                    <h:outputText value="Your Personal Photograph Organiser"/>
-                </h:outputLink>
+                <h:graphicImage library="images" name="48/gallery-icon.png"/>
+                <h:outputText value="Your Personal Photograph Organiser"/>
             </h1>
             <div id="gallerydescription"></div>
             <div><span id="gallerystats"></span> photos</div>
 
-            <h:commandButton value="Admin" 
-                             action="admin/index.xhtml"/>
+            <h:link value="Admin" 
+                    outcome="admin/index.xhtml" target="_blank"/>
             <h:commandButton value="Beginning"
                              onclick="beginning()"
                              type="button"/>
@@ -58,6 +56,14 @@
             <h:commandButton value="Go"
                              onclick="go()"
                              type="button"/>         <hr/>  
+            <div id="modalPanelDiv" style="display:none;">   
+                <form>
+                    <p><h2><img src="/YourPersonalPhotographOrganiser/faces/javax.faces.resource/32/pen.png?ln=images" title="Write comment"/>Add comment</h2></p>
+                    <p><label for="author">Author:</label><input type="text" size="30" name="author" id="author" /></p>
+                    <p><label for="comment">Message:</label><textarea rows="6" name="comment" id="comment" cols="35"></textarea></p>
+                    <p><span onclick="submitComment()">Submit</span></p><p><span onclick="hideCommentPopup()">Cancel</span></p>
+                </form>
+            </div>
             <div id="wrapper" style="width: 100%">
                 <div style="float:left;">
                     <div id="galleryDiv"></div>

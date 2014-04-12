@@ -154,3 +154,7 @@ hr {
 .tags {
     font-style:italic;
 }
+
+.tags span {
+    border: 1px solid black;
+}

@@ -37,6 +37,7 @@ import javax.servlet.http.HttpServletResponse;
  * The image servlet, returns images properly scaled and rotated, based on a
  * photograph id provided in the parameters as "id".
  * Accessible at for example /YourPersonalPhotographOrganiser/ImageServlet?id=123.
+ *
  * @author maartenl
  */
 @WebServlet(name = "ImageServlet", urlPatterns =
@@ -52,8 +53,8 @@ public class ImageServlet extends HttpServlet
     private void writeError(String error, HttpServletResponse response) throws IOException
     {
 
-        try (PrintWriter out =
-                        response.getWriter();)
+        try (PrintWriter out
+                = response.getWriter();)
         {
             response.setContentType("text/html;charset=UTF-8");
             out.println("<html>");
@@ -69,10 +70,12 @@ public class ImageServlet extends HttpServlet
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
+     * @throws MetadataException when not able to retrieve the meta data of a photo.
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, MetadataException
@@ -134,7 +137,7 @@ public class ImageServlet extends HttpServlet
             {
                 contentType = "image/png";
                 response.setContentType(contentType);
-                FileOperations.dumpFile(getServletContext().getResourceAsStream("/images/movie.png"), response.getOutputStream());
+                FileOperations.dumpFile(getServletContext().getResourceAsStream("/resources/images/movie.png"), response.getOutputStream());
             } else
             {
                 contentType = "video/avi";
@@ -156,6 +159,7 @@ public class ImageServlet extends HttpServlet
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -176,6 +180,7 @@ public class ImageServlet extends HttpServlet
 
     /**
      * Handles the HTTP <code>POST</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -196,6 +201,7 @@ public class ImageServlet extends HttpServlet
 
     /**
      * Returns a short description of the servlet.
+     *
      * @return a String containing servlet description
      */
     @Override
