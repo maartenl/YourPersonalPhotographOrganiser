@@ -102,9 +102,9 @@ function displaySinglePhotos()
     var buffer = "";
     var photos = YourPersonalPhotographOrganiserBag.photographs;
     var i = YourPersonalPhotographOrganiserBag.index;
-    var description = photos[i].description;
-    if (description === null) {
-        description = '';
+    var description = '';
+    if (typeof (photos[i].description) !== "undefined") {
+        description = photos[i].description;
     }
     buffer += "<div id=\"metadataDiv\"></div><div class=\"photographCenter\">";
     if (photos[i].photograph === undefined) // is gallery!
@@ -182,10 +182,6 @@ function displayMultiplePhotos()
     }
     for (i = YourPersonalPhotographOrganiserBag.index; i <= continue_until; i++)
     {
-        var description = photos[i].description;
-        if (description === null) {
-            description = '';
-        }
         if (photos[i].photograph === undefined) // is gallery!
         {
             // gallery found
