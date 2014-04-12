@@ -27,12 +27,16 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -239,5 +243,36 @@ public class PhotographBean extends AbstractBean<Photograph>
         Photograph photo = find(id);
         Logger.getLogger(PhotographBean.class.getName()).log(Level.FINE, "getAngle returns {0}", photo.getAngle());
         return photo.getAngle();
+    }
+
+    /**
+     * Provides a list of Photographs that are not assigned to any GalleryPhotographs
+     * yet.
+     *
+     * @return List<Photograph> a list of photographs currently not assigned
+     * to any galleries.
+     */
+    public List<Photograph> unusedPhotographs()
+    {
+        try
+        {
+            // get all photographs that are unused
+            Query query = em.createNamedQuery("Photograph.findUnused");
+            List list = query.getResultList();
+            if (list != null)
+            {
+                return list;
+            }
+            return Collections.emptyList();
+        } catch (ConstraintViolationException e)
+        {
+            logger.throwing(this.getClass().getName(), "unusedPhotographs", e);
+            for (ConstraintViolation<?> violation : e.getConstraintViolations())
+            {
+                logger.warning(violation.toString());
+                logger.exiting(this.getClass().getName(), "issues");
+            }
+            throw e;
+        }
     }
 }

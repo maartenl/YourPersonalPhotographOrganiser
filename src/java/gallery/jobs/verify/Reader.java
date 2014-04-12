@@ -99,6 +99,7 @@ public class Reader extends AbstractItemReader
         Query query = em.createNamedQuery("Photograph.getPhotographsByLocation");
         query.setParameter("location", location);
         List<Photograph> list = query.getResultList();
+        logger.log(Level.FINEST, "verifyPhotographReader found {0} photographs.", list.size());
         ids = list;
     }
 
