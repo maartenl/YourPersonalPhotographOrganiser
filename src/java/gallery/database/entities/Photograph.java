@@ -88,8 +88,8 @@ public class Photograph implements Serializable
     @Temporal(TemporalType.TIMESTAMP)
     private Date taken;
     @Basic(optional = false)
-    @Size(max = 1024)
-    @Column(name = "hashstring")
+    @Size(max = 512)
+    @Column(name = "hashstring", unique = true)
     private String hashstring;
     @Basic(optional = false)
     @Column(name = "filesize")
