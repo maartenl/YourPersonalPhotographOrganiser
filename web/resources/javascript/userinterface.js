@@ -78,15 +78,17 @@ function changeView()
     displayPhotos();
 }
 
-function go()
+function go(form)
 {
-    if (isNaN(parseInt($("#go_number_foto").val())))
+    var fotonumber = form[form.id + ":go_number_foto"].value;
+
+    if (isNaN(parseInt(fotonumber)))
     {
         alert("Number expected.");
     }
     else
     {
-        var i = parseInt($("#go_number_foto").val()) - 1;
+        var i = parseInt(fotonumber) - 1;
     }
     log.debug(i);
     if (i < 0 || i > YourPersonalPhotographOrganiserBag.photographs.length - 1) {
