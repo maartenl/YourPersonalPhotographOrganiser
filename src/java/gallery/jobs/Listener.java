@@ -16,10 +16,13 @@
  */
 package gallery.jobs;
 
+import gallery.beans.LogBean;
+import gallery.database.entities.Log;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.batch.api.listener.JobListener;
 import javax.batch.api.listener.StepListener;
+import javax.ejb.EJB;
 import javax.enterprise.context.ApplicationScoped;
 
 /**
@@ -32,30 +35,37 @@ public abstract class Listener implements JobListener, StepListener
 
     private static final Logger logger = Logger.getLogger(Listener.class.getName());
 
+    @EJB
+    private LogBean logBean;
+
     protected abstract String getName();
 
     @Override
     public void beforeJob() throws Exception
     {
         logger.log(Level.INFO, "Job Started: {0}", getName());
+        logBean.createLog(getName(), "Job Started: " + getName(), null, Log.LogLevel.INFO);
     }
 
     @Override
     public void afterJob() throws Exception
     {
         logger.log(Level.INFO, "Job Ended: {0}", getName());
+        logBean.createLog(getName(), "Job Ended: " + getName(), null, Log.LogLevel.INFO);
     }
 
     @Override
     public void beforeStep() throws Exception
     {
         logger.log(Level.INFO, "Step Started: {0}", getName());
+        logBean.createLog(getName(), "Step Started: " + getName(), null, Log.LogLevel.INFO);
     }
 
     @Override
     public void afterStep() throws Exception
     {
         logger.log(Level.INFO, "Step Ended: {0}", getName());
+        logBean.createLog(getName(), "Step Ended: " + getName(), null, Log.LogLevel.INFO);
     }
 
 }

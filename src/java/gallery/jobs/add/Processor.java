@@ -178,7 +178,7 @@ public class Processor implements ItemProcessor
         if (list != null && !list.isEmpty())
         {
             logger.log(Level.FINE, "{0} already exists.", path.toString());
-            logBean.createLog("addPhotograph", "Photograph " + path + " already exists.", null, LogLevel.WARNING);
+            logBean.createLog("addPhotograph", "Photograph " + path + " already exists.", null, LogLevel.INFO);
             return null;
         }
         // check if hash and filesize already exist in database
