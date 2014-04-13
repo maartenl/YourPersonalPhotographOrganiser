@@ -275,4 +275,35 @@ public class PhotographBean extends AbstractBean<Photograph>
             throw e;
         }
     }
+
+    /**
+     * Provides a list of Photographs that are assigned more than once.
+     *
+     * @return List<Photograph> a list of photographs currently assigned
+     * to any galleries more than once.
+     */
+    public List<Photograph> findDoubleUsedPhotographs()
+    {
+        try
+        {
+            // get all photographs that are used more than once
+            Query query = em.createNamedQuery("Photograph.findDoubleUsed");
+            List list = query.getResultList();
+            if (list != null)
+            {
+                return list;
+            }
+            return Collections.emptyList();
+        } catch (ConstraintViolationException e)
+        {
+            logger.throwing(this.getClass().getName(), "findDoubleUsedPhotographs", e);
+            for (ConstraintViolation<?> violation : e.getConstraintViolations())
+            {
+                logger.warning(violation.toString());
+                logger.exiting(this.getClass().getName(), "issues");
+            }
+            throw e;
+        }
+    }
+
 }

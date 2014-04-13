@@ -14,6 +14,9 @@
                 <h:panelGroup id="messagePanel" layout="block">
                     <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
                 </h:panelGroup>
+                <h2>                        
+                    <h:outputText value="#{bundle.UnusedPhotographs}"/>
+                </h2>     
                 <h:dataTable value="#{issuesController.unusedPhotographs}" var="item">
                     <h:column>
                         <f:facet name="header">
@@ -66,7 +69,62 @@
                         <h:outputText value="#{item.angle}"/>
                     </h:column>
                 </h:dataTable>  
-                <br />
+                <h2>                        
+                    <h:outputText value="#{bundle.DoubleUsedPhotographs}"/>
+                </h2>
+                <h:dataTable value="#{issuesController.doubleUsedPhotographs}" var="item">
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListPhotographTitle_id}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.id}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListPhotographTitle_filename}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.filename}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListPhotographTitle_relativepath}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.relativepath}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListPhotographTitle_taken}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.taken}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListPhotographTitle_location}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.location}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListPhotographTitle_fullPath}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.fullPath}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListPhotographTitle_filesize}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.filesize}"/>
+                    </h:column>                       
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListPhotographTitle_angle}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.angle}"/>
+                    </h:column>
+                </h:dataTable>  
+                <br/>
                 <h:commandLink action="#{issuesController.refresh}" value="#{bundle.IssuesRefresh}"/>      
                 <br />
                 <br />

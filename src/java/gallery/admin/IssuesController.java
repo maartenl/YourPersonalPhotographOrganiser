@@ -18,6 +18,8 @@ public class IssuesController implements Serializable
 
     private List<Photograph> unusedPhotographs;
 
+    private List<Photograph> doubleUsedPhotographs;
+
     public IssuesController()
     {
     }
@@ -34,6 +36,15 @@ public class IssuesController implements Serializable
             unusedPhotographs = getFacade().unusedPhotographs();
         }
         return unusedPhotographs;
+    }
+
+    public List<Photograph> getDoubleUsedPhotographs()
+    {
+        if (doubleUsedPhotographs == null)
+        {
+            doubleUsedPhotographs = getFacade().findDoubleUsedPhotographs();
+        }
+        return doubleUsedPhotographs;
     }
 
     public void refresh()

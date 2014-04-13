@@ -6,10 +6,12 @@ Installing this war requires the following components:
 - JDK 7
 - MariaDB
 - MariaDB JConnect jdbc driver in glassfish ($GLASSFISH/glassfish/lib)
-- JQuery (automatically connects to a CDN, so no worries there)
-- Fancybox (Lightbox replacement for jquery, I'm using an old version,
-  version jquery.fancybox-1.3.4.zip. To be on the safe side, I included it
-  into git.)
+- JQuery
+- Fancybox (Lightbox replacement for jquery)
+
+NOTE: MariaDB happens to be the database that I am using. It should run,
+out of the box, using another database. As long as there's a JDBC driver
+for it.
 
 Steps
 -----
@@ -69,6 +71,11 @@ gallery.servlets.FileOperations.level=FINEST
 gallery.servlets.ImageServlet.level=FINEST
 gallery.beans.PhotographBean.level=FINEST
 gallery.database.entities.Photograph.level=FINEST
+
+Logging sql statements in EclipseLink is possible by adding the following
+to the persistence.xml:
+<property name="eclipselink.logging.logger" value="DefaultLogger"/>
+<property name="eclipselink.logging.level" value="FINE"/>
 
 Addendum
 --------
