@@ -335,4 +335,13 @@ public class LogController implements Serializable
 
     }
 
+    public String deleteAll()
+    {
+        logBean.deleteAll();
+        recreateModel();
+        recreatePagination();
+        JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/bundle").getString("LogDeleted"));
+        return "List";
+    }
+
 }

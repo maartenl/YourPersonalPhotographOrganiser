@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.ParameterExpression;
 import javax.persistence.criteria.Root;
@@ -102,5 +103,11 @@ public class LogBean extends AbstractBean<Log>
         }
         javax.persistence.Query q = getEntityManager().createQuery(cq);
         return ((Long) q.getSingleResult()).intValue();
+    }
+
+    public int deleteAll()
+    {
+        Query query = em.createNamedQuery("Log.deleteAll");
+        return query.executeUpdate();
     }
 }

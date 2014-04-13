@@ -67,6 +67,8 @@
                         </h:column>
                     </h:dataTable>
                 </h:panelGroup>
+                <br />
+                <h:commandLink action="#{logController.deleteAll}" value="#{bundle.DeleteAllLogEntries}" immediate="true"/>
                 <br />               
                 <h:link outcome="/admin/index" value="#{bundle.ListLogIndexLink}"/>
             </h:form>

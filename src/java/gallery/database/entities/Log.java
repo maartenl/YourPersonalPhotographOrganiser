@@ -48,7 +48,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries(
         {
             @NamedQuery(name = "Log.findAll", query = "SELECT l FROM Log l"),
-            @NamedQuery(name = "Log.findById", query = "SELECT l FROM Log l WHERE l.id = :id")
+            @NamedQuery(name = "Log.findById", query = "SELECT l FROM Log l WHERE l.id = :id"),
+            @NamedQuery(name = "Log.deleteAll", query = "DELETE FROM Log l")
         })
 public class Log implements Serializable
 {
