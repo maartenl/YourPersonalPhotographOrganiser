@@ -22,8 +22,10 @@
                 <h:outputText escape="false" value="#{bundle.ListLogEmpty}" rendered="#{logController.items.rowCount == 0}"/>
                 <h:panelGroup rendered="#{logController.items.rowCount > 0}">
                     <h:outputText value="#{logController.pagination.pageFirstItem + 1}..#{logController.pagination.pageLastItem + 1}/#{logController.pagination.itemsCount}"/>&nbsp;
+                    <h:commandLink action="#{logController.beginning}" value="#{bundle.Beginning}"/>&nbsp;
                     <h:commandLink action="#{logController.previous}" value="#{bundle.Previous} #{logController.pagination.pageSize}" rendered="#{logController.pagination.hasPreviousPage}"/>&nbsp;
                     <h:commandLink action="#{logController.next}" value="#{bundle.Next} #{logController.pagination.pageSize}" rendered="#{logController.pagination.hasNextPage}"/>&nbsp;
+                    <h:commandLink action="#{logController.end}" value="#{bundle.End}"/>&nbsp;
                     <h:dataTable value="#{logController.items}" var="item" border="0" cellpadding="2" cellspacing="0" rowClasses="jsfcrud_odd_row,jsfcrud_even_row" rules="all" style="border:solid 1px">
                         <h:column>
                             <f:facet name="header">

@@ -56,6 +56,16 @@ public abstract class PaginationHelper
         }
     }
 
+    public void firstPage()
+    {
+        page = 0;
+    }
+
+    public void lastPage()
+    {
+        page = getItemsCount() / pageSize;
+    }
+
     public boolean isHasPreviousPage()
     {
         return page > 0;

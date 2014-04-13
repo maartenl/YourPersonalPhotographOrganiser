@@ -227,6 +227,20 @@ public class LogController implements Serializable
         return "List";
     }
 
+    public String beginning()
+    {
+        getPagination().firstPage();
+        recreateModel();
+        return "List";
+    }
+
+    public String end()
+    {
+        getPagination().lastPage();
+        recreateModel();
+        return "List";
+    }
+
     public SelectItem[] getItemsAvailableSelectMany()
     {
         return JsfUtil.getSelectItems(logBean.findAll(), false);
