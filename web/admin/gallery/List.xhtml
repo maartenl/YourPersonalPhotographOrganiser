@@ -73,6 +73,10 @@
                             <h:commandLink action="#{galleryController.prepareEdit}" value="#{bundle.ListGalleryEditLink}"/>
                             <h:outputText value=" "/>
                             <h:commandLink action="#{galleryController.destroy}" value="#{bundle.ListGalleryDestroyLink}"/>
+                            <h:outputText value=" "/>
+                            <h:commandLink action="#{galleryController.reorderPhotographs}" value="#{bundle.ReorderPhotographs}"/>
+                            <h:outputText value=" "/>
+                            <h:commandLink action="#{galleryController.reorderGalleries}" value="#{bundle.ReorderGalleries}"/>
                         </h:column>
                     </h:dataTable>
                 </h:panelGroup>

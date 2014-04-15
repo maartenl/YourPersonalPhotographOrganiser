@@ -292,4 +292,16 @@ public class GalleryBean extends AbstractBean<Gallery>
         return String.valueOf(super.count());
     }
 
+    public void reorderGalleries(Long id)
+    {
+        Gallery gallery = find(id);
+        gallery.reorderGalleries();
+    }
+
+    public void reorderPhotographs(Long id)
+    {
+        Gallery gallery = find(id);
+        gallery.reorderPhotographs();
+    }
+
 }

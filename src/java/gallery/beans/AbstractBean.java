@@ -24,6 +24,7 @@ import javax.persistence.EntityManager;
  * entities.
  *
  * @author maartenl
+ * @param <T> The Entity to work on
  */
 public abstract class AbstractBean<T>
 {

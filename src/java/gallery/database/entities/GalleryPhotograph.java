@@ -33,6 +33,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -40,18 +41,19 @@ import javax.xml.bind.annotation.XmlTransient;
 /**
  * A photograph contained in a gallery, with references to both the gallery and
  * the original photograph itself.
+ *
  * @author maartenl
  */
 @Entity
 @Table(name = "GalleryPhotograph")
 @XmlRootElement
 @NamedQueries(
-{
-    @NamedQuery(name = "GalleryPhotograph.findAll", query = "SELECT g FROM GalleryPhotograph g"),
-    @NamedQuery(name = "GalleryPhotograph.findById", query = "SELECT g FROM GalleryPhotograph g WHERE g.id = :id"),
-    @NamedQuery(name = "GalleryPhotograph.findByName", query = "SELECT g FROM GalleryPhotograph g WHERE g.name = :name"),
-    @NamedQuery(name = "GalleryPhotograph.findBySortorder", query = "SELECT g FROM GalleryPhotograph g WHERE g.sortorder = :sortorder")
-})
+        {
+            @NamedQuery(name = "GalleryPhotograph.findAll", query = "SELECT g FROM GalleryPhotograph g"),
+            @NamedQuery(name = "GalleryPhotograph.findById", query = "SELECT g FROM GalleryPhotograph g WHERE g.id = :id"),
+            @NamedQuery(name = "GalleryPhotograph.findByName", query = "SELECT g FROM GalleryPhotograph g WHERE g.name = :name"),
+            @NamedQuery(name = "GalleryPhotograph.findBySortorder", query = "SELECT g FROM GalleryPhotograph g WHERE g.sortorder = :sortorder")
+        })
 public class GalleryPhotograph implements Serializable
 {
 
@@ -69,8 +71,9 @@ public class GalleryPhotograph implements Serializable
     @Column(name = "description")
     private String description;
     @Column(name = "sortorder")
+    @NotNull
     private BigInteger sortorder;
-        @OneToMany(cascade = CascadeType.ALL, mappedBy = "galleryphotograph")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "galleryphotograph")
     private Collection<Comment> commentCollection;
     @JoinColumn(name = "photograph_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
@@ -90,6 +93,7 @@ public class GalleryPhotograph implements Serializable
 
     /**
      * Primary key/unique identifier.
+     *
      * @return Long containing the id.
      */
     public Long getId()
@@ -99,6 +103,7 @@ public class GalleryPhotograph implements Serializable
 
     /**
      * Sets the unique identifier.
+     *
      * @param id the new primary key/unique identifier
      */
     public void setId(Long id)
@@ -109,6 +114,7 @@ public class GalleryPhotograph implements Serializable
     /**
      * Name belonging to the picture, originally this is the name of the file,
      * but can be anything.
+     *
      * @return the name of the photograph
      */
     public String getName()
@@ -118,6 +124,7 @@ public class GalleryPhotograph implements Serializable
 
     /**
      * Sets the name of the photograph, may be anything.
+     *
      * @param name the new name
      */
     public void setName(String name)
@@ -127,6 +134,7 @@ public class GalleryPhotograph implements Serializable
 
     /**
      * Full description of the photograph. Can be large.
+     *
      * @return the description of the photograph
      */
     public String getDescription()
@@ -136,6 +144,7 @@ public class GalleryPhotograph implements Serializable
 
     /**
      * Sets the full description of the photograph.
+     *
      * @param description String with the new description
      */
     public void setDescription(String description)
@@ -146,6 +155,7 @@ public class GalleryPhotograph implements Serializable
     /**
      * Sort order, indicates the order in which the photographs should be displayed,
      * where 0 is the first photograph, 1 is the next, etc.
+     *
      * @return the sort order, 0..infinity.
      */
     public BigInteger getSortorder()
@@ -155,6 +165,7 @@ public class GalleryPhotograph implements Serializable
 
     /**
      * Sets the sort order.
+     *
      * @param sortorder BigInteger, 0..infinity.
      */
     public void setSortorder(BigInteger sortorder)
@@ -164,6 +175,7 @@ public class GalleryPhotograph implements Serializable
 
     /**
      * Comments on this photograph.
+     *
      * @return Collection of comments.
      */
     @XmlTransient
@@ -174,6 +186,7 @@ public class GalleryPhotograph implements Serializable
 
     /**
      * Sets the collection of comments.
+     *
      * @param commentCollection a new collection of comments.
      */
     public void setCommentCollection(Collection<Comment> commentCollection)
@@ -183,6 +196,7 @@ public class GalleryPhotograph implements Serializable
 
     /**
      * Reference to the original file containing the photograph.
+     *
      * @return the photograph/file itself.
      */
     public Photograph getPhotograph()
@@ -192,6 +206,7 @@ public class GalleryPhotograph implements Serializable
 
     /**
      * Sets the photograph where this galleryphotograph refers to.
+     *
      * @param photograph the new photograph
      */
     public void setPhotograph(Photograph photograph)
@@ -201,6 +216,7 @@ public class GalleryPhotograph implements Serializable
 
     /**
      * Reference to the gallery, that contains this photograph.
+     *
      * @return the Gallery
      */
     @XmlTransient
@@ -211,6 +227,7 @@ public class GalleryPhotograph implements Serializable
 
     /**
      * For setting to which gallery this galleryphotograph belongs.
+     *
      * @param gallery the gallery
      */
     public void setGallery(Gallery gallery)

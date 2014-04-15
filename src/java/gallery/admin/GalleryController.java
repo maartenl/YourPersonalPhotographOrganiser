@@ -326,4 +326,20 @@ public class GalleryController implements Serializable
 
     }
 
+    public String reorderPhotographs()
+    {
+        current = (Gallery) getItems().getRowData();
+        getFacade().reorderPhotographs(current.getId());
+        JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/bundle").getString("PhotographsReordered"));
+        return "List";
+    }
+
+    public String reorderGalleries()
+    {
+        current = (Gallery) getItems().getRowData();
+        getFacade().reorderGalleries(current.getId());
+        JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/bundle").getString("GalleriesReordered"));
+        return "List";
+    }
+
 }

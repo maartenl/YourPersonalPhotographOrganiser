@@ -17,9 +17,14 @@
 package gallery.database.entities;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
+import java.util.logging.Logger;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -61,6 +66,8 @@ import javax.xml.bind.annotation.XmlTransient;
         })
 public class Gallery implements Serializable
 {
+
+    private static final Logger logger = Logger.getLogger(Gallery.class.getName());
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -332,8 +339,58 @@ public class Gallery implements Serializable
     {
         if (galleryPhotographCollection == null)
         {
-            galleryPhotographCollection = new ArrayList<GalleryPhotograph>();
+            galleryPhotographCollection = new ArrayList<>();
         }
         galleryPhotographCollection.add(gphoto);
+    }
+
+    /**
+     * Reorders the galleries of this gallery based on creation date.
+     * The OLD sort order is lost!
+     */
+    public void reorderGalleries()
+    {
+        logger.fine("reorderGalleries");
+        List<Gallery> list = new ArrayList<>(galleryCollection);
+        Collections.sort(list, new Comparator<Gallery>()
+        {
+
+            @Override
+            public int compare(Gallery t, Gallery t1)
+            {
+                return t.getCreationDate().compareTo(t1.getCreationDate());
+            }
+        });
+        int sort_order = 1;
+        for (Gallery gallery : galleryCollection)
+        {
+            gallery.setSortorder(sort_order++);
+        }
+    }
+
+    /**
+     * Reorders the photographs in this gallery based on when the photographs
+     * were taken.
+     * The OLD sort order is lost!
+     */
+    public void reorderPhotographs()
+    {
+        logger.fine("reorderPhotographs");
+        List<GalleryPhotograph> list = new ArrayList<>(galleryPhotographCollection);
+        Collections.sort(list, new Comparator<GalleryPhotograph>()
+        {
+
+            @Override
+            public int compare(GalleryPhotograph t, GalleryPhotograph t1)
+            {
+                return t.getPhotograph().getTaken().compareTo(t1.getPhotograph().getTaken());
+            }
+        });
+        BigInteger sort_order = BigInteger.ONE;
+        for (GalleryPhotograph galleryPhotograph : list)
+        {
+            galleryPhotograph.setSortorder(sort_order);
+            sort_order = sort_order.add(BigInteger.ONE);
+        }
     }
 }

@@ -42,6 +42,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -90,6 +91,7 @@ public class Photograph implements Serializable
     private Date taken;
     @Basic(optional = false)
     @Size(max = 512)
+    @NotNull
     @Column(name = "hashstring", unique = true)
     private String hashstring;
     @Basic(optional = false)

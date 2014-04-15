@@ -401,12 +401,24 @@ function loadPage()
                         }
                     })
                     // create the instance
-                    .jstree({'core': {
+                    .jstree({
+                        'core': {
                             "themes": {"stripes": true, "dots": false},
-                            "plugins": ["wholerow", "search", "state"],
                             "multiple": false,
                             'data': YourPersonalPhotographOrganiserBag.galleries
-                        }});
+                        },
+                        'plugins': ["wholerow", "search", "state", "sort"],
+                        'sort': function(a, b) {
+                            log.debug("Sorting function called.");
+                            if (typeof (a.sortorder) === "undefined") {
+                                return -1;
+                            }
+                            if (typeof (b.sortorder) === "undefined") {
+                                return 1;
+                            }
+                            return a.sortorder > b.sortorder ? 1 : -1;
+                        }
+                    });
         });
         yppo.photographs.getPhotographs(1, function(data) {
             YourPersonalPhotographOrganiserBag.photographs = data;
