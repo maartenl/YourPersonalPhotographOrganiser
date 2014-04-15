@@ -366,7 +366,7 @@ public class Gallery implements Serializable
         for (Gallery gallery : list)
         {
             gallery.setSortorder(sort_order++);
-            logger.log(Level.FINEST, "{0} has sortorder {1}", new Object[]
+            logger.log(Level.INFO, "{0} has sortorder {1}", new Object[]
             {
                 gallery.getName(), gallery.getSortorder()
             });

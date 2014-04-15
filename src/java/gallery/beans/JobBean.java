@@ -110,7 +110,8 @@ public class JobBean
             query.setParameter("mask", location);
             query.setParameter("separator", File.separator);
             query.setParameter("gallery", found);
-            List list = query.getResultList();
+            @SuppressWarnings("unchecked")
+            List<Photograph> list = query.getResultList();
             if (list == null || list.isEmpty())
             {
                 logger.exiting(this.getClass().getName(), "importPhotographs");
@@ -221,6 +222,7 @@ public class JobBean
     {
         Query query = em.createNamedQuery("Photograph.getPhotographsByLocation");
         query.setParameter("location", location);
+        @SuppressWarnings("unchecked")
         List<Photograph> photographs = query.getResultList();
         for (Photograph photograph : photographs)
         {
@@ -287,6 +289,7 @@ public class JobBean
     {
         Query query = em.createNamedQuery("Photograph.getPaths");
         query.setParameter("location", location);
+        @SuppressWarnings("unchecked")
         List<String> list = query.getResultList();
         return list;
     }

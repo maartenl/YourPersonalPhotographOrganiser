@@ -174,8 +174,9 @@ public class Processor implements ItemProcessor
         Query query = em.createNamedQuery("Photograph.findByFilename");
         query.setParameter("filename", filename.toString());
         query.setParameter("relativepath", relativePath.toString());
-        List list = query.getResultList();
-        if (list != null && !list.isEmpty())
+        @SuppressWarnings("unchecked")
+        List<Photograph> listByFilename = query.getResultList();
+        if (listByFilename != null && !listByFilename.isEmpty())
         {
             logger.log(Level.FINE, "{0} already exists.", path.toString());
             logBean.createLog("addPhotograph", "Photograph " + path + " already exists.", null, LogLevel.INFO);
@@ -188,10 +189,11 @@ public class Processor implements ItemProcessor
         query = em.createNamedQuery("Photograph.findByStats");
         query.setParameter("hashstring", computeHash);
         query.setParameter("filesize", size);
-        list = query.getResultList();
-        if (list != null && !list.isEmpty())
+        @SuppressWarnings("unchecked")
+        List<Photograph> listByStats = query.getResultList();
+        if (listByStats != null && !listByStats.isEmpty())
         {
-            Photograph alreadyPhoto = (Photograph) list.get(0);
+            Photograph alreadyPhoto = (Photograph) listByStats.get(0);
             String result = "File with filename " + relativePath.toString() + ":" + filename.toString() + " with hash " + computeHash + " already exists with id " + alreadyPhoto.getId() + ".";
             logger.fine(result);
             logBean.createLog("addPhotograph", result, null, LogLevel.WARNING);

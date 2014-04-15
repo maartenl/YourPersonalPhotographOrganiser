@@ -268,7 +268,8 @@ public class GalleryBean extends AbstractBean<Gallery>
     public List<Gallery> findAll()
     {
         Query query = em.createNamedQuery("Gallery.findAll");
-        List list = query.getResultList();
+        @SuppressWarnings("unchecked")
+        List<Gallery> list = query.getResultList();
         return list;
     }
 

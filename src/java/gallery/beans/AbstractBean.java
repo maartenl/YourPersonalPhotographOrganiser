@@ -95,6 +95,7 @@ public abstract class AbstractBean<T>
      *
      * @return List of entities
      */
+    @SuppressWarnings("unchecked")
     public List<T> findAll()
     {
         javax.persistence.criteria.CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
@@ -110,6 +111,7 @@ public abstract class AbstractBean<T>
      * and last is the last row (exclusive).
      * @return List of entities
      */
+    @SuppressWarnings("unchecked")
     public List<T> findRange(int[] range)
     {
         javax.persistence.criteria.CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
@@ -125,6 +127,7 @@ public abstract class AbstractBean<T>
      *
      * @return integer indicating how many entities there are.
      */
+    @SuppressWarnings("unchecked")
     public int count()
     {
         javax.persistence.criteria.CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();

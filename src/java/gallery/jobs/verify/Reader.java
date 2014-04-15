@@ -98,6 +98,7 @@ public class Reader extends AbstractItemReader
         // check if photo already exists in database
         Query query = em.createNamedQuery("Photograph.getPhotographsByLocation");
         query.setParameter("location", location);
+        @SuppressWarnings("unchecked")
         List<Photograph> list = query.getResultList();
         logger.log(Level.FINEST, "verifyPhotographReader found {0} photographs.", list.size());
         ids = list;

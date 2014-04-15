@@ -258,7 +258,8 @@ public class PhotographBean extends AbstractBean<Photograph>
         {
             // get all photographs that are unused
             Query query = em.createNamedQuery("Photograph.findUnused");
-            List list = query.getResultList();
+            @SuppressWarnings("unchecked")
+            List<Photograph> list = query.getResultList();
             if (list != null)
             {
                 return list;
@@ -288,7 +289,8 @@ public class PhotographBean extends AbstractBean<Photograph>
         {
             // get all photographs that are used more than once
             Query query = em.createNamedQuery("Photograph.findDoubleUsed");
-            List list = query.getResultList();
+            @SuppressWarnings("unchecked")
+            List<Photograph> list = query.getResultList();
             if (list != null)
             {
                 return list;
