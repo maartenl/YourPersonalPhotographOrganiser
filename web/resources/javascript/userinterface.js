@@ -409,14 +409,10 @@ function loadPage()
                         },
                         'plugins': ["wholerow", "search", "state", "sort"],
                         'sort': function(a, b) {
-                            log.debug("Sorting function called.");
-                            if (typeof (a.sortorder) === "undefined") {
-                                return -1;
-                            }
-                            if (typeof (b.sortorder) === "undefined") {
-                                return 1;
-                            }
-                            return a.sortorder > b.sortorder ? 1 : -1;
+                            // this might break, depending on teh sequence. Best guess here.
+                            var galleryA = YourPersonalPhotographOrganiserBag.galleries[a-1];
+                            var galleryB = YourPersonalPhotographOrganiserBag.galleries[b-1];
+                            return galleryA.sortorder > galleryB.sortorder ? 1 : -1;
                         }
                     });
         });

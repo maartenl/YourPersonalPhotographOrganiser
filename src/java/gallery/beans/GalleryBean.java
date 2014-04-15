@@ -28,6 +28,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.ws.rs.Consumes;
@@ -252,7 +253,7 @@ public class GalleryBean extends AbstractBean<Gallery>
     }
 
     /**
-     * Retrieves all galleries (with a parent, if they have one).
+     * Retrieves all galleries ordered by id (with a parent, if they have one).
      * GET to /YourPersonalPhotographOrganiser/resources/galleries.
      * Can produce both application/xml as well as application/json when asked.
      *
@@ -266,7 +267,9 @@ public class GalleryBean extends AbstractBean<Gallery>
             })
     public List<Gallery> findAll()
     {
-        return super.findAll();
+        Query query = em.createNamedQuery("Gallery.findAll");
+        List list = query.getResultList();
+        return list;
     }
 
     @GET

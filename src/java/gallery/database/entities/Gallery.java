@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -57,7 +58,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries(
         {
-            @NamedQuery(name = "Gallery.findAll", query = "SELECT g FROM Gallery g"),
+            @NamedQuery(name = "Gallery.findAll", query = "SELECT g FROM Gallery g ORDER BY g.id"),
             @NamedQuery(name = "Gallery.findRoot", query = "SELECT g FROM Gallery g WHERE g.parent is null"),
             @NamedQuery(name = "Gallery.findById", query = "SELECT g FROM Gallery g WHERE g.id = :id"),
             @NamedQuery(name = "Gallery.findByName", query = "SELECT g FROM Gallery g WHERE g.name = :name"),
@@ -362,9 +363,13 @@ public class Gallery implements Serializable
             }
         });
         int sort_order = 1;
-        for (Gallery gallery : galleryCollection)
+        for (Gallery gallery : list)
         {
             gallery.setSortorder(sort_order++);
+            logger.log(Level.FINEST, "{0} has sortorder {1}", new Object[]
+            {
+                gallery.getName(), gallery.getSortorder()
+            });
         }
     }
 
