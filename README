@@ -41,6 +41,12 @@ all the new stuff in there.
 in java, in memory, in glassfish. *)
 6. flexible in where these photographs are located (no need to keep them in
 the webdir, for example)
+7. make it impossible to add the same photograph twice (make it easy to 
+verify if you already have a photograph in there) **)
+8. verify photographs, check to see that the photograph in the database, is 
+equivalent to the photograph in the file (a nice check for possible harddrive failure)
+9. quickly initialise an empty database, by importing a directory structure as galleries
+10. automatically adapt the database if photographs are moved on the filesystem
 
 *) I've had too many instances where:
 1. changing files from webinterface is a security risk, and requires proper
@@ -53,6 +59,10 @@ jpegs
 5. changing files makes it impossible (or at the very least, extremely hard) 
 to determine if the photo is already present in your collection
 
+**) Sure, you can have the same photograph in multiple galleries or even in
+the same gallery, but these will refer to the SAME photograph. Every photograph
+is unique.
+
 Some of the new stuff that is being used here:
 JDK7 (Look for "JDK7" in the sourcecode)
 1. multiple catch
@@ -63,6 +73,7 @@ JDK7 (Look for "JDK7" in the sourcecode)
 JEE 7
 1. no local interfaces on beans
 2. EJBs inside the WAR, no longer is an EAR required
+3. Batch Applications (look for 'jobs' package)
 
 USE
 ---
