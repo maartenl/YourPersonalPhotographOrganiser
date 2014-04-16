@@ -5,6 +5,8 @@ import gallery.admin.util.PaginationHelper;
 import gallery.beans.GalleryBean;
 import gallery.database.entities.Gallery;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,6 +35,7 @@ public class GalleryController implements Serializable
     private PaginationHelper pagination;
     private int selectedItemIndex;
     private String location;
+    private Gallery parentGallery;
 
     public GalleryController()
     {
@@ -53,6 +56,11 @@ public class GalleryController implements Serializable
         return galleryBean;
     }
 
+    public List<Gallery> getGalleries()
+    {
+        return getFacade().findAll();
+    }
+
     public PaginationHelper getPagination()
     {
         if (pagination == null)
@@ -63,16 +71,24 @@ public class GalleryController implements Serializable
                 @Override
                 public int getItemsCount()
                 {
+                    if (getParentGallery() != null)
+                    {
+                        return getParentGallery().getGalleryCollection().size();
+                    }
                     return getFacade().count();
                 }
 
                 @Override
                 public DataModel createPageDataModel()
                 {
-                    return new ListDataModel(getFacade().findRange(new int[]
+                    if (getParentGallery() == null)
                     {
-                        getPageFirstItem(), getPageFirstItem() + getPageSize()
-                    }));
+                        return new ListDataModel(getFacade().findRange(new int[]
+                        {
+                            getPageFirstItem(), getPageFirstItem() + getPageSize()
+                        }));
+                    }
+                    return new ListDataModel(new ArrayList<>(getFacade().getGalleries(getParentGallery().getId())));
                 }
             };
         }
@@ -277,6 +293,28 @@ public class GalleryController implements Serializable
         this.location = location;
     }
 
+    /**
+     * @return the parentGallery
+     */
+    public Gallery getParentGallery()
+    {
+        return parentGallery;
+    }
+
+    /**
+     * @param parentGallery the parentGallery to set
+     */
+    public void setParentGallery(Gallery parentGallery)
+    {
+        if (this.parentGallery != parentGallery)
+        {
+            // parentGallery has changed, refresh the data model and the pagination.
+            recreateModel();
+            recreatePagination();
+        }
+        this.parentGallery = parentGallery;
+    }
+
     @FacesConverter(forClass = Gallery.class)
     public static class GalleryControllerConverter implements Converter
     {
@@ -340,6 +378,15 @@ public class GalleryController implements Serializable
         getFacade().reorderGalleries(current.getId());
         JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/bundle").getString("GalleriesReordered"));
         return "List";
+    }
+
+    public String getImageurl()
+    {
+        if (getSelected() == null || getSelected().getHighlight() == null)
+        {
+            return null;
+        }
+        return "ImageServlet?id=" + getSelected().getHighlight().getId() + "&size=medium";
     }
 
 }

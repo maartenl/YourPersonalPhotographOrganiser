@@ -10,7 +10,12 @@
             <h:outputText value="#{bundle.ListGalleryTitle}"></h:outputText>
         </ui:define>
         <ui:define name="body">
-            <h:form styleClass="jsfcrud_list_form">
+            <h:form styleClass="jsfcrud_list_form"> 
+                <h:selectOneMenu id="galleries" onchange="submit()"
+                                 value="#{galleryController.parentGallery}"  >
+                    <f:selectItems value="#{galleryController.galleries}" var="gallery" itemLabel="#{gallery.name}"/> 
+                    <f:selectItem id="allitem" itemLabel="All Galleries" noSelectionOption="true" />
+                </h:selectOneMenu>
                 <h:panelGroup id="messagePanel" layout="block">
                     <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
                 </h:panelGroup>

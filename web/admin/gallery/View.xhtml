@@ -28,6 +28,8 @@
                     </h:outputText>
                     <h:outputText value="#{bundle.ViewGalleryLabel_sortorder}"/>
                     <h:outputText value="#{galleryController.selected.sortorder}" title="#{bundle.ViewGalleryTitle_sortorder}"/>
+                    <h:outputText value="#{bundle.ViewGalleryLabel_highlight}" />
+                    <h:graphicImage url="/#{galleryController.imageurl}" rendered="#{galleryController.imageurl != null}" ></h:graphicImage>
                     <h:outputText value="#{bundle.ViewGalleryLabel_highlight}"/>
                     <h:outputText value="#{galleryController.selected.highlight}" title="#{bundle.ViewGalleryTitle_highlight}"/>
                     <h:outputText value="#{bundle.ViewGalleryLabel_parent}"/>
