@@ -46,3 +46,72 @@ yppo.tags.getTags = function(id, callBack)
             "json"); // endget
     // url [, data] [, success(data, textStatus, jqXHR)] [, dataType] )
 }
+
+
+/**
+ * Returns all tags, in the form of an array of tags.
+ * @param callBack function called when completed.
+ * @returns array of tags
+ */
+yppo.tags.getAllTags = function(callBack)
+{
+    log.debug("getAllTags");
+    var url = '/YourPersonalPhotographOrganiser/resources/tags';
+    $.get(url,
+            function(data) {
+                log.debug(data);
+                if (data === null)
+                {
+                    return;
+                }
+                callBack(data);
+            }, // end function(data)
+            "json"); // endget
+    // url [, data] [, success(data, textStatus, jqXHR)] [, dataType] )
+}
+
+/**
+ * Returns a summary, in the form of an array of tags, containing the text
+ * and the amount of time it was used.
+ * @param callBack function called when completed.
+ * @returns array of Objects with "text" and "weight" values.
+ */
+yppo.tags.getSummary = function(callBack)
+{
+    log.debug("getSummary");
+    var url = '/YourPersonalPhotographOrganiser/resources/tags/summary';
+    $.get(url,
+            function(data) {
+                log.debug(data);
+                if (data === null)
+                {
+                    return;
+                }
+                callBack(data);
+            }, // end function(data)
+            "json"); // endget
+    // url [, data] [, success(data, textStatus, jqXHR)] [, dataType] )
+}
+
+/**
+ * Returns all gallery photographs that have been tagged with tagname.
+ * @param tagname the tag
+ * @param callBack function called when completed.
+ * @returns array of galleryPhotographs
+ */
+yppo.tags.getPhotographsFromTag = function(tagname, callBack)
+{
+    log.debug("getPhotographsFromTag");
+    var url = '/YourPersonalPhotographOrganiser/resources/tags/photographs/' + tagname;
+    $.get(url,
+            function(data) {
+                log.debug(data);
+                if (data === null)
+                {
+                    return;
+                }
+                callBack(data);
+            }, // end function(data)
+            "json"); // endget
+    // url [, data] [, success(data, textStatus, jqXHR)] [, dataType] )
+}

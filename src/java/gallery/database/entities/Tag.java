@@ -28,19 +28,23 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * A Tag, word to identify picture(s) for easy searching.
+ *
  * @author maartenl
  */
 @Entity
 @Table(name = "Tag")
 @XmlRootElement
 @NamedQueries(
-{
-    @NamedQuery(name = "Tag.findAll", query = "SELECT t FROM Tag t"),
-    @NamedQuery(name = "Tag.findByTagname", query = "SELECT t FROM Tag t WHERE t.tagPK.tagname = :tagname"),
-    @NamedQuery(name = "Tag.findByPhotograph", query = "SELECT t FROM Tag t WHERE t.tagPK.photographId = :photographId")
-})
+        {
+            @NamedQuery(name = "Tag.findAll", query = "SELECT t FROM Tag t"),
+            @NamedQuery(name = "Tag.findByTagname", query = "SELECT t FROM Tag t WHERE t.tagPK.tagname = :tagname"),
+            @NamedQuery(name = "Tag.findByPhotograph", query = "SELECT t FROM Tag t WHERE t.tagPK.photographId = :photographId"),
+            @NamedQuery(name = "Tag.getSummary", query = "SELECT NEW gallery.util.TagCount(t.tagPK.tagname, count(t.tagPK.tagname)) FROM Tag t GROUP BY t.tagPK.tagname"),
+            @NamedQuery(name = "Tag.getGalleryPhotographs", query = "SELECT gp FROM GalleryPhotograph gp, Tag t WHERE t.tagPK.tagname = :tagname AND t.photograph = gp.photograph")
+        })
 public class Tag implements Serializable
 {
+
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected TagPK tagPK;
@@ -64,6 +68,7 @@ public class Tag implements Serializable
 
     /**
      * Returns the primary key of a Tag, consisting of a tagname and the photograph id.
+     *
      * @return primary key of a Tag
      */
     public TagPK getTagPK()
@@ -73,6 +78,7 @@ public class Tag implements Serializable
 
     /**
      * Sets the primary key of a Tag.
+     *
      * @param tagPK primary key of a Tag
      */
     public void setTagPK(TagPK tagPK)
@@ -82,6 +88,7 @@ public class Tag implements Serializable
 
     /**
      * Get the photograph associated with this key.
+     *
      * @return the photograph matching the tag.
      */
     public Photograph getPhotograph()
@@ -91,6 +98,7 @@ public class Tag implements Serializable
 
     /**
      * Indicate which photograph matches this tag.
+     *
      * @param photograph the photograph that corresponds to the tagname.
      */
     public void setPhotograph(Photograph photograph)

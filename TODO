@@ -3,8 +3,10 @@ TODO
 
 - put javascript in js files instead of jsp files.
 - implement JSF 2 for the administration side of things
-- implement JMS for jobs to do
-
+- implement *JMS( Batch Applications For Java for jobs to do
+- add a tag cloud
+- make moving photographs painless by adding it to the 'discover'
+  functionality
 - configure logging for EclipseLink (See https://wiki.eclipse.org/EclipseLink/Examples/JPA/Logging)
 
 $.ajaxSetup({ cache: false }); => tis said that this causes jquery to skip

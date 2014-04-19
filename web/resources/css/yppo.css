@@ -158,3 +158,11 @@ hr {
 .tags span {
     border: 1px solid black;
 }
+
+.tagCloudDiv {
+    width: 250px;
+    height: 250px;
+    position: absolute;
+    bottom: 500px;
+    left: 0px;
+}

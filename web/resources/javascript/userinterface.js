@@ -20,7 +20,6 @@ var YourPersonalPhotographOrganiserBag = {
     view: "multiple", // indicates that 9 pictures should be shown at once, single being only one picture.
     index: 0 // the offset on which photos are being watched.
 };
-
 function doThisThing()
 {
     /* Apply fancybox to multiple items */
@@ -81,7 +80,6 @@ function changeView()
 function go(form)
 {
     var fotonumber = form[form.id + ":go_number_foto"].value;
-
     if (isNaN(parseInt(fotonumber)))
     {
         alert("Number expected.");
@@ -173,7 +171,6 @@ function displaySinglePhotos()
             photos[i].name
             + '</div><div class=\"description\">' + description + '</div><div class=\"comments\"></div></div><div><span class=\"tags\"></span></div>';
     $('#pictureDiv').html(buffer);
-
     yppo.comments.getComments(photos[i].id,
             function(data) {
                 log.debug(data);
@@ -361,8 +358,28 @@ function resizeScreen()
     $('#pictureDiv').css("width", (documentwidth - sidewidth - 100) + "px");
 }
 
+function showPhotographsBasedOnTag(tagname)
+{
+    log.debug("showPhotographsBasedOnTag", tagname);
+    yppo.tags.getPhotographsFromTag(tagname, function(data) {
+        log.debug(data);
+        YourPersonalPhotographOrganiserBag.photographs = data;
+        displayPhotos();
+    });
+}
+
 function loadPage()
 {
+    yppo.tags.getSummary(function(data) {
+        log.debug(data);
+        for (i in data)
+        {
+            data[i].handlers = {click: function() {
+                    showPhotographsBasedOnTag($( this ).text());
+                }};
+        }
+        $("#tagCloudDiv").jQCloud(data);
+    });
     yppo.galleries.getGallery(1, function(data) {
         YourPersonalPhotographOrganiserBag.gallery = data;
         yppo.galleries.getAllGalleries(function(data) {
@@ -410,8 +427,8 @@ function loadPage()
                         'plugins': ["wholerow", "search", "state", "sort"],
                         'sort': function(a, b) {
                             // this might break, depending on teh sequence. Best guess here.
-                            var galleryA = YourPersonalPhotographOrganiserBag.galleries[a-1];
-                            var galleryB = YourPersonalPhotographOrganiserBag.galleries[b-1];
+                            var galleryA = YourPersonalPhotographOrganiserBag.galleries[a - 1];
+                            var galleryB = YourPersonalPhotographOrganiserBag.galleries[b - 1];
                             return galleryA.sortorder > galleryB.sortorder ? 1 : -1;
                         }
                     });

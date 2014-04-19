@@ -16,11 +16,14 @@
  */
 package gallery.beans;
 
+import gallery.database.entities.GalleryPhotograph;
 import gallery.database.entities.Tag;
+import gallery.util.TagCount;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -29,16 +32,20 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response.Status;
 
 /**
  * Tag Enterprise Java Bean, maps to a Tag Hibernate Entity.
  * Also a REST service mapping to /YourPersonalPhotographOrganiser/resources/tags.
+ *
  * @author maartenl
  */
 @Stateless
 @Path("/tags")
 public class TagBean extends AbstractBean<Tag>
 {
+
     @PersistenceContext(unitName = "YourPersonalPhotographOrganiserPU")
     private EntityManager em;
 
@@ -56,14 +63,15 @@ public class TagBean extends AbstractBean<Tag>
     /**
      * Creates a Tag. POST to /YourPersonalPhotographOrganiser/resources/tags.
      * Will accept both application/xml as well as application/json.
+     *
      * @param entity Tag
      */
     @POST
     @Override
     @Consumes(
-    {
-        "application/xml", "application/json"
-    })
+            {
+                "application/xml", "application/json"
+            })
     public void create(Tag entity)
     {
         super.create(entity);
@@ -72,14 +80,15 @@ public class TagBean extends AbstractBean<Tag>
     /**
      * Updates a Tag. PUT to /YourPersonalPhotographOrganiser/resources/tags.
      * Will accept both application/xml as well as application/json.
+     *
      * @param entity Tag
      */
     @PUT
     @Override
     @Consumes(
-    {
-        "application/xml", "application/json"
-    })
+            {
+                "application/xml", "application/json"
+            })
     public void edit(Tag entity)
     {
         super.edit(entity);
@@ -87,6 +96,7 @@ public class TagBean extends AbstractBean<Tag>
 
     /**
      * Removes a Tag. DELETE to /YourPersonalPhotographOrganiser/resources/tags/{id}.
+     *
      * @param id unique identifier for the Tag, present in the url.
      */
     @DELETE
@@ -99,27 +109,32 @@ public class TagBean extends AbstractBean<Tag>
     /**
      * Retrieves a Tag. GET to /YourPersonalPhotographOrganiser/resources/tags/{id}.
      * Can produce both application/xml as well as application/json when asked.
-     * @param id unique identifier for the comment, present in the url.
-     * @return Tag entity
+     *
+     * @param tagname
+     * @return list of photographs
      * @throws WebApplicationException with status {@link Status#NOT_FOUND} if Tag with that id does not exist (any more).
      */
     @GET
-    @Path("{id}")
+    @Path("photographs/{tagname}")
     @Produces(
+            {
+                "application/xml", "application/json"
+            })
+    public List<GalleryPhotograph> find(@PathParam("tagname") String tagname) throws WebApplicationException
     {
-        "application/xml", "application/json"
-    })
-    public Tag find(@PathParam("id") Long id)
-    {
-        return super.find(id);
+        Query query = em.createNamedQuery("Tag.getGalleryPhotographs");
+        query.setParameter("tagname", tagname);
+        @SuppressWarnings("unchecked")
+        List<GalleryPhotograph> list = query.getResultList();
+        return list;
     }
 
     @GET
     @Override
     @Produces(
-    {
-        "application/xml", "application/json"
-    })
+            {
+                "application/xml", "application/json"
+            })
     public List<Tag> findAll()
     {
         return super.findAll();
@@ -128,15 +143,15 @@ public class TagBean extends AbstractBean<Tag>
     @GET
     @Path("{from}/{to}")
     @Produces(
-    {
-        "application/xml", "application/json"
-    })
+            {
+                "application/xml", "application/json"
+            })
     public List<Tag> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to)
     {
         return super.findRange(new int[]
-                {
-                    from, to
-                });
+        {
+            from, to
+        });
     }
 
     @GET
@@ -145,5 +160,19 @@ public class TagBean extends AbstractBean<Tag>
     public String countREST()
     {
         return String.valueOf(super.count());
+    }
+
+    @GET
+    @Path("summary")
+    @Produces(
+            {
+                "application/xml", "application/json"
+            })
+    public List<TagCount> getSummary()
+    {
+        Query query = em.createNamedQuery("Tag.getSummary");
+        @SuppressWarnings("unchecked")
+        List<TagCount> list = query.getResultList();
+        return list;
     }
 }
