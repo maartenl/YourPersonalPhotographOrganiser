@@ -8,6 +8,7 @@ TODO
 - make moving photographs painless by adding it to the 'discover'
   functionality
 - configure logging for EclipseLink (See https://wiki.eclipse.org/EclipseLink/Examples/JPA/Logging)
+- fix TagBean,... lots of methods don't actually work because the PK is combined.
 
 $.ajaxSetup({ cache: false }); => tis said that this causes jquery to skip
 caching for ALL ajax calls.
