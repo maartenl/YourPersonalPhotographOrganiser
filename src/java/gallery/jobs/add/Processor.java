@@ -202,8 +202,18 @@ public class Processor implements ItemProcessor
         {
             Photograph alreadyPhoto = (Photograph) listByStats.get(0);
             String result = "File with filename " + relativePath.toString() + ":" + filename.toString() + " with hash " + computeHash + " already exists with id " + alreadyPhoto.getId() + ".";
-            logger.fine(result);
+            logger.warning(result);
             logBean.createLog("addPhotograph", result, null, LogLevel.WARNING);
+            File alreadyPhotoFile = new File(alreadyPhoto.getFullPath());
+            if (!alreadyPhotoFile.exists())
+            {
+                String errormessage = "Photograph with id " + alreadyPhoto.getId() + " with path " + alreadyPhoto.getFullPath() + " has moved to " + path + ".";
+                logger.warning(errormessage);
+                logBean.createLog("addPhotograph", errormessage, null, LogLevel.WARNING);
+                alreadyPhoto.setFilename(filename.toString());
+                alreadyPhoto.setRelativepath(relativePath.toString());
+                alreadyPhoto.setLocation(location);
+            }
             return null;
         }
         // JDK7: lots of nio.Path calls
