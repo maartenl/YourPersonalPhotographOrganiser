@@ -58,26 +58,33 @@ import javax.persistence.Query;
  * <img src="../../../images/Processor-add.png"/></p>
  * @startuml Processor-add.png
  * (*) --> "Initialisation"
- *
  * if "check Photograph" then
  * -->[not exists] "computeHash"
  * if "check Hash" then
- * -left-> [exists] "log: another\nPhotograph already\nhas that hash"
- * --> (*)
+ * -left-> [hash exists] "log: another\nPhotograph already\nhas that hash"
+ * if "is other \nPhotograph\n good?" then
+ * -down-> [yes] (*)
  * else
- * -->[not exists] "getDateTime"
+ * partition "Move Photograph"
+ * --> [no] "log: Photograph has moved"
+ * ---> "Update old photograph\nto new location"
+ * -down-> (*)
+ * end partition
+ * endif
+ * else
+ * partition "Add Photograph"
+ * -->[hash not exists] "getDateTime"
  * --> getAngle
  * -->store Photo
  * --> (*)
+ * end partition
  * endif
  * else
  * ->[already exists] "log: Photograph\nalready in\ndatabase"
  * --> (*)
  * endif
- *
- * @enduml
- * @author maartenl
- */
+ * @enduml * @author maartenl
+ * */
 @Named("addPhotographProcessor")
 @ApplicationScoped
 public class Processor implements ItemProcessor
