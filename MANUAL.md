@@ -5,6 +5,10 @@
 
 Browse to [http://localhost:8080/YourPersonalPhotographOrganiser](http://localhost:8080/YourPersonalPhotographOrganiser).
 
+### Viewing picture metadata
+
+It is possible to view all the information stored in the picture by your camera/smartphone/etc. Just "Change view" to single-photograph, and then click on the "Metadata" label in the properties of the current photograph visible on the left of the browserwindow.
+
 ## For Administrators
 
 Browse to [http://localhost:8080/YourPersonalPhotographOrganiser/faces/admin/index.xhtml](http://localhost:8080/YourPersonalPhotographOrganiser/faces/admin/index.xhtml).
@@ -20,8 +24,17 @@ In general the following three functions are available at all levels:
 
 ### Verify existing photographs
 
+    Select "Show all locations", at the location of your choice, click on "Verify"
+
 You can verify all photographs at a location. The checksum of a photograph is recomputed and compared with the checksum stored in the database.
+
+This will be done in the background, so once started, you can continue your administration tasks normally, whilst the server does its stuff.
 
 The log will indicate which photographs are:
 * Faulty
 * Missing
+
+Depending on the amount of photographs that are stored at a location, this verification can take a long time.
+
+However, the site should remain perfectly usable, if maybe slightly slower.
+
