@@ -3,7 +3,12 @@
 
 ## Table of Contents
 
-<a href="#for-administrators">For administrators</a>
+* <a href="#for-users">For Users</a>
+  * <a href="#viewing-picture-metadata">Viewing picture metadata</a>
+* <a href="#for-administrators">For administrators</a>
+  * <a href="#initialize-galleries">Initialize galleries</a>
+  * <a href="#add-new-photographs">Add new photographs</a>
+  * <a href="#verify-existing-photographs">Verify existing photographs</a>
 
 ## For Users
 
