@@ -22,6 +22,10 @@ In general the following three functions are available at all levels:
 
     Select "Show all locations", at the location of your choice, click on "Init"
 
+Once clicked you'll notice a message displayed:
+
+    Initializing location with galleries and photographs...
+    
 Will initialize your galleries. Extremely handy if you are just starting out with a fresh slate.
 
 Galleries will be named after the directorynames. Basically, the gallery tree will mirror the file system tree.
@@ -33,6 +37,7 @@ Then, afterwards, you can make any changes you need.
     Select "Show all locations", at the location of your choice, click on "Discover"
 
 Once clicked you'll notice a message displayed:
+
     Discover job started...
 
 Will discover new photographs at the given location. The checks are as follows:
@@ -47,6 +52,7 @@ New photographs are not automatically added to any gallery.
     Select "Show all locations", at the location of your choice, click on "Verify"
 
 Once clicked you'll notice a message displayed:
+
     Verify job started...
     
 You can verify all photographs at a location. The checksum of a photograph is recomputed and compared with the checksum stored in the database.
