@@ -32,6 +32,9 @@ Then, afterwards, you can make any changes you need.
 
     Select "Show all locations", at the location of your choice, click on "Discover"
 
+Once clicked you'll notice a message displayed:
+    Discover job started...
+
 Will discover new photographs at the given location. The checks are as follows:
 * verify if photo already exists in the database, if so -> skip
 * verify if hash of photo matches up with another photo in the database (i.e. a rename or move operation has occurred) -> change path/filename of photo in database appropriately
@@ -43,6 +46,9 @@ New photographs are not automatically added to any gallery.
 
     Select "Show all locations", at the location of your choice, click on "Verify"
 
+Once clicked you'll notice a message displayed:
+    Verify job started...
+    
 You can verify all photographs at a location. The checksum of a photograph is recomputed and compared with the checksum stored in the database.
 
 This will be done in the background, so once started, you can continue your administration tasks normally, whilst the server does its stuff.
