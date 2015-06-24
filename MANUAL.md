@@ -1,6 +1,10 @@
 
 # MANUAL
 
+## Table of Contents
+
+<a href="#for-administrators">For administrators</a>
+
 ## For Users
 
 Browse to [http://localhost:8080/YourPersonalPhotographOrganiser](http://localhost:8080/YourPersonalPhotographOrganiser).
