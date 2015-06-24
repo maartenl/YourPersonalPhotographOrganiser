@@ -7,7 +7,7 @@ Browse to [http://localhost:8080/YourPersonalPhotographOrganiser](http://localho
 
 ### Viewing picture metadata
 
-It is possible to view all the information stored in the picture by your camera/smartphone/etc. Just "Change view" to single-photograph, and then click on the "Metadata" label in the properties of the current photograph visible on the left of the browserwindow.
+It is possible to view all the information stored in the picture by your camera/smartphone/etc. Just "Change view" to single-photograph, and then click on the "Metadata" label in the properties of the current photograph (visible on the left of the browserwindow).
 
 ## For Administrators
 
