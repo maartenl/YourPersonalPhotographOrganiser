@@ -20,7 +20,24 @@ In general the following three functions are available at all levels:
  
 ### Initialize galleries
 
+    Select "Show all locations", at the location of your choice, click on "Init"
+
+Will initialize your galleries. Extremely handy if you are just starting out with a fresh slate.
+
+Galleries will be named after the directorynames. Basically, the gallery tree will mirror the file system tree.
+
+Then, afterwards, you can make any changes you need.
+
 ### Add new photographs
+
+    Select "Show all locations", at the location of your choice, click on "Discover"
+
+Will discover new photographs at the given location. The checks are as follows:
+* verify if photo already exists in the database, if so -> skip
+* verify if hash of photo matches up with another photo in the database (i.e. a rename or move operation has occurred) -> change path/filename of photo in database appropriately
+* otherwise -> adds the new photo to the database
+
+New photographs are not automatically added to any gallery.
 
 ### Verify existing photographs
 
