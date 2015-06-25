@@ -8,6 +8,7 @@
 * <a href="#for-administrators">For administrators</a>
   * <a href="#initialize-galleries">Initialize galleries</a>
   * <a href="#add-new-photographs">Add new photographs</a>
+  * <a href="#add-photographs-to-gallery-in-bulk">Add photographs to gallery in bulk</a>
   * <a href="#verify-existing-photographs">Verify existing photographs</a>
 
 ## For Users
@@ -54,7 +55,15 @@ Will discover new photographs at the given location. The checks are as follows:
 * verify if hash of photo matches up with another photo in the database (i.e. a rename or move operation has occurred) -> change path/filename of photo in database appropriately
 * otherwise -> adds the new photo to the database
 
-New photographs are not automatically added to any gallery.
+New photographs are not automatically added to any gallery. For that, see <a href="#add-photographs-to-gallery-in-bulk">Add photographs to gallery in bulk</a>.
+
+### Add photographs to gallery in bulk
+
+    Select "Show all gallerys", at the gallery of your choice, click on "Edit", enter a location in textfield after "Import from location". Click on "Import".
+
+The location should be the FULL path of the directory to check.
+
+No subdirectories will be considered for adding.
 
 ### Verify existing photographs
 
