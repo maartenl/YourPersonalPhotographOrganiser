@@ -61,7 +61,7 @@ New photographs are not automatically added to any gallery. For that, see <a hre
 
     Select "Show all gallerys", at the gallery of your choice, click on "Edit", enter a location in textfield after "Import from location". Click on "Import".
 
-The location should be the FULL path of the directory to check.
+The location should be the FULL path of the directory to check with a wildcard. For example "/home/mrbear/pictures/vacation/2015%".
 
 No subdirectories will be considered for adding.
 
